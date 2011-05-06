@@ -1,0 +1,31 @@
+
+message# Inform PHI # inform (PHI)
+
+###message# request new promise to # request ((action (agent-identifier :name buyer@test) (PROMISE_TO :action (PAY :amount 100 :receiver (agent-identifier :name b2b@test) :reference 77) :creditor (agent-identifier :name seller@test) :institution b2b :condition (fact zzz) :deadline (fact (time 7777)))))
+
+#message# test future oblig # inform ((future-formula (fact (D b2b (O (done (action (agent-identifier :name buyer@test) (PAY :amount 100 :receiver (agent-identifier :name b2b@test) :reference 77)) true)))  ) (fact (time 5000)) ) )
+#message# request to promise that # request ((action (agent-identifier :name buyer@test) (PROMISE_THAT :creditor (agent-identifier :name seller@test) :institution b2b :validity (fact (time 9999999)) :what (fact youhou) ) ))
+##message# request buyer to promise to pay # request ((action (agent-identifier :name buyer@test) (PROMISE_TO :action (PAY :amount 5001 :receiver (agent-identifier :name seller@test) :reference 777) :creditor (agent-identifier :name seller@test) :institution b2b :validity (fact (time 7777)) ) ))
+##message# request seller to promise to pay # request ((action (agent-identifier :name seller@test) (PROMISE_TO :action (PAY :amount 200 :receiver (agent-identifier :name buyer@test) :reference 777) :creditor (agent-identifier :name buyer@test) :institution b2b :validity (fact (time 7777)) ) ))
+##message# inform seller of buyer's oblig # inform ((D b2b (O (done (action (agent-identifier :name buyer@test) (RETURN :past 1997)) true)) )) 
+
+#message# I am the institution # inform ((rien))
+#message# assert countas # inform ((countas b2b phi psi))
+#message# retract countas # inform ((not (countas b2b phi psi)))
+
+##message# inform buyer of contradiction # inform ((D b2b (B (agent-identifier :name seller@test) (not (D b2b (holder (agent-identifier :name seller@test) roleSeller)))) ))
+##message# inform seller of contradiction # inform ((D b2b (not (B (agent-identifier :name buyer@test) (D b2b (holder (agent-identifier :name buyer@test) roleBuyer)))) ))
+
+###message# request to ask catalogue # request ((action (agent-identifier :name buyer@test) (REQUEST_CATALOGUE :supplier (agent-identifier :name seller@test) ) ))
+
+#message# inform delegation # inform ((document (agent-identifier :name buyer@test) (agent-identifier :name intermediary@test) (delegation :purchaseOrder "ref_a_la_con" :loaningBank (agent-identifier :name bankAagent@test) ) ))
+
+#message# query-ref amount of money # query-ref ((any ?x (has-money (agent-identifier :name buyer@test) ?x) ))
+##message# request to pay # request ((action (agent-identifier :name buyer@test) (PAY :amount 100 :receiver (agent-identifier :name b2b@test) :reference 77) ))
+#message# request test cond action # request ((action (agent-identifier :name buyer@test) (TESTCOND :cond (fact condition))))
+#message# inform cond # inform (condition)
+
+image# b2b
+
+receiver# buyer@test
+receiver# seller@test

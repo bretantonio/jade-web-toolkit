@@ -1,0 +1,26 @@
+
+
+message# Inform PHI # inform (PHI)
+#message# complaint # inform (and (D ??institution (O (done (action ??defendant ??action) true))) (not (B ??complainant (done (action ??defendant ??action) true) )))
+##message# complaint # inform ((and (D b2b (O (done (action (agent-identifier :name buyer@test) (RETURN :past 1997)) true))) (not (B (agent-identifier :name seller@test) (done (action (agent-identifier :name buyer@test) (RETURN :past 1997)) true) ))))
+##message# complain2 # inform ((and (D b2b (O (done (action (agent-identifier :name buyer@test) (PAY :amount 100 :receiver (agent-identifier :name b2b@test) :reference 77)) true))) (not (B (agent-identifier :name seller@test) (done (action (agent-identifier :name buyer@test) (PAY :amount 100 :receiver (agent-identifier :name b2b@test) :reference 77)) true) ))))
+#message# request test cond action # request ((action (agent-identifier :name buyer@test) (TESTCOND :cond (fact condition))))
+#message# request unfeasible action # request ((action (agent-identifier :name buyer@test) (RETURN :past 1997)))
+#message# query if intend to pay # query-if ((I (agent-identifier :name buyer@test) (done (action (agent-identifier :name buyer@test) (PAY_PACKAGE :package (set "television" "phone") :price 250 :seller (agent-identifier :name seller@test)) ) true)))
+
+#message# request to ask catalogue # request ((action (agent-identifier :name buyer@test) (REQUEST_CATALOGUE :seller (agent-identifier :name seller@test) ) ))
+#message# assert premise # inform ((D insta phi))
+#message# assert countas # inform ((countas insta phi psi))
+#message# query-if cci # query-if ((D insta psi))
+#message# queryref instfact # query-ref ((any ?i (D ?i phi)))
+#message# query a price # query-if ((D b2b (price (agent-identifier :name seller@test) (agent-identifier :name buyer@test) "phone" 25)))
+#message# query an oblig # query-if ((D b2b (O (B (agent-identifier :name seller@test) (price (agent-identifier :name seller@test) (agent-identifier :name buyer@test) "phone" 25) ))))
+#message# query-if price # query-if ((D b2b (price (agent-identifier :name seller@test) (agent-identifier :name buyer@test) "phone" 25) ))
+#message# query-ref any price # query-ref ((any ?x (D b2b (price (agent-identifier :name seller@test) (agent-identifier :name buyer@test) "phone" ?x)) ))
+
+image# seller
+
+receiver# buyer@test
+receiver# b2b@test
+receiver# mediator@test
+receiver# enterpriseB@test

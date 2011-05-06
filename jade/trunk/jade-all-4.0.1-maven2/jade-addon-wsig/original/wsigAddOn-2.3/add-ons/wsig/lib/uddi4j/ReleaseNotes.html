@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+    <HEAD>
+        <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <META name="GENERATOR" content="IBM WebSphere Studio">
+        <META http-equiv="Content-Style-Type" content="text/css">
+        <LINK href="style.css" rel="stylesheet" type="text/css">
+        <TITLE>UDDI4J - Downloads / Releases</TITLE>
+    </HEAD>
+    <BODY bgcolor="#99ccff">
+    
+        <!-- Header -->
+        <img class = uddi4jlogo src="uddi4j.jpeg" alt="UDDI4J">
+        
+        <!-- Content -->
+            
+        <H1>UDDI4J Releases</H1>
+        
+        <P>UDDI4J releases can be <a href="https://sourceforge.net/project/showfiles.php?group_id=128810">downloaded from SourceForge</a>.</P>
+        
+        <H2>Release Log</H2>
+        <TABLE border="1">
+          <TBODY>
+            <TR>
+              <TD>Release name</TD>
+              <TD>Date</TD>
+              <TD>Notes</TD>
+            </TR>
+            <TR>
+              <TD>2.0.5</TD>
+              <TD>06/27/2006</TD>
+              <TD>UDDI4J minor update release containing minor bug fixes - see Change Log below.
+            </TR>
+            <TR>
+              <TD>2.0.4</TD>
+              <TD>10/31/2005</TD>
+              <TD>UDDI4J minor update release containing minor bug fixes - see Change Log below.
+            </TR>
+            <TR>
+              <TD>2.0.3</TD>
+              <TD>03/22/2005</TD>
+              <TD>UDDI4J minor update release containing minor bug fixes - see Change Log below.
+              <BR>The binary distribution for this release does not contain the compiled class file for HPSOAPTransport.
+              <BR>Users wishing to use HPSOAPTransport must download the source distribution and compile this class
+              <BR>themselves using the supplied build.xml file.</TD>
+            </TR>
+            <TR>
+              <TD>2.0.2</TD>
+              <TD>09/04/2003</TD>
+              <TD>UDDI4J minor update release containing minor bug fixes.</TD>                  
+            </TR>
+            <TR>
+             <TD>2.0.1</TD>
+             <TD>01/30/2003</TD>
+             <TD>UDDI4J minor update release, including updated Axis support, spec compliance fixes, and minor bug fixes.</TD>  
+            </TR>
+            <TR>
+             <TD>2.0</TD>
+             <TD>5/15/2002</TD>
+             <TD>UDDI4J release with v2 support. Minor changes from 2.0 beta. Errata 3 support,
+             bug fixes, collection class enhancements.
+             </TD>
+            </TR>    
+            <TR>
+             <TD>2.0 beta</TD>
+             <TD>11/09/2001</TD>
+             <TD>Major new release support UDDI v2 specification.
+             Collaboration with HP. </TD>
+            </TR>
+            <TR>
+              <TD>1.0.3</TD>
+              <TD>06/26/2001</TD>
+              <TD>Important bug fix corrects problem with multiple
+              'name' attributes being misinterpreted</TD>
+            </TR>
+            <TR>
+              <TD>1.0.2</TD>
+              <TD>03/28/2001</TD>
+              <TD>bug fixes</TD>
+            </TR>
+            <TR>
+              <TD>1.0.1</TD>
+              <TD>02/16/2001</TD>
+              <TD>bug fixes</TD>
+            </TR>
+            <TR>
+              <TD>1.0</TD>
+              <TD>01/24/2001</TD>
+              <TD>UDDI4J contributed by IBM to open source
+              community on <A href="http://www.ibm.com/developer">Developerworks</A></TD>
+            </TR>
+           <TR>
+              <TD>1.0 beta</TD>
+              <TD>11/13/2000</TD>
+              <TD>Initial release as part of Web Services Toolkit
+              v2.0 available on <A href="http://www.alphaworks.ibm.com">Alphaworks</A></TD>
+            </TR>
+          </TBODY>
+        </TABLE>
+
+        <H2>Change log</H2>
+        
+        <H4>2.0.5 release 06/27/2006</H4>
+        <BLOCKQUOTE>Changes from 2.0.4 release include:<BR>
+        <UL>
+            <LI>Fix DBCS problem in ApacheAxisTransport, causing DBCS characters to be translated incorrectly.</LI>
+        </UL>
+        </BLOCKQUOTE>
+        
+        <H4>2.0.4 release 10/31/2005</H4>
+        <BLOCKQUOTE>Changes from 2.0.3 release include:<BR>
+        <UL>
+            <LI>Introduction of more flexible properties handling including ability to specify configuration properties in a uddi4j.properties file.</LI>
+            <LI>UDDI4J is now XML namespace aware</LI>
+        </UL>
+        </BLOCKQUOTE>
+        
+        <H4>2.0.3 release 03/22/2005</H4>
+        <BLOCKQUOTE>Changes from 2.0.2 release include:<BR>
+        <UL>
+            <LI>UDDIElement now implements Serializable (and hence so do all the datatype classes which are subclasses of UDDIElement).</LI>
+            <LI>ApacheAxisTransport updated to work with Crimson parser as well as Xerces.</LI>
+            <LI>ApacheSOAPTransport now catches generic Exception rather than SOAPException from calls into Apache SOAP.
+                <BR>This prevents RuntimeExceptions from Apache SOAP propagating through UDDI4J.</LI>
+            <LI>Organized imports to aid compilation.</LI>
+            <LI>Corrected some javadoc errors.</LI>
+        </UL>
+        </BLOCKQUOTE>
+        <BLOCKQUOTE><B>Important information for release 2.0.3:</B><BR>
+        <UL>
+            <LI>The binary distribution of the 2.0.3 release does not contain the compiled class file for HPSOAPTransport.
+                (The source distribution still contains the source file for this class.)
+                This will not affect users of ApacheSOAPTransport (the default) or ApacheAxisTransport.
+                Users wishing to use the HPSOAPTransport class will need to download the source distribution
+                and build UDDI4J themselves using the supplied build.xml file.</LI>
+        </UL>
+        </BLOCKQUOTE>
+        
+        <H4>2.0.2 release 04/09/2003</H4>
+        <BLOCKQUOTE>Changes from 2.0.1 release include:<BR>
+        <UL>
+            <LI>Miscellaneous bug fixes.</LI>
+        </UL>
+        </BLOCKQUOTE>
+            
+        <H4>2.0.1 release 30/01/2003</H4>
+        <BLOCKQUOTE>Changes from 2.0 release include:<BR>
+        <UL>
+         <li> Axis 1.x update
+         <li> Ant 1.5.x update
+         <li> BindingTemplate
+         <br>  Required fields constructors updated to ensure either HostingRedirector or AccessPoint is present.
+         <li> BusinessInfo
+         <br>  Updated to support multiple Name objects.
+         <li> DispositionReport
+         <br>  Updated to include missing 'truncated' attribute.
+         <br>  Updated to better represent the component objects of a DispositionReport.
+         <li> KeysOwned
+         <br>  Minor fixes to avoid Null Pointer Exceptions.
+         <li> RelatedBusinessInfo
+         <br>  Updated to support multiple Name and Description objects.
+         <li> ServiceInfo
+         <br>  Updated to support multiple Name objects.
+         <li> TModelInfo 
+         <br>  Minor fix to avoid possible Null Pointer Exception.
+         <li> 'All Publish API requests'
+         <br>  Minor updates to avoid possible Null Pointer Exception.
+         <li> FindService, FindBusiness, FindTModel, GetCompletionStatus, AuthToken
+         <br>  Minor updates to avoid possible Null Pointer Exception.
+         <li> BindingDetail, BusinessDetail, BusinessDetailExt, BusinessList, ServiceList, TModelDetail, TModelList
+         <br>  Updated to avoid Null Pointer Exception handling optional truncated attribute.
+        </UL>
+        </BLOCKQUOTE>
+        
+        <H4>2.0 release 5/15/2002</H4>
+        <BLOCKQUOTE>Changes from 2.0 beta include:<BR>
+        <UL>
+          <LI>Support for UDDI V2 errata 3
+          <LI>Configuration object to override system property settings in UDDIProxy.
+          <LI>Collection class methods added to classes that are primarily collections.
+          <LI>Addressline class added support for keyname, keyvalue.
+          <LI>Other miscellaneous bug fixes and enhancements.
+        </UL>
+        </BLOCKQUOTE>
+        
+        <H4>2.0 beta released 11/09/2001</H4>
+        <BLOCKQUOTE>Major revision. New capabilities include:<BR>
+        <UL>
+          <LI>Full support of the UDDI V2 specification
+          <LI>Support for plugable SOAP transports. Currently
+          the supported SOAP implementations include
+          <UL>
+            <LI>Apache SOAP 2.2 (http://xml.apache.org/soap/)
+            <LI>HP SOAP (http://www.hp.com/go/webservices)
+            <LI>Axis (http://xml.apache.org/axis/)
+          </UL>
+          <LI>Logging capability
+          <LI>Improved configuration capability
+        </UL>
+        </BLOCKQUOTE>
+        <BLOCKQUOTE>Other major changes:<BR>
+        <UL>
+          <LI>Package name changed to org.uddi4j
+          <LI>UDDI v1 messages are no longer supported.
+        </UL>
+        </BLOCKQUOTE>
+        <BLOCKQUOTE>Major contribution by HP to the project as
+        they join the development community. </BLOCKQUOTE>
+        <H4>1.0.3 released 06/26/2001</H4>
+        <BLOCKQUOTE>This release contains a significant bug fix.
+        Users of previous releases are strongly encouraged
+        to upgrade. <BR>
+        Corrected problem incorrecting interpreting
+        'name' attributes contained at multiple levels
+        when invoking save requests. <BR>
+        </BLOCKQUOTE>
+        <H4>1.0.2 released 03/28/2001</H4>
+        <BLOCKQUOTE>The getDescriptionStrings methods have been
+        removed from all classes that had them. They
+        have been replaced with getDefaultDesriptionString
+        method.<BR>
+        <BR>
+        The getDescriptionStrings method was misleading.
+        Each string in the returned vector represented
+        a different language, yet there was no way
+        to figure out what language each string was
+        for. getDefaultDescriptionString returns
+        the default (english) string.<BR>
+        <BR>
+        To obtain all the descriptions, use the getDescriptionVector
+        method. This returns Description objects
+        which contain a language attribute.<BR>
+        <BR>
+        Some fixes have been checked in to required
+        field constructs that accepted Vectors of
+        Strings. This does not affect their signatures.
+        Affected classes are: DeleteBinding, DeleteBusiness,
+        DeleteService, DeleteTModel, GetBindingDetail,
+        GetBusinessDetail, GetBusinessDetailExt,
+        GetServiceDetail, GetTModelDetail, TModelBag.<BR>
+        </BLOCKQUOTE>
+        <H4>1.0.1 released 02/16/01</H4>
+        <BLOCKQUOTE>Required fields constructors corrected for
+        some objects.<BR>
+        Samples added to source distribution.</BLOCKQUOTE>
+        <H4>1.0 released 01/24/2001</H4>
+        <BLOCKQUOTE>Initial submission by IBM of UDDI4J to open
+        source community on Developerworks.</BLOCKQUOTE>
+        <H4>1.0 beta release 11/13/2000</H4>
+        <BLOCKQUOTE>Included as part of IBM Web Services Toolkit
+        version 2.0 available on Alphaworks.<BR>
+        </BLOCKQUOTE>
+
+    </BODY>
+</HTML>

@@ -1,0 +1,19 @@
+   =========================================================================
+   ==  NOTICE file corresponding to section 4(d) of the Apache License,   ==
+   ==  Version 2.0, in this case for the Apache Axis distribution.        ==
+   =========================================================================
+
+   This product includes software developed by
+   The Apache Software Foundation (http://www.apache.org/).
+
+
+The library axisPlus.jar is a modified version of Axis 1.4.
+
+Modified files are:
+org.apache.axis.wsdl.symbolTable.BindingEntry
+org.apache.axis.wsdl.symbolTable.SymbolTable
+org.apache.axis.wsdl.toJava.JavaStubWriter
+org.apache.axis.wsdl.toJava.Emitter
+org.apache.axis.wsdl.toJava.JavaClassWriter
+org.apache.axis.encoding.DefaultTypeMappingImpl
+org.apache.axis.Constants.JavaBeanWriter

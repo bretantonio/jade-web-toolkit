@@ -1,0 +1,2 @@
+Do not delete files in the in/ directory.
+These are UBL files sent by enterprises to the business agents representing them in the platform. The messages sent through the enterprises interfaces in the demo refer to these files. You can modify their content to simulate different documents, as long as they remain correct.

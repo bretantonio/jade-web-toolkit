@@ -1,0 +1,109 @@
+<project name="Miscellaneous" default="compile" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="jade-home" value="../.."/>
+
+  <property name="version" value="2.2"/>
+
+  <property name="src" value="src"/>
+  <property name="build" value="classes"/>
+  <property name="doc" value="doc"/>
+  <property name="lib" value="lib"/>
+  <property name="jade-lib-dir" value="${jade-home}/lib"/>
+
+  <property name="javac.optimize" value="off"/>
+  <property name="javac.debug" value="on"/>
+
+  <path id="jade-classes">
+    <fileset dir="${jade-lib-dir}">
+      <include name="commons-codec/commons-codec-1.3.jar"/>
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the directories structure used to store files -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${lib}"/>
+    <mkdir dir="${doc}/api"/>
+  </target>
+
+  <!-- Compile the javadoc code from ${src} into ${doc} -->
+  <target name="doc" depends="compile">
+    <mkdir dir="${doc}/api"/>
+    <javadoc sourcepath="${src}" packagenames="jade.misc, examples.misc.FSMMessageExchange" destdir="${doc}/api" author="true" windowtitle="JADE Miscellaneous classes">
+      <classpath>
+        <pathelement location="{build}"/>
+        <path refid="jade-classes"/>
+      </classpath>
+    </javadoc>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src}"
+           destdir="${build}"
+           nowarn="off"
+           optimize="${javac.optimize}"
+           debug="${javac.debug}"
+           debuglevel="lines,vars,source"
+           deprecation="on">
+      <classpath>
+        <path refid="jade-classes"/>
+      </classpath>
+    </javac>
+
+    <!-- Copy images if any -->
+    <copy todir="${build}">
+      <fileset dir="${src}">
+        <include name="**/*.png"/>
+        <include name="**/*.gif"/>
+        <include name="**/*.jpg"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="lib" depends="compile" description="generate jar archive">
+    <jar jarfile="${lib}/jadeMisc.jar">
+      <fileset dir="${build}" includes="**/jade/**"/>
+    </jar>
+  </target>
+
+  <!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="clean, doc, lib">
+    <mkdir dir="${jade-home}/doc"/>
+
+    <delete file="../miscAddOn-${version}.zip" quiet="true"/>
+    <zip zipfile="../miscAddOn-${version}.zip" basedir="../..">
+      <include name="add-ons/misc/*"/>
+      <include name="add-ons/misc/src/**"/>
+      <include name="add-ons/misc/doc/**"/>
+      <include name="add-ons/misc/lib/**"/>
+      <include name="add-ons/misc/resources/**"/>
+    </zip>
+  </target>
+
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} directory tree -->
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${build}"/>
+      <fileset dir=".">
+           <include name="APDescription.txt"/>
+	   <include name="MTPs-Main-Container.txt"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="test" description="test the classes">
+    <java classname="jade.Boot" >
+       <arg value="-gui -nomtp subDF:jade.domain.df x:jade.misc.DFFederatorAgent(resources/DFFederatorAgent.properties)"/>
+       <classpath>
+           <pathelement path="${classpath}"/>
+       </classpath>
+    </java>
+  </target>
+
+  <target name="all" depends="clean, init, doc, compile, dist, test"/>
+
+</project>

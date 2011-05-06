@@ -1,0 +1,375 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>DistilledStateChartBehaviour User's Guide</title>
+<style type="text/css">
+<!--
+.Stile1 {
+	font-size: xx-large;
+	font-weight: bold;
+}
+.Stile2 {
+	font-size: x-large;
+	font-weight: bold;
+}
+.Stile3 {
+	font-family: "Courier New", Courier, monospace;
+	font-size: small;
+}
+-->
+</style>
+</head>
+
+<body>
+<p align="center" class="Stile1">DistilledStateChartBehaviour User's Guide</p>
+<p align="center">v 01-10-2010<br />
+Copyright (C) 2010 G. Fortino, F. Rango</p>
+<p>&nbsp;</p>
+<p class="Stile2">Index</p>
+<ol>
+  <li><a href="#1">Introduction</a></li>
+  <li><a href="#2">Installation, compilation and other operations</a></li>
+  <li><a href="#3">States programming</a></li>
+  <li><a href="#4">Events and transitions programming</a></li>
+  <li><a href="#5">Programming example</a></li>
+  <li><a href="#6">Application example</a></li>
+  <li><a href="#7">Fixed bugs</a></li>
+  <li><a href="#8">Contact us</a></li>
+  <li><a href="#9">License</a></li>
+  <li><a href="#10">References</a></li>
+</ol>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="1" id="1"></a>1. Introduction</p>
+<p>The <span class="Stile3">DistilledStateChartBehaviour</span> is a new JADE behaviour that allows defining the agent behaviour through a particular hierarchical state machine called &quot;Distilled  StateChart (DSC)&quot;. DSCs are obtained from the famous Statecharts formalism (Harel 1987) as follows to model the agent behaviour as a set of consistent states and transitions, driven by events, to which specific actions are associated:</p>
+<p>- DERIVING PROCESS: DSCs derive the following characteristics from Statecharts:</p>
+<ul>
+  <li>Structure based on a higraph consisting of rounded rectilinear blobs representing states, linked together with transitions.</li>
+  <li>Transitions based on ECA rules defined as E[C]/A, when E(vent) occurs and C(ondition) holds, the transition fires and A(ction) is atomically executed.</li>
+  <li>OR-decomposition of states in hierarchies of states among which the enclosing states are called composite state, the nested states are called sub-states and states without nested states are called simple states. AND-decomposition of states and related synchronization modeling elements are not used as DSCs are intended for the behavioral modeling of single-threaded agents (like JADE agents).</li>
+  <li>Inter-level state transitions that can originate from or lead to nested states on any level of the hierarchy.</li>
+  <li>History entrance pseudo-states (shallow and deep) allow entering sub-states which were most recently visited. With respect to the composite state on which the pseudo-state appears, shallow history indicates that history is applied only at the level of the composite state whereas deep history applies the same rule recursively to all levels of the state hierarchy of the composite state.</li>
+  <li>Default  entrance indicates the sub-state of a composite state to be entered when a transition targets its border.</li>
+  <li> Default  deep/shallow history entrance indicates the state to be entered in case deep/shallow history is not initialized, i.e. when the composite state containing the deep/shallow history pseudo-state is entered for the first time.</li>
+</ul>
+<p>- CONSTRAINING PROCESS: DSCs impose the following constraints:</p>
+<ul>
+  <li>Each DSC has an enclosing top state.</li>
+  <li>States do not include activity, entry and exit actions. So activity is only carried out under the form of atomic actions labeling transitions.</li>
+  <li>Transitions (apart from default entrances and default deep/shallow history entrances) are always labeled by an event.</li>
+  <li>Each composite state has an initial pseudo-state from which the default entrance of the composite state originates.</li>
+  <li>Default entrance and default deep/shallow history entrances can only be labeled by an action.</li>
+  <li>Run-to-completion execution semantics: an event can be processed only if the processing of the previous event has been fully completed.</li>
+</ul>
+<p>- AUGMENTATION PROCESS: DSCs augment Statecharts with the following features: </p>
+<ul>
+  <li>Events are implicitly and asynchronously received through an event queue.</li>
+  <li>To explicitly and asynchronously emit events the action language provides a primitive.</li>
+  <li>Variables can be declared in each state so forming a hierarchical data space.</li>
+</ul>
+<p>A DSC-based agent behaviour relies on an enhanced basic template built according to the FIPA agent lifecycle which JADE agents are compliant with (see Figure 1). In particular, the ACTIVE state is always entered through a deep history pseudo-state (H*) to restore the agent execution state after agent migration and, in general, after agent suspension. The ACTIVE state contains the Active Distilled  StateChart (ADSC) state to which the deep history entrance of H* points. The agent behaviour can be obtained by defining the ADSC.</p>
+<p>&nbsp;</p>
+<p align="center"><img src="images/dsc_template.jpg" width="447" height="325" /></p>
+<p align="center"><strong>Figure 1.</strong> DSC template. </p>
+<p>&nbsp;</p>
+<p>JADE already provides the <span class="Stile3">FSMBehaviour</span> for the modeling of agent behaviours based on finite state machines (FSMs). However their programming is not flexible as they are not based on ECA (Event-Condition-Action)-rule based transitions, and do not provide important mechanisms for reducing behaviour complexity such as well structured OR-decomposition and history entrances. In fact, the <span class="Stile3">FSMBehaviour</span> model essentially only permits flat state machines. The <span class="Stile3">HSMBehaviour</span> model extends the JADE <span class="Stile3">CompositeBehaviour</span> and provides a hierarchical state machine driven by ECA rules. However, it does not support shallow and deep history entrance mechanisms, useful for reducing behaviour complexity even further and for transparently archiving agent states. Therefore, the <span class="Stile3">DistilledStateChartBehaviour</span> has been developed by enhancing the <span class="Stile3">HSMBehaviour</span> and providing especially history entrance mechanisms.</p>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="2" id="2"></a>2. Installation, compilation and other operations </p>
+<p>To install this JADE add-on, do the following operations:</p>
+<ol>
+  <li>Extract the ZIP file of this JADE add-on into the main directory of JADE (JADE has to be already installed).</li>
+  <li>Besides the JADE libraries, add to the <span class="Stile3">CLASSPATH</span> system variable the path of <span class="Stile3">dsc.jar</span> library (it's contained in the <span class="Stile3">lib</span> directory).</li>
+</ol>
+<p>To compile this JADE add-on or generate the JAR/JAVADOC/distribution ZIP file, do the following operations:</p>
+<ol>
+  <li>Download and install ANT (go at <a href="http://ant.apache.org/" target="_blank">http://ant.apache.org/</a>). </li>
+  <li>Open the commands shell.</li>
+  <li>Through the commands shell, go in the main directory of this add-on (this directory is called <span class="Stile3">dsc</span> and contains the <span class="Stile3">build.xml</span> file).</li>
+  <li>Execute the command <span class="Stile3">set CLASSPATH=</span> to momentarily reset the <span class="Stile3">CLASSPATH</span> system variable.</li>
+  <li>To compile only, use the command <span class="Stile3">ant</span> or <span class="Stile3">ant compile</span> (the CLASS files are created into the <span class="Stile3">classes</span> directory). To generate the JAR file, use the command <span class="Stile3">ant lib</span> (the JAR file is created into the <span class="Stile3">lib</span> directory). To generate the JAVADOC, use the command <span class="Stile3">ant doc</span> (the JAVADOC is created into the <span class="Stile3">doc\api</span> directory). To generate the distribution ZIP file, use the command <span class="Stile3">ant dist</span> (the ZIP file is created into the <span class="Stile3">add-ons</span> JADE directory and it contains all the files of this add-on except the CLASS files that can be created through the compilation).</li>
+</ol>
+<p>We have used JDK 1.6.0, ANT 1.7.0 and JADE 4.0.1.<br />
+The <span class="Stile3">DistilledStateChartBehaviour</span> has also been extensively tested with JADE 3.6.1 and probably it works with many other JADE versions.<br />
+Here we explain the function of the add-on directories:</p>
+<ul>
+  <li><span class="Stile3">dsc</span>: it's the main directory of the add-on and contains the <span class="Stile3">build.xml</span> file used by ANT.
+    <ul>
+      <li><span class="Stile3">classes</span>: it contains the CLASS files  created during the ANT compilation process.</li>
+      <li><span class="Stile3">doc</span>: it contains the documentation.
+        <ul>
+          <li><span class="Stile3">api</span>: it contains the JAVADOC. </li>
+        </ul>
+      </li>
+      <li><span class="Stile3">lib</span>: it contains the JAR file.</li>
+      <li><span class="Stile3">src</span>: it contains the source code.
+        <ul>
+          <li><span class="Stile3">jade\core\behaviours</span>: it contains the source code of the <span class="Stile3">DistilledStateChartBehaviour</span>.</li>
+          <li><span class="Stile3">examples</span>: it contains the source code of the examples. </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="3" id="3"></a>3. States programming</p>
+<p>The <span class="Stile3">DistilledStateChartBehaviour</span> class represents a behaviour built according with the DSC characteristics: it extends the JADE <span class="Stile3">CompositeBehaviour</span> class  and manages a set of simple or composite sub-states. The simple sub-states can be represented through any JADE behaviour, while the composite sub-states must be of type <span class="Stile3">DistilledStateChartBehaviour</span>.<br />
+Naturally, the DSC has a current state and you can indicate the initial state and the final states. The methods used to add a normal, initial or final state into the DSC are respectively <span class="Stile3">addState</span>, <span class="Stile3">addInitialState</span> and <span class="Stile3">addFinalState</span>. Hierarchy is created well into a DSC by simply adding a <span class="Stile3">DistilledStateChartBehaviour</span> state to an existing <span class="Stile3">DistilledStateChartBehaviour</span>.<br />
+The <span class="Stile3">DistilledStateChartBehaviour</span> invokes the <span class="Stile3">action</span> method of the current state  and terminates when a final state is reached and its <span class="Stile3">done</span> method returns true. The current state is changed when a transition is executed.<br />
+To set the default deep/shallow history entrances of a composite state you must respectively use <span class="Stile3">setDefaultDeepHistoryEntrance</span> and <span class="Stile3">setDefaultShallowHistoryEntrance</span> methods of <span class="Stile3">DistilledStateChartBehaviour</span>. You can also define an initial state of type H or H* respectively through the operations <span class="Stile3">addInitialState(DistilledStateChartTransition.SHALLOW_HISTORY)</span> and <span class="Stile3">addInitialState(DistilledStateChartTransition.DEEP_HISTORY)</span>.<br />
+To define an action associated at the default entrance of the <span class="Stile3">DistilledStateChartBehaviour</span> (to execute when we enter the <span class="Stile3">DistilledStateChartBehaviour</span> and we have to restart from its initial state) you must override the <span class="Stile3">initialAction</span> method of <span class="Stile3">DistilledStateChartBehaviour</span>. In similar way, to define an action associated at the default deep/shallow history entrance you must override respectively the <span class="Stile3">defaultDeepHistoryEntranceAction</span> and <span class="Stile3">defaultShallowHistoryEntranceAction</span> methods of <span class="Stile3">DistilledStateChartBehaviour</span>.<br />
+To respect the DSC template shown in Figure 1 you must create the root <span class="Stile3">DistilledStateChartBehaviour</span> through the <span class="Stile3">createRootForDSCTemplate</span> static method  of <span class="Stile3">DistilledStateChartBehaviour</span>: it receives as parameter the user defined <span class="Stile3">DistilledStateChartBehaviour</span> corresponding to the ADSC state of the DSC template and returns the root that has  the deep history pseudo-state of the ACTIVE state as initial state and the default deep history entrance set to the user defined <span class="Stile3">DistilledStateChartBehaviour</span> passed as parameter. Naturally, the <span class="Stile3">addBehaviour</span> method of the agent must receive as parameter exactly the root returned by the <span class="Stile3">createRootForDSCTemplate</span> method.</p>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="4" id="4"></a>4. Events and transitions programming</p>
+<p>An event can be represented as an <span class="Stile3">ACLMessage</span>, since the <span class="Stile3">DistilledStateChartBehaviour</span> uses the JADE messages queue.<br />
+The <span class="Stile3">DistilledStateChartTransition</span> represents a generic transition, that can be added to a <span class="Stile3">DistilledStateChartBehaviour</span> through the <span class="Stile3">addTransition(DistilledStateChartTransition trans,  Behaviour source)</span> method, where the parameters represent respectively the transition to add and the source state of this transition. The <span class="Stile3">addTransition</span> method can be invoked on the <span class="Stile3">DistilledStateChartBehaviour</span> that contains the source state of the transition or it can be invoked on the root <span class="Stile3">DistilledStateChartBehaviour</span>. The <span class="Stile3">trigger(Behaviour source, ACLMessage msg)</span> method works as trigger and guard of the transition (the parameters represent respectively the source state of the transition and the event to check) and the <span class="Stile3">action(ACLMessage msg)</span> method represents the action of the transition (the parameter indicates the event that caused the transition to fire). Both these methods should be overridden by the user to define respectively trigger and action of the transition. If the <span class="Stile3">trigger</span> method returns true, the transition can be executed, then the <span class="Stile3">action</span> method of the transition is invoked and the transition to the destination state is executed.<br />
+  The <span class="Stile3">DistilledStateChartPerformativeTransition</span> and <span class="Stile3">DistilledStateChartTemplateTransition</span> classes extend <span class="Stile3">DistilledStateChartTransition</span> providing a new version of the <span class="Stile3">trigger</span> method that allows to check respectively if the received event respects a given performative or a given <span class="Stile3">MessageTemplate</span>.<br />
+  It's possible to indicate that a transition uses history (deep or shallow) for its destination state; i.e. we indicate as destination state the composite state that contains the history pseudo-state (H or H*) to which points the transition. The <span class="Stile3">DistilledStateChartTransition.DEEP_HISTORY</span> constant indicates that we use the deep history, instead the <span class="Stile3">DistilledStateChartTransition.SHALLOW_HISTORY</span> indicates that we use the shallow history.<br />
+To search a valid transition to fire,  initially the transitions related to the current state are checked to see if any of their triggers are true. If not,  the transitions related to the parent states are checked until the root is reached. If no transition can fire, the event is removed or inserted again into the messages queue referring to the chosen   event handling politics. You can choose the event handling politics through the following parameters passed to the <span class="Stile3">DistilledStateChartBehaviour</span> constructor:</p>
+<ul>
+  <li><span class="Stile3">boolean  putbackMessage</span>: if the received event not allows to execute a transition and <span class="Stile3">putbackMessage</span> is <span class="Stile3">true</span>, the event is inserted again into the messages queue and it's the first event in the queue. Instead if <span class="Stile3">putbackMessage</span> is <span class="Stile3">false</span>, the event is removed.</li>
+  <li><span class="Stile3">MessageTemplate  mainTemplate</span>: if the <span class="Stile3">mainTemplate</span> is assigned, the DSC receives and uses only the events that respect the <span class="Stile3">mainTemplate</span>; i.e. the DSC uses only the events that are sent to be handled by this DSC and ignores the other messages that should be handled by any other behaviour of the same agent. Instead if <span class="Stile3">mainTemplate</span> is <span class="Stile3">null</span>, the DSC receives and uses all the messages sent to the current agent without any filter.</li>
+</ul>
+<p>You have to set these parameters very carefully referring to the specific case, but probably in the majority of cases the better event handling politics is that with <span class="Stile3">putbackMessage  = false</span> and assigned <span class="Stile3">mainTemplate</span> (if the received event not allows to execute a transition, it's removed and we know that it isn't needed by any other behaviour).</p>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="5" id="5"></a>5. Programming example</p>
+<p>Now we consider the DSC shown in Figure 2.</p>
+<p>&nbsp;</p>
+<p align="center"><img src="images/simple_dsc_example.jpg" width="491" height="598" /></p>
+<p align="center"><strong>Figure 2.</strong> Programming example.</p>
+<p>&nbsp;</p>
+<p>To create this DSC, we have to write the following Java code inside a JADE agent:</p>
+<p class="Stile3"> // 1. Create composite states, eventually indicating the initial action<br />
+DistilledStateChartBehaviour adsc = new DistilledStateChartBehaviour(this, &quot;ADSC&quot;, MessageTemplate.MatchConversationId(&quot;DistilledStateChartBehaviour&quot;), false){<br />
+&nbsp;
+public void initialAction(){<br />
+&nbsp;&nbsp;
+System.out.println(&quot;ENTER ADSC&quot;);<br />
+&nbsp;
+}<br />
+};<br />
+DistilledStateChartBehaviour dsc1 = new DistilledStateChartBehaviour(this, &quot;DSC1&quot;, MessageTemplate.MatchConversationId(&quot;DistilledStateChartBehaviour&quot;), false){<br />
+&nbsp;
+public void initialAction(){<br />
+&nbsp;&nbsp;
+System.out.println(&quot;ENTER DSC1&quot;);<br />
+&nbsp;
+}<br />
+};<br />
+DistilledStateChartBehaviour dsc2 = new DistilledStateChartBehaviour(this, &quot;DSC2&quot;, MessageTemplate.MatchConversationId(&quot;DistilledStateChartBehaviour&quot;), false);</p>
+<p class="Stile3"> // 2. Create &quot;empty&quot; simple states<br />
+  Behaviour s1 = new SimpleStateBehaviour(this, &quot;S1&quot;);<br />
+  Behaviour s2 = new SimpleStateBehaviour(this, &quot;S2&quot;);<br />
+  Behaviour s3 = new SimpleStateBehaviour(this, &quot;S3&quot;);<br />
+  Behaviour s4 = new SimpleStateBehaviour(this, &quot;S4&quot;);</p>
+<p class="Stile3"> // 3. Add sub-states and set the &quot;Default Deep/Shallow History Entrance&quot;<br />
+  adsc.addInitialState(dsc1);<br />
+  adsc.addState(dsc2);<br />
+  dsc1.addInitialState(s1);<br />
+  dsc1.addState(s2);<br />
+  dsc1.setDefaultDeepHistoryEntrance(s1);<br />
+  dsc2.addInitialState(DistilledStateChartTransition.DEEP_HISTORY);<br />
+  dsc2.addState(s3);<br />
+  dsc2.addState(s4);<br />
+  dsc2.setDefaultDeepHistoryEntrance(s3);<br />
+  dsc2.setDefaultShallowHistoryEntrance(s4);</p>
+<p class="Stile3"> // 4. Create transitions<br />
+  DistilledStateChartTransition t12 = new DistilledStateChartTransition(&quot;T12&quot;, s2){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.INFORM) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;T12&quot;);<br />
+ &nbsp; }<br />
+  };<br />
+  DistilledStateChartTransition t21 = new DistilledStateChartTransition(&quot;T21&quot;, s1){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.INFORM) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;T21&quot;);<br />
+ &nbsp; }<br />
+  };<br />
+  DistilledStateChartTransition t34 = new DistilledStateChartTransition(&quot;T34&quot;, s4){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.INFORM) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;T34&quot;);<br />
+ &nbsp; }<br />
+  };<br />
+  DistilledStateChartTransition t43 = new DistilledStateChartTransition(&quot;T43&quot;, s3){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.INFORM) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;T43&quot;);<br />
+ &nbsp; }<br />
+  };<br />
+  DistilledStateChartTransition td1d2 = new DistilledStateChartTransition(&quot;TD1D2&quot;, dsc2){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.AGREE) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;TD1D2&quot;);<br />
+ &nbsp; }<br />
+  };<br />
+  DistilledStateChartTransition th21 = new DistilledStateChartTransition(&quot;TH21&quot;, dsc1, DistilledStateChartTransition.DEEP_HISTORY){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.CONFIRM) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;TH21&quot;);<br />
+ &nbsp; }<br />
+  };<br />
+  DistilledStateChartTransition th12 = new DistilledStateChartTransition(&quot;TH12&quot;, dsc2, DistilledStateChartTransition.SHALLOW_HISTORY){<br />
+ &nbsp; public boolean trigger(Behaviour source, ACLMessage msg) {<br />
+ &nbsp;&nbsp; if (msg != null &amp;&amp; msg.getPerformative() == ACLMessage.CONFIRM) {<br />
+ &nbsp;&nbsp;&nbsp; return true;<br />
+ &nbsp;&nbsp; }<br />
+ &nbsp;&nbsp; return false;<br />
+ &nbsp; }<br />
+ &nbsp; public void action(ACLMessage msg){<br />
+ &nbsp;&nbsp; System.out.println(&quot;TH12&quot;);<br />
+ &nbsp; }<br />
+  };</p>
+<p class="Stile3"> // 5. Add transitions<br />
+  adsc.addTransition(t12, s1);<br />
+  adsc.addTransition(t21, s2);<br />
+  adsc.addTransition(t34, s3);<br />
+  adsc.addTransition(t43, s4);<br />
+  adsc.addTransition(td1d2, dsc1);<br />
+  adsc.addTransition(th21, dsc2);<br />
+  adsc.addTransition(th12, dsc1);</p>
+<p class="Stile3"> // 6. Create the root according with the DSC template<br />
+  DistilledStateChartBehaviour root = DistilledStateChartBehaviour.createRootForDSCTemplate(adsc);</p>
+<p class="Stile3"> // 7. Activate the root<br />
+  addBehaviour(root);</p>
+<p>Where the <span class="Stile3">SimpleStateBehaviour</span> class represents the &quot;empty&quot; simple states of the DSC (without entry/exit actions and <span class="Stile3">action</span> method with empty body):</p>
+<p class="Stile3">public class SimpleStateBehaviour extends Behaviour {<br />
+  <br />
+ &nbsp; private Agent myAgent;<br />
+<br />
+&nbsp;
+public SimpleStateBehaviour(Agent anAgent, String aName) {<br />
+ &nbsp;&nbsp;&nbsp; super(anAgent);<br />
+ &nbsp;&nbsp;&nbsp; this.myAgent = anAgent;<br />
+ &nbsp;&nbsp;&nbsp; setBehaviourName(aName);<br />
+&nbsp; }<br />
+&nbsp; <br />
+&nbsp;
+public void action() {}<br />
+&nbsp; <br />
+&nbsp;
+public boolean done() { return true; }<br />
+<br />
+ }</p>
+<p>The <span class="Stile3">done</span> method of <span class="Stile3">SimpleStateBehaviour</span> immediately returns <span class="Stile3">true</span>, because the simple states behaviour doesn't have to execute any action and immediately terminates.<br />
+As we can see, through the parameters passed to the <span class="Stile3">DistilledStateChartBehaviour</span> constructor we have chosen the event handling politics with <span class="Stile3">putbackMessage  = false</span> and assigned <span class="Stile3">mainTemplate</span>. In fact, this should be the better event handling politics in the majority of cases: the DSC receives and uses only the messages that respect the assigned <span class="Stile3">mainTemplate</span> and discards the useless messages (that not allow to execute any transition); i.e., in our case, the DSC receives and uses only the messages that have their <span class="Stile3">conversation-id</span> field set to the value &ldquo;DistilledStateChartBehaviour&rdquo;. Therefore, when we send a message to this DSC, we have to set its <span class="Stile3">conversation-id</span> field to the value &ldquo;DistilledStateChartBehaviour&rdquo; like the following example: </p>
+<p class="Stile3"> ACLMessage msg = new ACLMessage( ... );<br />
+  msg.setConversationId(&quot;DistilledStateChartBehaviour&quot;); //set conversation-id field<br />
+  msg.addReceiver( ... );<br />
+  msg.setSender( ... ); <br />
+send(msg);</p>
+<p>Into the different <span class="Stile3">DistilledStateChartBehaviour</span>, the <span class="Stile3">initialAction</span> method is used to specify the initial action.<br />
+  In Figure 2, the transitions that depart from a history pseudo-state and reach a given state indicate that this state represents the default deep/shallow  history entrance, which is set through the <span class="Stile3">setDefaultDeepHistoryEntrance</span>&nbsp;and <span class="Stile3">setDefaultShallowHistoryEntrance</span> methods into the code. The default deep/shallow  history entrance indicates the sub-state to reach in absence of history memory: for example, if we want to enter with shallow history the DSC2 composite state through the TH12 transition, but this state has never been visited before, the sub-state of DSC2 indicated as default shallow  history entrance (i.e. S4) is reached.<br />
+  As it regards the DSC2 state, it's possible to see another particularity: to indicate that its initial state is the H* history pseudo-state is effected the <span class="Stile3">addInitialState(DistilledStateChartTransition.DEEP_HISTORY)</span> operation.<br />
+  The transitions guard is specified through the <span class="Stile3">trigger</span> method, while the <span class="Stile3">action</span> method indicates the action associated to the transition. Moreover, each transition has a name (like each state). <br />
+Since the transitions trigger in this example checks only if the received event respects a given performative, we can use the <span class="Stile3">DistilledStateChartPerformativeTransition</span> class instead of the <span class="Stile3">DistilledStateChartTransition</span> class. For example, for the T12 transition we can write the following code lines:</p>
+<p class="Stile3">DistilledStateChartTransition  t12 = new DistilledStateChartPerformativeTransition(&quot;T12&quot;,  s2, ACLMessage.INFORM){<br />
+  &nbsp; public void action(ACLMessage msg){<br />
+  &nbsp;&nbsp;
+  System.out.println(&quot;T12&quot;);<br />
+  &nbsp; }<br />
+};</p>
+<p>For those transitions that use history, at the transition creation moment has been indicated the destination state (that is that contains the history pseudo-state) and the history type (through the <span class="Stile3">DistilledStateChartTransition.DEEP_HISTORY</span> and <span class="Stile3">DistilledStateChartTransition.SHALLOW_HISTORY</span> constants). For example, for the TH21 transition, that goes from the DSC2 state to the deep history pseudo-state of the DSC1 state, has been indicated as destination state the DSC1 state (i.e. the state that contains the H* pseudo-state reached by the transition) and has been used the <span class="Stile3">DistilledStateChartTransition.DEEP_HISTORY</span> constant to indicate that we want to use deep history.<br />
+  To respect the DSC template shown in Figure 1 we have created the root <span class="Stile3">DistilledStateChartBehaviour</span> through the <span class="Stile3">createRootForDSCTemplate</span> method  of <span class="Stile3">DistilledStateChartBehaviour</span>: it receives as parameter the created <span class="Stile3">DistilledStateChartBehaviour</span> (that, as the name suggests, corresponds to the ADSC state of the DSC template) and generates the root that has  the deep history pseudo-state of the ACTIVE state as initial state and the default deep history entrance set to the <span class="Stile3">DistilledStateChartBehaviour</span> passed as parameter. Then, the <span class="Stile3">addBehaviour</span> method of the agent  receives as parameter the root created in this way.<br />
+The complete source code of this example is placed in the <span class="Stile3">src\examples\simple_dsc_example</span> directory. To run this example, use the following command:</p>
+<p class="Stile3">java jade.Boot -gui ExampleDSCAgent:examples.simple_dsc_example.ExampleDSCAgent</p>
+<p>In this example, the states haven't variables: to  assign the variables to the states so forming a hierarchical data space, we recommend you to follow the structure used in the following application example. </p>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="6" id="6"></a>6. Application example</p>
+<p>In this section we propose a complete application example that uses agents and  DSCs to coordinate and arrange in an intelligent way meetings. The  <span class="Stile3">MeetingRequester</span> (see Figure 3) represents the agent that has to send the meeting request  to the <span class="Stile3">MeetingBroker</span> (see Figure 4), that manages the request and coordinates the  participants, called <span class="Stile3">MeetingParticipant</span> (see Figure 5). Initially, the  <span class="Stile3">MeetingRequester</span> sends a <span class="Stile3">Request</span> event to the <span class="Stile3">MeetingBroker</span>  containing the appointment to arrange (that possesses all the necessary  information on the participants, the chosen date, etc.). When the  <span class="Stile3">MeetingBroker</span> receives the <span class="Stile3">Request</span> event, sends to itself and all the  participants a <span class="Stile3">Propose</span> event containing the appointment to schedule and then  starts a timer. If the participants accept the appointment, they send an <span class="Stile3">AcceptProposal</span>  event to the <span class="Stile3">MeetingBroker</span>; otherwise they send a <span class="Stile3">RejectProposal</span> event. On  the basis of the received responses, the <span class="Stile3">MeetingBroker</span> accepts or excludes  the participants and, when it receives all the responses or when expires the timeout  associated to the set timer, sends an <span class="Stile3">ArrangementDone</span> event to itself that  allows to undertake the final operations for the current appointment:</p>
+<ul>
+  <li>If at least two <span class="Stile3">MeetingParticipant</span> have accepted  the appointment, it means that the meeting organization is successfully done,  then the <span class="Stile3">MeetingBroker</span> sends a <span class="Stile3">Confirm</span> event to the&nbsp;<span class="Stile3">MeetingRequester</span> and the participants, that  schedule the appointment in their rosters.</li>
+  <li>If the appointment has been accepted by less than two <span class="Stile3">MeetingParticipant</span>  and it is not yet reached the maximum limit of three new participant requests to  the <span class="Stile3">MeetingRequester</span>, the <span class="Stile3">MeetingBroker</span> issues a request of new  participants to the <span class="Stile3">MeetingRequester</span> by sending it an <span class="Stile3">AskForRequest</span> event.  Then, the <span class="Stile3">MeetingRequester</span> sends a new <span class="Stile3">Request</span>  event to the <span class="Stile3">MeetingBroker</span> indicating the appointment to schedule and the  new participants. This way, the <span class="Stile3">MeetingBroker</span> can try again to schedule  the appointment involving the new participants.</li>
+  <li>If the appointment has been accepted by less than two <span class="Stile3">MeetingParticipant</span>  and it is reached the maximum limit of three new participant requests to  the <span class="Stile3">MeetingRequester</span>, the appointment is canceled and a <span class="Stile3">Cancel</span> event is  sent to the&nbsp;<span class="Stile3">MeetingRequester</span> and the participants that had accepted.</li>
+</ul>
+<p>&nbsp;</p>
+<p align="center"><img src="images/dsc_meeting_requester.jpg" width="457" height="183" /></p>
+<p align="center"><strong>Figure 3.</strong> DSC of the <span class="Stile3">MeetingRequester</span></p>
+<p>&nbsp;</p>
+<p align="center"><img src="images/dsc_meeting_broker.jpg" width="630" height="606" /></p>
+<p align="center"><strong>Figure 4.</strong> DSC of the <span class="Stile3">MeetingBroker</span></p>
+<p>&nbsp;</p>
+<p align="center"><img src="images/dsc_meeting_participant.jpg" width="359" height="251" /></p>
+<p align="center"><strong>Figure 5.</strong> DSC of a <span class="Stile3">MeetingParticipant</span></p>
+<p>&nbsp;</p>
+<p>Because of the big amount of code, we don't report here the code of this application example: you can find it  in the <span class="Stile3">src\examples\meeting_dsc_example</span> directory. To run this example, use the following command:</p>
+<p class="Stile3">java jade.Boot -gui MeetingBroker:examples.meeting_dsc_example.MeetingBroker;<br />
+p1:examples.meeting_dsc_example.MeetingParticipant;p2:examples.meeting_dsc_example.MeetingParticipant;<br />
+p3:examples.meeting_dsc_example.MeetingParticipant;MeetingRequester:examples.meeting_dsc_example.MeetingRequester</p>
+<p>Don't start the agents in a different order from that indicated in the command! But naturally it's possible to start a different number of <span class="Stile3">MeetingParticipant</span>.<br />
+  As you can see inside the code, to create a hierarchical data space, the inferior states are realized as inner classes of the superior states: the general structure is made so that each state contains the inner classes of its direct sub-states. So each state can &quot;see&quot; and use directly the variables of its superior states. Moreover, each state creates its sub-states and has variables that represent these sub-states, which are very useful when we have to indicate the source or destination state of a transition.<br />
+This time, to create the root <span class="Stile3">DistilledStateChartBehaviour</span> has not been used the <span class="Stile3">createRootForDSCTemplate</span> method, because the root has been created manually respecting the DSC template (the default deep history entrance of the root is set to the state that appears with the &ldquo;DHS&rdquo; stereotype in Figure 3/4/5).<br />
+The transitions are declared inside the root, so they can be seen and used by all the inner classes, but they are created through a <span class="Stile3">createT...</span> method of the transition source state, so that <span class="Stile3">trigger</span> and <span class="Stile3">action</span> methods of the transition can &quot;see&quot; and use directly the variables of the transition source state and those of its superior states.</p>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="7" id="7"></a>7. Fixed bugs </p>
+<p>Here is the list of <span class="Stile3">HSMBehaviour</span> fixed bugs:</p>
+<ul>
+  <li>&quot;getParent&quot; method of &quot;HSMBehaviour&quot; doesn't work with JADE 3.6.1. FIXED.</li>
+  <li>For NON final states, if &quot;done&quot; method of current behaviour returns &quot;true&quot; (i.e. it has finished) and it isn't possible to fire a transition, next time the current behaviour is executed again by the beginning (calling methods &quot;onStart&quot; -&gt; &quot;action&quot; -&gt; &quot;onEnd&quot;). FIXED.</li>
+  <li>For HSMs with more than two level of hierarchy, if a transition, that goes from an HSM that contains more than one HSM to another HSM, fires, a &quot;ClassCastException&quot; is raised. FIXED.</li>
+  <li>Parent of &quot;Wrapper&quot; is always &quot;null&quot;. FIXED.</li>
+  <li>Before executing a transition, only the current &quot;HSMBehaviour&quot; makes the operation &quot;setCurrent(null)&quot; and the superior ones don't set to &quot;null&quot; their currents so causing a malfunction when such states are reentered. FIXED.</li>
+  <li>Each HSM must have an initial state, otherwise if the target HSM of a hierarchical transition doesn't have an initial state there are problems. FIXED.</li>
+  <li>If the HSM is in a final state and a transition fires, if &quot;done&quot; method of final state returns &quot;true&quot; (even if its &quot;action&quot; method has never been executed) is executed twice its &quot;onEnd&quot; method. FIXED.</li>
+  <li>If a final state has finished but it can execute a transition as soon as its &quot;action&quot; method returns, this final state executes the transition, even if it has already finished. FIXED.</li>
+  <li>If a state that contains some transitions is added, through &quot;addState&quot; method, a &quot;ConcurrentModificationException&quot; is raised. FIXED.</li>
+</ul>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="8" id="8"></a>8. Contact us </p>
+<p>If you have any problem or question, you can contact us at the following addresses:</p>
+<ul>
+  <li>G. Fortino: <a href="mailto:g.fortino@unical.it">g.fortino@unical.it</a></li>
+  <li>F. Rango:  <a href="mailto:frango@si.deis.unical.it">frango@si.deis.unical.it</a></li>
+</ul>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="9" id="9"></a>9. License</p>
+<p>&quot;DistilledStateChartBehaviour&quot; is a work based on the library &quot;HSMBehaviour&quot; (authors: G. Caire, R. Delucchi, M. Griss, R. Kessler, B. Remick).<br />
+  Changed files: &quot;HSMBehaviour.java&quot;, &quot;HSMEvent.java&quot;, &quot;HSMPerformativeTransition.java&quot;, &quot;HSMTemplateTransition.java&quot;, &quot;HSMTransition.java&quot;.<br />
+  Last change date: 18/06/2010<br />
+  Copyright (C) 2010 G. Fortino, F. Rango</p>
+<p>This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; version 2.1 of the License.</p>
+<p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.</p>
+<p>You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA</p>
+<p>&nbsp;</p>
+<p class="Stile2"><a name="10" id="10"></a>10. References</p>
+<ul>
+  <li>G. Fortino, F. Rango, W. Russo, &ldquo;Statecharts-based JADE agents and tools for engineering Multi-Agent Systems&rdquo;, Proc of 14th International Conference on Knowledge-Based and Intelligent Information and Engineering Systems (KES2010), Cardiff, 2010.</li>
+  <li>G. Fortino, A. Garro, S. Mascillaro, W. Russo, &ldquo;Using Event-driven Lightweight DSC-based Agents for MAS Modeling,&rdquo; International Journal on Agent Oriented Software Engineering, 4(2), 2010.</li>
+  <li>G. Fortino, W. Russo, E. Zimeo, &ldquo;A statecharts-based software development process for mobile agents,&rdquo; Information and Software Technology 46(13), 907--921, 2004.</li>
+  <li>G. Fortino, A. Garro, S. Mascillaro, W. Russo,  &ldquo;ELDATool: A Statecharts-based Tool for Prototyping Multi-Agent Systems&rdquo;, In  Proc. of the Workshop on Objects and Agents (WOA&rsquo;07), Genova (Italy), Sept.  24-25, 2007.</li>
+  <li>D. Harel, &ldquo;Statecharts: a visual formalism for complex  systems&rdquo;, in Science of Computer Programming, Volume 8, Issue 3, Pages 231-274,  Elsevier North-Holland, Inc., 1987.</li>
+  <li>R. Kessler, M. Griss, B. Remick, R. Delucchi, &ldquo;A  Hierarchical State Machine using JADE Behaviours with Animation Visualization&rdquo;, In  Proc. of Int&rsquo;l Joint Conference on Autonomous Agents and Multi Agents Systems,  AAMAS&rsquo;04, New York City, NY, USA, July 2004.</li>
+</ul>
+<p>&nbsp;</p>
+</body>
+</html>

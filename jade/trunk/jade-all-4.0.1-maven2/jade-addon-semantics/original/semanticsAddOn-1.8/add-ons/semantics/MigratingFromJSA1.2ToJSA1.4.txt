@@ -1,0 +1,207 @@
+GUIDELINES FOR MIGRATING A JSA-1.2 APPLICATION TO JSA-1.4
+==========================================================================
+
+
+NEW SIGNATURE FOR THE SETUP METHODS
+-----------------------------------
+Since the 1.4 version, the setupKBase, setupSemanticInterpretationPrinciples and
+setupSemanticActions methods are no longer void methods. They return their
+respective setup object. The general form of these methods should be the
+following:
+
+    protected KBase setupKbase() {
+            FilterKBase kb = (FilterKBase)super.setupKbase();
+            kb.add...(...);
+            return kb;
+    }
+
+    protected SemanticInterpretationPrincipleTable
+                setupSemanticInterpretationPrinciples() {
+        SemanticInterpretationPrincipleTable table =
+                super.setupSemanticInterpretationPrinciples();
+        table.add...(...);
+        return table;
+    }
+
+    protected SemanticActionTable setupSemanticActions() {
+        SemanticActionTable table = super.setupSemanticActions();
+        table.add...(...);
+        return table;
+    }
+
+
+DEPRECATION OF THE STANDARDCUSTOMIZATION CLASS
+----------------------------------------------
+Since the 1.4 version, the StandardCustomization class is progressively
+deprecated. The general idea is to replace each provided method by a proper
+Semantic Interpretation Principle (SIP). Such SIPs can be defined using a
+particular SIP adapter, which can be found in the
+jade.semantics.interpreter.sips.adapters package. For example, the
+acceptBeliefTransfer and acceptIntentionTransfer methods can be replaced using
+respectively a set of BeliefTransferSIPAdapater or IntentionTransferSIPAdapater
+instances. For example, the previous programming style hereunder:
+
+    public boolean acceptBeliefTransfer(Formula formula, Term agent) {
+        ...
+        return <acceptation condition check>;
+    }
+
+must be replaced with a set of SIPs (one for each pattern of formula to
+believe):
+
+    mySIPTable.addSemanticInterpretationPrinciple(
+        new BeliefTransferSIPAdapter(this, <pattern of formula to believe>,
+                                           <pattern of originating agent>) {
+            protected ArrayList doApply(MatchResult matchFormula,
+                             MatchResult matchAgent,
+                             ArrayList acceptResult,
+                             ArrayList refuseResult,
+                             SemanticRepresentation sr) {
+                if (<acceptation condition check>) {
+                    return acceptResult;
+                }
+                else {
+                    return refuseResult;
+                }
+            }
+        });
+
+Another typical example is to handle CFP, which must now be done by adding one
+or more instances of the CFPSIPAdapter class to the SIP table of the semantic
+agent:
+
+    mySIPTable.addSemanticInterpretationPrinciple(new CFPSIPAdapter(this));
+
+By default, the CFPSIPAdapter checks the queried condition in the belief base of
+the agent independently from the queried action. If a more fine control is
+required, you have to override the prepareProposal method of this adapter.
+
+
+DEPRECATION OF THE PLANNER INTERFACE
+------------------------------------
+Since the 1.4 version, the Planner interface (together with the planner package)
+has been removed. One must now add one or more instances of the
+PlanningSIPAdapter class to the SIP table of the semantic agent. This adapter
+can be extended by overriding the doApply method. The main difference with
+respect to the 1.2 version is that this method returns a FIPA-SL action
+expression rather than a JADE behaviour.
+
+
+EVOLUTION OF THE KBASSERTFILTER CLASS
+-------------------------------------
+Since the 1.4 version, the afterAssert method of KBAssertFilter is deprecated.
+To trigger some code after the assertion of a fact, use a NotificationSIPAdapter
+in the following way:
+
+    mySIPTable.addSemanticInterpretationPrinciple(
+        new NotificationSIPAdapter(this, <pattern of asserted formula>) {
+            protected void notify(MatchResult matchFormula,
+                                  SemanticRepresentation sr) {
+                potentiallyAddBehaviour(new OneShotBehaviour() {
+                    void action() {
+                        <code to trigger>
+                    }
+                });
+            }
+        });
+
+
+IMPROVEMENT OF CONVENIENT METHODS TO SEND ACL MESSAGES
+------------------------------------------------------
+Since the 1.4 version, replace all statements of the form:
+
+    semanticCapabilities
+        .sendCommunicativeAction(semanticCapabilities.createInform(...));
+
+with:
+
+    semanticCapabilities.inform(...);
+
+in order to send ACL messages to other agents. Such a convenient method has been
+added for each kind of ACL message. Similarly, the unsubscribe method must be
+used to generate a proper ACL message to cancel a previous subscription.
+
+
+IMPROVEMENT OF THE INTERPRET METHOD
+-----------------------------------
+Since the 1.4 version, the interpret method of the SemanticInterpreterBehaviour
+class can be accessed from the SemanticCapabilities for convenience. The
+"??myself" meta-reference must also be used instead of "??agent", to refer the
+semantic agent (i.e. such reserved meta-references are instantiated with an SL
+functional term representing the agent's AID), in all signatures of the method.
+Finally, the interpret method now automatically adds a surrounding "(B ??myself
+...)" belief modality to the passed formulas, so that it possible to omit it
+(for the sake of readibility). For example, instead of writing:
+
+    mySemCap.getSemanticInterpreterBehaviour().interpret(
+        "(B ??agent (wearing " + mySemCap.getAgentName() + " coat))");
+
+you can now write more simply:
+
+    mySemCap.interpret("(wearing ??myself coat)");
+
+
+EVOLUTION OF THE EVENTCREATIONOBSERVER CLASS
+--------------------------------------------
+Since the 1.4 version, the constructor of EventCreationObserver has changed. See
+the java doc for details. Moreover, it is now possible to use the "??myself"
+reserved meta-reference to refer to the semantic agent inside the formula to
+observe, as well as inside the formula to interpret when the observer is
+triggerred. Moreover, the surrounding "(B ??myself ...)" belief modality can be
+omitted inside the formula to observe. For example:
+
+    myKBase.addObserver(new EventCreationObserver(myKBase,
+                     SL.fromFormula("(not (temperature_gt 20))"),
+                     SL.fromFormula("(I ??myself (wearing ??myself trousers))"),
+                     getSemanticInterpreterBehaviour()));
+
+
+
+RENAMING OF SOME CLASSES
+------------------------
+Since the 1.4 version, use the class SL instead of SLPatternManip (more readable
+name), the class SemanticAgent instead of SemanticAgentBase (there is no more
+SemanticAgent interface). The previous names still work for backward
+compatibility, but they are deprecated and should be removed in future versions.
+
+
+EVOLUTION OF THE KBASE INTERFACE
+--------------------------------
+Since the 1.4 version, the removeFormula method of the KBase interface is no
+longer available. Use the retractFormula instead. Moreover, the toStrings method
+(which returns an array of the formulas contained in the belief base, expressed
+as Java strings) has been added to the KBase interface, and replaces the
+previous viewDataInBase method, which was available only for the FilterKBaseImpl
+implementation.
+
+
+EXTENSION OF THE FIPA-SL GRAMMAR
+--------------------------------
+Since the 1.4 version, it is possible to use inside FIPA-SL expressions logical
+"and" or "or" operators with more than 2 arguments. For example "(and f1 f2 f3
+f4)" is parsed as "(and f1 (and f2 (and f3 f4)))". This the same for the
+sequence ";" and the alternative "|" functional operators.
+Additionnally, for convenience, an "instantiate" method with 1 couple of
+arguments (meta-reference name, value) has been added on the Formula and Term
+nodes. It returns a node of the same type, making it possible to call repeatedly
+this method on a node to instantiate several meta-references. Notice however
+that it is not the most efficient way to instantiate several meta-references,
+use rather the intantiate methods (with the required number of arguments) of the
+SL class.
+
+
+EVOLUTION OF THE ONTOLOGICALACTION CLASS
+----------------------------------------
+Since the 1.4 version, the constructor of the OntologicalAction class has
+changed. Replace the first argument by the SemanticCapabilities object.
+Moreover, one must now use the "??actor" reserved meta-reference instead of
+"??sender" inside the FIPA-SL expressions defining the ontological action
+(action expression, precondition, postcondition).
+
+
+EVOLUTION OF THE KBASSERTFILTERADAPTER CLASS
+--------------------------------------------
+Since the 1.4 version, the signature of the doApply has changed, it now expects
+a MatchResult object resulting from the matching between the formula to assert
+and the filter pattern, in addition to the Formula object giving the formula to
+assert.

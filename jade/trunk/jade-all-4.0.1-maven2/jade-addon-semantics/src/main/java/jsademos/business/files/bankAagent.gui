@@ -1,0 +1,10 @@
+
+#message# I am the loaning bank # inform (bank)
+#message# loan done # inform ((done (action (agent-identifier :name bank@test) (LOAN_MONEY :buyer (agent-identifier :name buyer@test) :package (set "television" "phone") :price 250 :seller (agent-identifier :name seller@test))) true))
+message# Inform PHI # inform (PHI)
+
+image# bankA
+
+receiver# bankA@test
+receiver# intermediary@test
+receiver# buyer@test

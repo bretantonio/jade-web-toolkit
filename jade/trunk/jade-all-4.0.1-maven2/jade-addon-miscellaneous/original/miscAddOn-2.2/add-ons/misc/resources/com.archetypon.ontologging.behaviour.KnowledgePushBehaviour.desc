@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fsm>
+
+	<state name="START" first="true" behaviour="com.archetypon.ontologging.behaviour.knowledgepush.SendNotificationsBehaviour">
+		<!-- default transition -->
+		<transition nextState="IDLE"/>
+	</state>
+	
+	<state name="IDLE" behaviour="com.archetypon.ontologging.behaviour.knowledgepush.ReceiveRepliesBehaviour">
+		<!-- FIPA CONFIRM -->
+		<transition code="4" nextState="END"/>
+		
+		<!-- FIPA INFORM -->
+		<transition code="7" nextState="INFORM_RECEIVED"/>
+	</state>
+	
+	<!-- default behaviour -->
+	<state name="INFORM_RECEIVED">
+		<!-- default transition -->
+		<transition nextState="END"/>
+	</state>
+	
+	<state name="END" last="true" behaviour="com.archetypon.ontologging.behaviour.knowledgepush.FinalBehaviour">
+	</state>
+	
+</fsm>

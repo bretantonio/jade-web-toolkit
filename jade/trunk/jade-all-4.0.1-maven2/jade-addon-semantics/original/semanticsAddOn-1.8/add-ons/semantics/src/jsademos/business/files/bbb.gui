@@ -1,0 +1,12 @@
+
+message# I am the institution # inform ((rien))
+message# assert countas # inform ((countas b2b phi psi))
+message# retract countas # inform ((not (countas b2b phi psi)))
+message# request to ask catalogue # request ((action (agent-identifier :name buyer@test) (REQUEST_CATALOGUE :seller (agent-identifier :name seller@test) ) ))
+message# request test cond action # request ((action (agent-identifier :name buyer@test) (TESTCOND :cond (fact condition))))
+message# inform cond # inform (condition)
+
+image# bbb
+
+receiver# buyer@test
+receiver# seller@test

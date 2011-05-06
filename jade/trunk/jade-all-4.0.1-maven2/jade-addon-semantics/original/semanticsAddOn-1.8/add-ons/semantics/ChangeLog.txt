@@ -1,0 +1,366 @@
+MAJOR CHANGES in JSA 1.8 (18 February 2009)
+==========================================================================
+
+
+- Extensions:
+              added the 'institutions' extensions, which makes it possible to
+              reason about institutional facts (obligations, institutional
+              powers...) and semantically interpret institutional speech acts
+              (declarations, promises).
+
+- General packaging:
+              refactored the build.xml file to improve the build process. The
+              'j2se' and 'pjava' targets now only build the JSA kernel (without
+              any demo nor JSA extension). Each JSA extension has its own target
+              and creates an independent jar file. Also, each demo can be
+              directly compiled and run with ant (see 'ant help' for details).
+
+
+
+
+
+
+MAJOR CHANGES in JSA 1.6 (6 May 2008)
+==========================================================================
+
+
+- Belief Base: 
+             * added the handling of "built-in" predicates, with a simple
+               Java API to code their query evaluation and assertion. The
+               default belief base now includes the handling of useful
+               predicates such as member, nth, card, +, -, * ,/, ...
+             * modified the queryRef method, so that it returns a Term instead
+               of a ListOfTerm. Consequently, the queryRef on a iota or any
+               IRE returns directly the term representing the queried object,
+               whereas a queryRef on a some or all IRE returns an SL set of
+               all queried objects
+             * added a parameter to the query and queryRef methods to return
+               a list of true formula, which explain why the query is
+               false (this parameter is useless if the query returns a
+               result). This is particularly useful to compute the reason
+               of a FAILURE act for example
+             * added a timeout mechanism on the observers (just like on
+               application-specific SIPs)
+             * better reorganised the jade.semantics.kbase package
+               
+- Handling of FIPA-SL expressions:
+             * the SL parser now shares the same Node instance for all the
+               occurrences of the same meta-reference within an expression,
+               which fixes some bugs and improves performances of related
+               algorithms, such as the matching algorithm.
+             * optimized the creation of SL Nodes (using a hashed symbol table)
+               and added the necessary static methods in the SL class to create
+               SL constants accordingly (symbol, string, word, date, bytes,
+               integer, real). The fromFormula and fromTerm methods have also
+               been renamed into formula and term
+             * added a FactNode, which makes it possible to reify SL formulas
+               into terms. The corresponding SL syntax is (fact <formula>)
+             * added a ContentNode structure to represent the content of
+               communicative acts. The corresponding SL syntax is (content
+               <contentExpr1> <contentExpr2> ...). Together with the FactNode,
+               this is particularly useful to directly match communicative
+               acts with a pattern of propositional content
+               
+- Semantic Interpretation Principles:
+             * the intention transfer- and planning-related SIPs has been
+               improved, so that the plan finally selected for performance
+               is interpreted by a new formula of the form
+               (is_doing <agent> <plan>)
+               and may be catched by application-specific SIPs for
+               modification of update before actual performance
+               
+- Semantic Capabilities:
+             * a new method interpretAfterPlan(Plan,FormulaSuccess,FormulaFailure)
+               have been added to interpret a formula depending of the
+               success of a plan to perform. In particular, it is very useful
+               to delay the effect of a SIP (e.g. to decide whether to adopt
+               a belief depending on the answer of another agent).
+               
+- Semantic Actions:
+             * added some useful actions: test, interpret, wait
+
+- Extensions:
+             * added the jade.semantics.ext package to include some extensions
+               to the JSA framework
+             * included the emotion extension, which handles an emotional
+               state for JSA-based agents. This may be useful to implement
+               "intelligent" user interface agents. See the package-info.java
+               file to test it.
+             * included the sqlwrapper extension, which connects a JSA belief
+               base with a SQL database. In particular, it makes it possible:
+                 - to store some patterns of beliefs in a relational database
+                   (and retrieve them in the other way). This is particularly
+                   useful to share some beliefs with other agents or to save
+                   them in a persistent maner.
+                 - to get some beliefs from existing SQL tables. This is
+                   particularly useful to interface a JSA agent with a legacy
+                   system.
+               See the package-info.java file to test it.
+
+- Other: fixed numerous bugs, and updated the JSA tutorial (in the
+               doc/tutorials/english directory), which can be used as the
+               reference programming guide.
+               Note also that the compliance with the .NET and the pJava
+               environments has not been checked.
+
+
+
+
+
+
+MAJOR CHANGES in JSA 1.4 (30 April 2007)
+==========================================================================
+
+
+REFACTORED DESIGN OF SOME JSA INTERNALS
+- Belief Base
+  * The default implementation of the KBase interface has been better structured
+    and split into ArrayListKBaseImpl and FilterKBaseImpl. The latter class can
+    now wrap any instance of KBase (including a nested FilterKBaseImpl).
+  * The mechanism of observer has been clearly separated from the KBase
+    implementation itself.
+  * The methods to handle closed predicates have been moved to the KBase
+    interface.
+  * As for query filters, the QueryResult class has been improved with methods
+    to set more easily individual or a set of results to a query. As for
+    assertion filters, the doApply method of the KBAssertFilterAdapter class has
+    been improved to support recursive applications of filters.
+  * The filters to handle the memory of past events have been gathered into the
+    single EventMemoryFilters class (extending the FiltersDefinition one).
+- Semantic Actions
+  * The hierarchy of classes implementing the performance of actions (under the
+    SemanticBehaviourBase class) has been improved to factor some duplicate
+    code.
+- FIPA-SL expressions handling
+  * For the sake of readibility, the SLPatternManip class (to handle FIPA-SL
+    expressions) has been renamed into SL
+- Demos
+  * The demo package has been reorganised (now named jsademos) and enriched with
+    the new booktrading demo, which is described in the just published book on
+    JADE by Wiley.
+- Semantic Interpretation Principles
+  * Every table used by the JSA engine is now initialized by an explicit
+    separate loader (the DefaultSemanticInterpretationPrincipleLoader class
+    loads the SemanticInterpretationPrincipleTableImpl class, the
+    DefaultSemanticActionLoader class loads the SemanticActionTableImpl class
+    and the DefaultFilterKBaseLoader class loads the FilterKBaseImpl class).
+  * The SIP table has been redesigned and is now accessed through SIP classes,
+    each SIP being associated to a given class. In this way, it becomes more
+    intuitive to add new SIPs in the table at the proper place, only depending
+    on its class.
+
+
+SIMPLIFIED PROGRAMMING STYLE
+- Progressive deprecation of the StandardCustomization class, each of its
+  methods to override being replaced with one or more instances of a proper SIP
+  adapter to add to the SIP table (see the list of SIP adapters below).
+  Removed the Planner interface (and the planner package), which is similarly
+  replaced with one or more instances of the PlanningSIPAdapter class to add to
+  the SIP table.
+- Added the jade.semantics.interpreter.sips.adapters package, which provides a
+  number of useful SIP adapters to customize the behaviour of the developped
+  semantic agents:
+  * The BeliefTransferSIPAdapter makes it possible to control the transfer of
+    belief on any pattern of formula from any pattern of agent (several
+    instances may be added into the SIP table for each nedded patterns).
+  * The IntentionTransferSIPAdapter makes it possible to control the transfer of
+    intention on any pattern of goal from any pattern of agent, as well as the
+    feed-back to give to the requesting agent.
+  * The PlanningSIPAdapter makes it possible to plug any planning algorithm to
+    find a plan (given as a FIPA-SL action expression) to reach a given pattern
+    of goal.
+  * The ActionDoneSIPAdapter makes it possible to trigger any piece of code upon
+    the completion of a given pattern of action by a given pattern of agent
+    (including actions from the semantic agent itself).
+  * The QueryRefSIPAdapter and the CFPSIPAdapter make it possible to prepare the
+    answers to a received QueryRef or CFP. In particular, it is possible to
+    delay the answers, so that the semantic agent can perform some processing
+    (e.g. querying other agents) before answering.
+- Improved the SemanticCapabilities class:
+  * The install method can now be applied to any JADE agent. In the same way,
+    the SemanticAgent interface becomes a class, deprecating the
+    SemanticAgentBase class.
+  * Added a return type to the setupXXX methods to better control the install
+    operation.
+  * Added convenient methods to send FIPA-ACL messages to other agents (one
+    method per performative plus the unsubscribe method to cancel a previously
+    sent subscribe message).
+  * Added several interpret methods to directly invoke the corresponding methods
+    of the SemanticInterpreterBehaviour class. A new signature of the method
+    makes it possible to interpret a set of formulas from a Java Reader object.
+- Simplified writing of FIPA-SL formulas (given as arguments of the
+  SemanticCapabilities.interpret, KBase.assert, KBase.query methods, as observed
+  formulas of Oberver objects and as formula patterns of SIP objects):
+  * The reserved "??myself" meta-reference may be used to refer to the semantic
+    agent (instead of "??agent" in some particular cases before the 1.4
+    version).
+  * Formulas are automatically surrounded with a belief modality. For example,
+    asserting "(B ??myself (isBusy john))" may be asserted specifying simply
+    "(isBusy john)".
+- Improved the handling of some action expressions:
+  * Upon completion of some atomic action performance, the corresponding "(done
+    ??action)" formula is automatically interpreted and may be further catched
+    by an application-specific ActionDoneSIPAdpater. The content of subsequent
+    inform-done messages is now the same "(done ??action)" formula instead of
+    the less intuitive "(exists ?e (done (; ??action e)))" formula.
+  * JSA agents can now perform action expressions including atomic actions from
+    other agents. Such actions actually install a one shot SIP, which monitors
+    their performance by the other agent (based on the achievement of their
+    effect).
+
+
+OTHER IMPROVEMENTS
+- Added some new generic filters for FilterKBase implementations:
+  * a set of filters (gathered in the NestedBeliefFilters class) to deal with
+    the beliefs on other agents' beliefs.
+  * a set of filters (managed by the FunctionalTermTable interface) to store
+    functional terms and handle them with virtual predicates.
+- Improved the SL handling operations:
+  * General improvement of: internal implementation, matching operations,
+    cloning of MatchResult objects, isMentalAttitude and isFreeVarialbe methods
+    on Formula nodes (better handling of meta-reference arguments)
+  * Renamed some operations on SL nodes: ActionExpression.getAgents -> getActors
+  * Added some operations on SL nodes: instantiate, isExistsOn (Formula nodes) ;
+    instantiate (Term nodes) ; getActor, getFirstStep (ActionExpression nodes) ;
+    size, getTerm (TermSet and TermSequence nodes) ; byteValue (Constant
+    nodes) ; getLeaves (And and Or nodes) ; intantiate on an array of nodes (SL
+    class).
+  * Removed the simplification of Any and Some nodes embedded in Equals nodes.
+- Extended the FIPA-SL grammar with "and", "or", "|" and ";" operators that
+  accept an arbitrary number of arguments (e.g. "(and f1 (and f2 f3))" may be
+  written "(and f1 f2 f3)").
+- Improved some SIPs
+  * Optimized the SplitAndSIP and ActionFeatureSIP classes.
+  * Added a "one shot" and a "timeout" mode on the ApplicationSpecificSIPAdapter
+    class (to automatically drop a SIP from the SIP table after its application
+    or a timeout expiration)
+  * Improved the planning-related SIPs (including the PlanningSIPAdapter
+    subclasses and IntentionalBehaviour class) by handling only FIPA-SL action
+    expressions (instead of JADE behaviours). The FeedBackData field of the
+    SemanticRepresentation class has also been replaced by a more general
+    Annotation field (implemented by a hash-map).
+  * Added a SemanticRepresentation argument to the doApply method of all SIP
+    adapters.
+- Improved the implementation of semantic actions:
+  * CommunicativeActs now assume fipa-sl if no content language is specified.
+  * Renamed the reserved meta-reference refering to the actor of an action from
+    "??sender" to "??actor" (to conform to FIPA specifications)
+  * Replaced the SemanticActionTable arguments of the constructors of all
+    SemanticAction subclasses with SemanticCapabilities arguments.
+  * Added the RUNNING constant to the SemanticBehaviour interface.
+- Added a JSA-based dummy agent. It uses the same package and class name as
+those of the JADE framework, so that it can be transparently used in the JADE
+RMA GUI by specifying the JSA jar file before the JADE jar file in the
+classpath. Very useful for debugging.
+
+
+BUG FIXES
+- Fixed a bug in the matching of FIPA-SL expressions.
+- Copied all predefined result SR passed to the doApply methods of the various
+  SIP adapters, to fix a bug on the SR indexes when the SIP was not applicable,
+- Improved the query filter for And nodes to work symetrically (left and right
+  sides can be evaluated in any order),
+- Improved the subscription mecanism to take into account all the data attached
+  to the subscribed SR,
+- Fixed a bug in the getIndex method of the new SIP table implementation,
+- Redefined the size method of the new SIP table implementation,
+- Fixed the getTriggeredPattern method of the IREFilter class.
+
+
+
+
+
+
+MAJOR CHANGES in JSA 1.2 (26 January 2006)
+==========================================================================
+
+
+GENERAL IMPROVEMENTS:
+- The current JADE Semantics Add-On works on J2SE, PJAVA, .NET environments.
+  A support for the MIDP environment is planned in future versions, in order to
+  run Semantic Agents on mobile phones.
+  To compile the framework for a given environment, specify the environment
+  name in the ant command line (example: ant pjava lib).
+- Moreover, the JSA framework can now be compiled from Java SDK 1.4 (and not
+  necessarily Java SDK 1.5)
+- Fixed bug on OntoActionBehaviour. When an exception was raised during the
+  perform method execution of this behaviour, the agent died. Now, the exception
+  is catched and the behaviour state is set to execution_failure.
+- In the class SemanticInterpreterBehaviour, set the visibility of the
+  receiveNextMessage method to public.
+- Multiple receivers of received messages taken into account.
+
+
+INTERPRETER:
+- Added a SIP EqualsIRE which manages the equality between an Identify
+  Expression and a formula.
+- Better architecture between SIPs and KBase assert filters.
+
+
+SL HANDLING:
+- Added a class ListOfMatchResults.
+- Added a new referential operator: some (this is an extension to the FIPA-SL
+  grammar: (some ?x (p ?X)) returns a set of terms satisfying the p predicate,
+  whereas (all ?x (p ?x)) returns the set of exactly all terms satisfying p).
+- Revised simplification of B-Forall formulas.
+- Byte encoding/decoding correction (added Base64 class).
+- Improved the matching function in ordre to match AndNode and OrNode as
+  unordered lists of formula (e.g. (or p q) matches (or q p)). This is
+  particulary useful when matching a pattern of formula, where the order of non
+  instantiated meta-references is not known in advance.
+- In the same way, improved the matching function so that the "=" SL predicate
+  is considered as commutative (i.e. (= a b) and (= b a) match).
+- Added Util class, which contains utility methods.
+
+
+BELIEF BASE:
+- The belief base handles the closure information conveyed by the identifying
+  referential expressions "all" and "iota". For example:
+  * (iota ?x (p ?x)) refers to the ONLY ?x which makes (p ?x) true.
+  * (any ?x (p ?x)) refers to one ?x which makes (p ?x) true.
+  After asserting the formula (= (iota ?x (p ?x)) 1), the answer to the query on
+  (= (iota ?x (p ?x)) 1) is true, because the belief base has interpreted the
+  iota operator as meaning 1 is the only possible value for predicate p.
+  However, after asserting simply the formula (p 1), the answer to the query on
+  (= (iota ?x (p ?x)) 1) is null, because the belief base has no element to
+  consider 1 as the only possible value for p (in this case, a query on (= (any
+  ?x (p ?x)) 1) still returns true, of course)
+- Automatic handling of "B" operators in the assertFormula and the query methods
+  for more convenience (e.g. asserting or querying for "(p 1)" is equivalent to
+  asserting or querying "(B agent (p 1)").
+- Optimized the query operation: when the belief base is updated, observers are
+  called only if they are concerned by this update.
+- Forall and Exists operators are taken into account.
+- The (not (B agent ??formula)) pattern is taken into account by the
+  assertFormula method to remove formulas from the base (this makes the
+  removeAllFormulae deprecated).
+- Added a retractFormula to the KBase interface. A call to retractFormula with
+  the F formula is equivalent to a call to assertFormula with (not (B agent F)).
+  This makes the removeFormula deprecated.
+- The result to a query is now the list of MatchResult that are solutions to the
+  query (added QueryResult class). This makes it possible to query formulas
+  including meta-refences (e.g. query on (p ??X) returns the list of all
+  bindings for ??X satisfying the predicate p).
+- Removed queryRef filters (queryRef filters become query filters using meta-
+  references, see the previous point).
+
+
+PLANNER:
+- Modified the planner interface
+
+
+OTHER:
+- The following classes do not exist any more:
+  kbase.Bind
+  kbase.Bindings
+  kbase.BindingsImpl
+  kbase.filter.KBQueryRefFilter
+- The following package do not exist any more:
+  kbase.filter.queryRef
+
+
+
+
+
+
+

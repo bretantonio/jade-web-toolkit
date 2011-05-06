@@ -1,0 +1,139 @@
+### pattern = (institutional-action ??inst ??pattern ??observers (fact ??precond) (fact ??_effect))
+## institutional effects were specified in institution.specif as countas or powers -> NEW they are now here
+## in institutional preconditions the author is designed by the specific variable ??_actor
+
+# hypothesis: once the institutional precondition is valid, the actor has right to perform the action, AND this action has the specified institutional effect
+# if there is no particular effect use "(fact true)"
+
+# WARNING: if effect forgotten, the action does not match the pattern of ActionDeclaration SIP so it is directly asserted in all kbases
+
+############# ACTIONS #############
+
+### REQUEST CATALOGUE
+(institutional-action b2b 
+	(REQUEST_CATALOGUE :seller ??_seller) 
+	(set ??_seller) 
+	(fact (D b2b (holder ??_actor roleBuyer)))
+	(fact true)
+)
+
+### SEND CATALOGUE actor = seller
+(institutional-action b2b 
+	# pattern
+	(SEND_CATALOGUE :client ??_client :contentOfCatalogue ??_contentOfCatalogue :endOfValidity (fact ??_endOfValidity)) 
+	# observing agents
+	(set ??_client) 
+	# institutional precondition
+	(fact (and 
+		(D b2b (holder ??_actor roleSeller)) 
+		(D b2b (holder ??_client roleBuyer))
+	))
+	# new: institutional effect (power)
+	(fact (until (fact (is_institutional b2b ??_client ??_actor ??_contentOfCatalogue)) (fact ??_endOfValidity)))
+)
+
+
+### SEND PURCHASE ORDER
+(institutional-action b2b 
+	(SEND_PURCHASE_ORDER :seller ??_seller :listOfItems ??_listOfItems) 
+	(set ??_seller) 
+	(fact true)
+	(fact true)
+)
+
+### SEND DETAILED ANSWER  actor = seller
+(institutional-action b2b 
+	(SEND_DETAILED_ANSWER :buyer ??_buyer :detailedAnswer ??_detailedAnswer) 
+	(set ??_buyer) 
+	(fact (and 
+		(D b2b (holder ??_actor roleSeller)) 
+		(D b2b (holder ??_buyer roleBuyer)) 
+	)) 
+	(fact (power ??_buyer b2b 
+		(fact (and (modif-link ??_answer ??_modifiedOrder) (price-link ??_modifiedOrder ??_price) (content-link ??_modifiedOrder ??_package)) ) 
+		(ACCEPT_MODIFIED_ORDER :modifiedOrder ??_modifiedOrder :ref ??ref :seller ??_actor) 
+		(fact (and 
+			(O (done (action ??_actor (DELIVER_PACKAGE :buyer ??_buyer :package ??_package :price ??_price :ref ??ref)) true)) 
+			(O (done (action ??_buyer (PAY_PACKAGE :package ??_package :price ??_price :ref ??ref :seller ??_actor)) true)) 
+		))
+	)) 
+)
+
+  
+
+### ACCEPT MODIFIED ORDER
+(institutional-action b2b 
+	(ACCEPT_MODIFIED_ORDER :modifiedOrder ??_modifiedOrder :ref ??ref :seller ??_seller) 
+	(set ??_seller) 
+	(fact true)
+	(fact true)
+)
+
+
+### REFUSE MODIFIED ORDER
+(institutional-action b2b 
+	(REFUSE_MODIFIED_ORDER :seller ??_seller :modifiedOrder ??_modifiedOrder) 
+	(set ??_seller) 
+	(fact true)
+	(fact true)
+)
+
+
+### DELIVER PACKAGE
+(institutional-action b2b 
+	(DELIVER_PACKAGE :buyer ??_buyer :package ??_package :price ??_price :ref ??ref) 
+	(set ??_buyer) 
+	(fact true)
+	(fact true)
+)
+
+### PAY PACKAGE
+(institutional-action b2b 
+	(PAY_PACKAGE :package ??_package :price ??_price :ref ??ref :seller ??_seller) 
+	(set ??_seller) 
+	(fact true)
+	(fact true)
+)
+
+# LOAN MONEY  actor = bank
+(institutional-action b2b 
+	(LOAN_MONEY :buyer ??_buyer :package ??_package :price ??_price :ref ??ref :seller ??_seller) 
+	(set ??_seller) 
+	(fact (and 
+		(D b2b (holder ??_actor roleBank)) 
+		(D b2b (holder ??_buyer roleBuyer)) 
+		(D b2b (holder ??_seller roleSeller))
+	))
+	(fact (power ??_buyer b2b
+		(fact true)
+		(PAY_PACKAGE :package ??_package :price ??_price :ref ??ref :seller ??_seller)
+		(fact (O (done (action ??_seller (PAYBACK_MONEY :amount ??_price :bank ??_actor :ref ??ref)) true)))
+	))
+)
+
+### PAYBACK MONEY
+(institutional-action b2b 
+	(PAYBACK_MONEY :amount ??_amount :bank ??_bank :ref ??ref) 
+	(set ??_bank) 
+	(fact true)
+	(fact true)
+)
+
+
+# PAY PENALTY AS A SANCTION FOR VIOLATION OF OBLIGATIONS
+# include the obligation violated, to be checked by the sanctioned agent ?
+(institutional-action b2b 
+	(PAY :amount ??_amount :receiver ??_receiver :reference ??_reference) 
+	(set ??_receiver) 
+	(fact true)
+	(fact true)
+)
+
+
+### TEST ACTIONS
+(institutional-action b2b (PROC :dest ??_dest :param ??_param) (set ??_dest) (fact true) (fact true))
+(institutional-action b2b (PROC :dest ??_dest :param ??_param) (set ??_dest) (fact phip) (fact true))
+(institutional-action b2b (PRINT :content ??_content) (set ) (fact true) (fact true))
+(institutional-action b2b (RETURN :past ??_past) (set ) (fact true) (fact true))
+(institutional-action b2b (TESTCOND :cond ??_cond) (set ) (fact true) (fact true))
+

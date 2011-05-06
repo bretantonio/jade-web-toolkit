@@ -1,0 +1,101 @@
+<!-- ANT BUILD FILE FOR THE MATH CLIENT -->
+	
+<project name="MathClient" default="compile">
+	
+	<property environment="env"/>
+	<property name="src" value="src"/>
+	<property name="classes" value="classes"/>
+	<property name="lib" value="lib"/>
+	<property name="wsdc-lib" value="../../lib"/>
+	<property name="jade-lib" value="../../../../lib"/>
+	<property name="resources" value="../../resources"/>
+	<property name="debug-build" value="on"/>
+	
+	<path id="compile-classpath">
+		<fileset dir="${wsdc-lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+		<fileset dir="${jade-lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	
+	<!--   _______________________________________________
+	                          INIT
+         _______________________________________________ -->
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<echo>JAVA_HOME = ${env.JAVA_HOME}</echo>
+		<mkdir dir="${classes}"/>
+		<mkdir dir="${lib}"/>
+	</target>
+
+  
+	<!--  __________________________________________________
+	                          COMPILE
+	      __________________________________________________ -->
+	<target name="compile" depends="init" description="Compile mathClient sources">
+		<javac srcdir="${src}" 
+		       destdir="${classes}"
+		       debug="${debug-build}"
+		       debuglevel="vars,lines,source"
+		       deprecation="true">
+			<classpath>
+				<path refid="compile-classpath"/>				
+			</classpath>
+		</javac>
+	</target>
+
+	
+	<!--  __________________________________________________
+	                          build
+	      __________________________________________________ -->
+	<target name="build" depends="compile" description="Create the mathClient.jar file">
+		<jar jarfile="${lib}/mathClient.jar" >
+			<fileset dir="${classes}"/>
+		</jar>
+	</target>
+
+	
+	<!--  __________________________________________________
+	                          REBUILD
+	      __________________________________________________ -->
+	<target name="rebuild" depends="clean, init, build" description="Rebuild the mathClient project from scratch"/>
+
+
+	<!--  __________________________________________________
+	                          CLEAN
+	      __________________________________________________ -->
+	<target name="clean" description="Clean the mathClient environment">
+		<delete includeEmptyDirs="true" quiet="true">
+			<fileset dir="${classes}"/>
+			<fileset dir="${lib}"/>
+			<fileset dir="./">
+				<include name="wsdc*.*"/>
+			</fileset>			
+		</delete>
+	</target>
+
+
+	<!--  __________________________________________________
+	                          RUN
+	      __________________________________________________ -->
+	<target name="run" description="start mathClient">
+		<java classname="examples.dynamicClient.MathClient" fork="yes">
+			<classpath>
+				<pathelement location="${resources}"/>
+				<fileset dir="${lib}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${wsdc-lib}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="${jade-lib}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
+</project>

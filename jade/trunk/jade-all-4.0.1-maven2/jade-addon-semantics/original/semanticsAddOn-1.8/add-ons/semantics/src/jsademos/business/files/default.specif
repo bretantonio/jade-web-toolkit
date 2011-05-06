@@ -1,0 +1,35 @@
+# default rules valid in any institution
+# DO NOT CHANGE THE NAME OF the meta-reference ??_institution
+
+# powers associated to promise that and promise to
+# do not encapsulate the Belief in the effect in an institutional fact, it is automatic
+#(power ??_agent ??_institution (fact true) 
+#	(PROMISE_THAT 
+#		:creditor ??_creditor 
+#		:institution ??_institution 
+#		:validity ??_validity 
+#		:what (fact ??_what)
+#	) 
+#	(fact (until 
+#		(fact (B ??_agent ??_what)) 
+#		??_validity
+#	)) 
+#)
+#commented for test (replaced by an institutional precondition of this action)
+
+# action IS NOT an action expression but only an action term
+#(power ??_agent ??_institution (fact true) 
+#	(PROMISE_TO 
+#		:action ??_action 
+#		:creditor ??_creditor 
+#		:institution ??_institution 
+#		:validity ??_validity
+#	) 
+#	(fact (since 
+#		(fact (O (done (action ??_agent ??_action) true))) 
+#		??_validity
+#	)) 
+#)
+
+# countas for the correspondence between commitments and obligations
+(countas ??_institution (D ??_institution (B ??_agent ??_phi)) (O (B ??_agent ??_phi)) )

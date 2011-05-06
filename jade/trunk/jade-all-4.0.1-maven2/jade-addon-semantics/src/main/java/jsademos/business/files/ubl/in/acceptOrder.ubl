@@ -1,0 +1,1 @@
+(response :acceptedIndicator \"accepted\" :customerAID (agent-identifier :name buyer@test) :id \"RESP_1\" :issueDateTime 20080723T115059742 :orderReference \"PUR_ORD_0\" :supplierAID (agent-identifier :name seller@test))

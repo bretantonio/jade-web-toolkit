@@ -1,0 +1,98 @@
+# strategies to manage inter-blocking actions
+# each strategy should be coded in a corresponding SIP
+
+# list of strategies: callbank, lie, default
+#??mediator instantiated in java code
+
+
+
+
+## NEW
+
+(strategy
+	# rejection reason (parameter of signal-problem action)
+	(fact (period-is-bad)) 
+	# rejected order
+	(purchaseOrder :customerAID ??customerAID :supplierAID ??supplierAID :totalLine (totalLine :totalNetAmount ??totalNetAmount))
+	# plan to perform
+	(;
+		(; 
+			#(action ??mediator (QUERY-IF 
+			#	:content (content agree-to-loan)
+			#	:receiver (set (agent-identifier :name bankAagent@test))
+			#	:sender ??mediator)
+			#)
+			(action ??mediator (QUERY_AGREEMENT :bank (agent-identifier :name bankAagent@test) :queryAgreement (queryAgreement :customerAID ??customerAID :supplierAID ??supplierAID :amount ??totalNetAmount) ))
+			(action ??mediator (WAIT (fact (document (agent-identifier :name bankAagent@test) ??mediator (agreement :acceptedIndicator "accepted"))) 77777))
+		)
+		(| 
+			(; 
+				(action ??mediator (TEST (fact (document (agent-identifier :name bankAagent@test) ??mediator (agreement :acceptedIndicator "accepted")) ))) 
+				#28# intermediary and loaning bank "en dur"
+				(action ??mediator (REQUEST 
+					:content (content (action ??complainant (DELEGATE_PURCHASE :intermediary (agent-identifier :name intermediary@test) :purchaseOrder ??rejectedPurchaseOrder :loaningBank (agent-identifier :name bankAagent@test))))
+					:sender ??mediator
+					:receiver (set ??complainant)
+					))
+			) 
+			(; 
+				(;
+					(action ??mediator (TEST (fact (document (agent-identifier :name bankAagent@test) ??mediator (agreement :acceptedIndicator "accepted")) ))) 
+					(action ??mediator (INTERPRET (fact unsolvable-problem)))
+				)
+				(action ??mediator (INFORM :content (content unsolvable-problem) :receiver (set ??complainant) :sender (agent-identifier :name mediator@test)))
+                        )
+		# il faudrait un cas où aucun document (pas de réponse dans les temps par ex)
+		)
+	)
+)
+		
+
+
+## OLD
+
+# new strategy with third parties : request the banks to promise
+
+# loaning bank strategy: ask a loaning bank to lend the money to the seller until he has been paid by the buyer
+(strategy-old
+	(action ??buyer (PAY_PACKAGE :package ??package :price ??price :ref ??ref :seller ??seller)) 
+	(action ??seller (DELIVER_PACKAGE :buyer ??buyer :package ??package :price ??price :ref ??ref)) 
+	(set (fact (I ??mediator (done (action ??mediator
+		(REQUEST 
+			:content (content (action (agent-identifier :name bank@test) (LOAN_MONEY :buyer ??buyer :package ??package :price ??price :ref ??ref :seller ??seller)))
+			:receiver (set (agent-identifier :name bank@test))
+			:sender ??mediator	
+		))
+	))))
+)
+
+
+
+# lying strategy: tell the seller that he has been paid by the buyer
+(strategy-debug
+	(action ??buyer (PAY_PACKAGE :package ??package :price ??price :ref ??ref :seller ??seller)) 
+	(action ??seller (DELIVER_PACKAGE :buyer ??buyer :package ??package :price ??price :ref ??ref)) 
+	(set (fact (I ??mediator (done 
+		(; 
+			(; 
+				(action ??mediator 
+					(INTERPRET (fact (done 
+						(action ??buyer (PAY_PACKAGE :package ??package :price ??price :ref ??ref :seller ??seller))
+						true 
+				))))
+				(action ??mediator 
+					(INFORM
+						:content (content 
+							(done (action ??buyer (PAY_PACKAGE :package ??package :price ??price :ref ??ref :seller ??seller)) true))
+						:receiver (set ??seller)
+						:sender ??mediator
+			)))
+			(action ??mediator
+				(INTERPRET (fact (not (done 
+					(action ??buyer (PAY_PACKAGE :package ??package :price ??price :ref ??ref :seller ??seller)) 
+					true ))) ))
+		)
+		true)) )
+))
+
+

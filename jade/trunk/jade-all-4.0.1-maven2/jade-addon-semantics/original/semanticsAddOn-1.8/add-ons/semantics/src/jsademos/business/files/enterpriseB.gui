@@ -1,0 +1,40 @@
+
+
+
+#ubl#message# Send catalogue # inform ((message (agent-identifier :name enterpriseA@test) (fact (done (action (agent-identifier :name seller@test) (SEND_CATALOGUE :catalogue (catalogue :catalogueContent (set (catalogueItem :id "PROD_0" :itemName "phone" :itemDescription "phone" :salesUnit "" :unitPrice 25.0) (catalogueItem :id "PROD_1" :itemName "television" :itemDescription "television" :salesUnit "" :unitPrice 200.0) (catalogueItem :id "PROD_2" :itemName "computer" :itemDescription "computer" :salesUnit "" :unitPrice 400.0) (catalogueItem :id "PROD_3" :itemName "laptop" :itemDescription "laptop" :salesUnit "" :unitPrice 1000.0)) :customerAID (agent-identifier :name buyer@test) :id "CAT_0" :issueDateTime 20080723T091612135 :supplierAID (agent-identifier :name seller@test) :validityPeriod (period (fact true) (fact false))) :customer (agent-identifier :name buyer@test))) true)) ))
+
+message# UBL send catalogue # inform ((ubl catalogue "catalogue.ubl"))
+
+################
+
+#gui#message# Send refuse to enterpriseA # inform ((message (agent-identifier :name enterpriseA@test) (fact (done (action (agent-identifier :name seller@test) (SEND_RESPONSE :customer (agent-identifier :name buyer@test) :response (response :acceptedIndicator "rejected" :customerAID (agent-identifier :name buyer@test) :id "RESP_0" :issueDateTime 20080723T104721331 :orderReference "PUR_ORD_0" :rejectionNote "(period-is-bad)" :rejectionReason (fact (period-is-bad)) :supplierAID (agent-identifier :name seller@test)))) true)) ))
+
+#################
+
+#ubl#message# Send accept to intermediary # inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name seller@test) (SEND_RESPONSE :customer (agent-identifier :name intermediary@test) :response (response :acceptedIndicator "accepted" :customerAID (agent-identifier :name buyer@test) :id "RESP_1" :issueDateTime 20080723T115059742 :orderReference "PUR_ORD_0" :supplierAID (agent-identifier :name seller@test)))) true)) ))
+
+message# UBL accept order # inform ((ubl acceptOrder "acceptOrder.ubl"))
+
+#############
+
+#ubl#message# Invoice # inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name seller@test) (SEND_INVOICE :customer (agent-identifier :name intermediary@test) :invoice (invoice :customerAID (agent-identifier :name buyer@test) :dispatchAdviceReference "" :id "INV_0" :invoicedItems (set) :issueDateTime 20080702T165053091 :latestPaymentDateTime 20080702T165350091 :netAmount 250.0 :orderReference "PUR_ORD_0" :receiptAdviceReference "" :supplierAID (agent-identifier :name seller@test) :supplierBankAID (agent-identifier :name bankBagent@test) :vatAmount 49.0))) true)) ))
+
+message# UBL invoice # inform ((ubl invoice "invoice.ubl"))
+
+##############
+
+#gui#message# Physical delivery (direct to A) # inform ((done (action (agent-identifier :name seller@test) (DELIVER_PACKAGE :customer (agent-identifier :name buyer@test) :deliveryNote (deliveryNote :customerAID (agent-identifier :name buyer@test) :id "DELIV_0" :issueDateTime 20080702T165059498 :listOfItems (set (orderLine :itemReference "PROD_0" :catalogueReference "CAT_0" :itemName "" :itemDescription "" :quantity 2 :unitPrice 25.0 :lineNetAmount 50.0) (orderLine :itemReference "PROD_1" :catalogueReference "CAT_0" :itemName "" :itemDescription "" :quantity 1 :unitPrice 200.0 :lineNetAmount 200.0)) :orderReference "PUR_ORD_0" :supplierAID (agent-identifier :name seller@test)) :orderReference "PUR_ORD_0")) true))
+
+############
+
+#ubl#message# Dispatch advice # inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name seller@test) (SEND_DISPATCH_ADVICE :customer (agent-identifier :name intermediary@test) :dispatchAdvice (dispatchAdvice :customerAID (agent-identifier :name buyer@test) :dispatchDateTime 20080724T095938470 :dispatchedItems (set) :expectedDeliveryDateTime 20080724T100235470 :id "RESP_0" :issueDateTime 20080724T095945470 :orderReference "PUR_ORD_0" :supplierAID (agent-identifier :name seller@test)))) true)) ))
+
+message# UBL dispatch advice # inform ((ubl dispatchAdvice "dispatchAdvice.ubl"))
+
+###########
+
+image# enterpriseB
+
+receiver# seller@test
+#gui#receiver# enterpriseA@test
+

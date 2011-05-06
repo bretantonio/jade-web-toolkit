@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<project name="wsig" default="build">
+
+	<!-- properties -->
+	<property file="build.properties"/>
+	<property environment="env"/>
+
+	<property name="wsig.version" value="2.3"/>
+
+	<property name="jade-home" value="../.."/>
+	<property name="wsigSrc.dir" location="src"/>
+	<property name="wsigDoc.dir" location="doc"/>
+	<property name="wsigBin.dir" location="bin"/>
+	<property name="wsigExamplesSrc.dir" location="examples/src"/>
+	<property name="wsigExamplesBuild.dir" location="examples/classes"/>
+	<property name="wsigExamplesLib.dir" location="examples/lib"/>
+	<property name="wsigExamplesLog.dir" location="examples/log"/>
+	<property name="wsigExamplesXml.dir" location="examples/xml"/>
+	<property name="wsigWeb.dir" location="webModule"/>
+	<property name="wsigBuild.dir" location="${wsigWeb.dir}/WEB-INF/classes"/>
+	<property name="wsigWebLib.dir" location="${wsigWeb.dir}/WEB-INF/lib"/>
+	<property name="wsigLib.dir" location="lib"/>
+	<property name="wsigContext.dir" location="context"/>
+	<property name="wsigWebapps.dir" location="webapps"/>
+	<property name="wsig.name" value="wsig"/>
+	<property name="wsigWar.name" value="${wsig.name}"/>
+	<property name="wsigZip.name" value="${wsig.name}"/>
+	<property name="warfile.path" location="${wsigWebapps.dir}/${wsigWar.name}"/>
+	<!--<property name="tomcat.dir" location="${env.CATALINA_BASE}"/>-->
+	<property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
+
+	<!-- classpath -->
+	<path id="wsigCompile.classpath">
+		<pathelement location="${wsigBuild.dir}"/>
+
+		<fileset dir="${wsigLib.dir}">
+			<include name="log4j-1.2.14.jar"/>
+			<include name="org.eclipse.emf.common_2.3.0.v200612211251.jar"/>
+			<include name="org.eclipse.emf.ecore_2.3.0.v200612211251.jar"/>
+			<include name="org.eclipse.xsd_2.3.0.v200612211251.jar"/>
+			<include name="servlet.jar"/>
+			<include name="uddi4j-2.0.5.jar"/>
+			<include name="soap.jar"/>
+			<include name="mail.jar"/>
+			<include name="axis-1.4.jar"/>
+			<include name="saaj-1.2.jar"/>
+			<include name="qname-1.6.2.jar"/>
+			<include name="wsdl4j-1.6.2.jar"/>
+			
+		</fileset>
+		<fileset dir="${jade-home}/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<tstamp/>
+
+	<target name="init">
+		<tstamp/>
+		<echo>JAVA_HOME ${env.JAVA_HOME}</echo>
+		<echo>CATALINA_HOME ${tomcat.dir}</echo>
+		<echo>source dir ${wsigSrc.dir}</echo>
+		<echo>build dir ${wsigBuild.dir}</echo>
+		<echo>OS platform is ${os.name}</echo>
+	</target>
+
+	<target name="compile" depends="init" description="Compile WSIG sources">
+		<javac srcdir="${wsigSrc.dir}" debug="yes" destdir="${wsigBuild.dir}" encoding="ISO-8859-1" includeAntRuntime="no">
+			<classpath refid="wsigCompile.classpath"/>
+		</javac>
+		<echo>Compilation complete</echo>
+	</target>
+
+	<target name="build" depends="compile" description="Prepare the WSIG web application content in the webModule directory">
+		<copy todir="${wsigWebLib.dir}">
+			<fileset dir="${wsigLib.dir}">
+				<include name="**/*.jar"/>
+				<exclude name="**/servlet.jar"/>
+			</fileset>
+			<fileset dir="${jade-home}/lib">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="createWar" description="Create the WSIG war file zipping the content of the webModule directory">
+		<mkdir dir="${wsigWebapps.dir}"/>
+		<zip destfile="${warfile.path}.war">
+			<zipfileset dir="${wsigWeb.dir}">
+				<include name="**/*.*"/>
+			</zipfileset>
+		</zip>
+		<copy todir="${wsigWebapps.dir}">
+			<fileset dir="${wsigContext.dir}">
+				<include name="**/*.xml"/>
+			</fileset>
+		</copy>
+		<echo>War creation succeded</echo>
+	</target>
+
+
+	<target name="war" depends="build, createWar" description="create the WSIG web application (war file)">
+	</target>
+
+	<target name="deploy0" depends="createWar">
+		<fail unless="env.CATALINA_HOME" message="CATALINA_HOME environment variable not set. Check the Tomcat installation"/>
+		<delete file="${tomcat.dir}/webapps/${wsigWar.name}.war"/>
+		<copy todir="${tomcat.dir}/webapps">
+			<fileset dir="${wsigWebapps.dir}">
+				<include name="**/*.war"/>
+			</fileset>
+		</copy>
+		<delete dir="${tomcat.dir}/webapps/${wsigWar.name}"/>
+	</target>
+	
+
+	<target name="deploy" depends="build, deploy0" description="deploy WSIG in Tomcat">
+		<echo>Wsig successfully deployed</echo>
+	</target>
+
+
+	<!-- EXAMPLES related targets -->
+	
+	<target name="compile-examples" depends="init" description="Compile WSIG examples sources">
+		<mkdir dir="${wsigExamplesBuild.dir}"/>
+		<javac srcdir="${wsigExamplesSrc.dir}" debug="yes" destdir="${wsigExamplesBuild.dir}" encoding="ISO-8859-1" includeAntRuntime="no">
+			<classpath refid="wsigCompile.classpath"/>
+		</javac>
+		<echo>Examples compilation complete</echo>
+	</target>
+
+	<target name="build-examples" depends="build, compile-examples" >
+		<mkdir dir="${wsigExamplesLib.dir}"/>
+		<mkdir dir="${wsigExamplesLog.dir}"/>
+		<jar jarfile="${wsigExamplesLib.dir}/wsigExamples.jar">
+			<fileset dir="${wsigExamplesBuild.dir}" />
+		</jar>
+
+		<copy todir="${wsigWebLib.dir}">
+			<fileset dir="${wsigExamplesLib.dir}">
+				<include name="**/wsigExamples.jar"/>
+			</fileset>
+		</copy>
+
+		<copy overwrite="true" file="${wsigWeb.dir}/conf/wsig-template.properties" tofile="${wsigWeb.dir}/conf/wsig.properties"/>
+		<replace file="${wsigWeb.dir}/conf/wsig.properties" value="onto.math-ontology=com.tilab.wsig.examples.MathOntology">
+			<replacetoken>#MyOntologies#</replacetoken>
+		</replace>
+
+		<echo>Examples build complete</echo>
+	</target>
+	
+	<target name="war-examples" depends="build-examples, createWar" description="create the WSIG web application (war file) properly configured to run the examples">
+	</target>
+
+	<target name="deploy-examples" depends="build-examples, deploy0" description="deploy WSIG properly configured to run the examples in Tomcat">
+		<echo>Tomcat wsig with examples deployed succeded</echo>
+	</target>
+
+
+
+	<target name="clean" description="clean the WSIG environment">
+		<delete dir="${wsigBuild.dir}/com" quiet="true"/>
+		<delete dir="${wsigWebapps.dir}" quiet="true"/>
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${wsigWebLib.dir}" includes="**/*"/>
+		</delete>
+		<delete dir="${wsigExamplesBuild.dir}" quiet="true"/>
+		<delete dir="${wsigExamplesLib.dir}" quiet="true"/>
+		<delete dir="${wsigExamplesLog.dir}" quiet="true"/>
+		<delete includeEmptyDirs="true" quiet="true">
+			<fileset dir=".">
+				<include name="**/APDescription.txt"/>
+				<include name="**/MTPs-Main-Container.txt"/>
+			</fileset>
+		</delete>
+		<echo>Dir deletion succeded</echo>
+	</target>
+	
+
+	<target name="dist" depends="clean" description="create the distribution ZIP file">
+		<echo message="GENERATE THE PDF FORM OF THE WSIG GUIDE, PUT IT IN THE LOCAL DIRECTORY (jade/add-ons/wsig) AND THEN PRESS ENTER -->"/>
+		<input/>
+		<mkdir dir="${jade-home}/doc"/>
+		<mkdir dir="${jade-home}/doc/tutorials"/>
+		<copy file="WSIG_Guide.pdf" todir="${jade-home}/doc/tutorials"/>
+
+		<delete file="../wsigAddOn-${wsig.version}.zip" quiet="true"/>
+		<zip zipfile="../wsigAddOn-${wsig.version}.zip" basedir="${jade-home}">
+			<include name="add-ons/wsig/**"/>
+			<exclude name="add-ons/wsig/WSIG_Guide.*"/>
+			<include name="doc/tutorials/WSIG_Guide.pdf"/>
+		</zip>
+		<echo>Zip creation completed</echo>
+	</target>
+
+</project>

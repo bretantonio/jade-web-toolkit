@@ -1,0 +1,14 @@
+(nom Eloona)
+(age 26)
+(not(mess_ouverte))
+(nb_message 4)
+(= (all (sequence ?x ?y ?z ?t) (message ?x ?y ?z ?t)) (set))
+
+(message 1 robert urjant "La réunion sur la lecture des enfants a été reporté à lundi prochain.")
+(message 2 vanessa normal "Je viens de lire un très bon livre qui s'appelle l'ombre du vent de Carlos Zafon.")
+(message 3 bobby normal "Est ce que je peux t'envoyer le texte de mon discours pour avoir ton avis ? .")
+(message 4 virginnie normal "Je ne serais pas disponible pour la prochaine réunion.")
+
+(= (all ?x (couleur ?x)) (set))
+(couleur bleu)
+(couleur vert)

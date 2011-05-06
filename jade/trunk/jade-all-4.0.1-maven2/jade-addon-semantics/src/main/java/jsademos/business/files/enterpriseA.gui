@@ -1,0 +1,43 @@
+
+
+message# UBL requestCatalogue # inform ((ubl requestCatalogue "requestCatalogue.ubl"))
+
+#ubl#message# Request catalogue # inform ((message (agent-identifier :name enterpriseB@test) (fact (done (action (agent-identifier :name buyer@test) (REQUEST_CATALOGUE :supplier (agent-identifier :name seller@test) :requestCatalogue (requestCatalogue :customerAID (agent-identifier :name buyer@test) :supplierAID (agent-identifier :name seller@test) :delayInDays 7) )) true)) ))
+
+################
+
+#ubl#message# Send purchase order # inform ((message (agent-identifier :name enterpriseB@test) (fact (done (action (agent-identifier :name buyer@test) (SEND_PURCHASE_ORDER :orderReference "" :purchaseOrder (purchaseOrder :cancellationPeriod (period (fact false) (fact true)) :customerAID (agent-identifier :name buyer@test) :deliveryPeriod (period (fact true) (fact false)) :id "PUR_ORD_0" :issueDateTime 20080723T103229608 :orderLines (set (orderLine :itemReference "PROD_0" :catalogueReference "CAT_0" :itemName "" :itemDescription "" :quantity 2 :unitPrice 25.0 :lineNetAmount 50.0) (orderLine :itemReference "PROD_1" :catalogueReference "CAT_0" :itemName "" :itemDescription "" :quantity 1 :unitPrice 200.0 :lineNetAmount 200.0)) :paymentPeriod (period (fact (document (agent-identifier :name seller@test) (agent-identifier :name buyer@test) (deliveryNote :orderReference PUR_ORD_0))) (fact false)) :supplierAID (agent-identifier :name seller@test) :totalLine (totalLine :nbOfOrderLines 2 :totalNetAmount 250.0) :validityPeriod (period (fact true) (fact false))) :responseReference "" :supplier (agent-identifier :name seller@test))) true)) ))
+
+message# UBL send purchase order # inform ((ubl purchaseOrder "purchaseOrder.ubl"))
+
+
+####################
+
+#ubl#message# Receipt advice # inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name buyer@test) (SEND_RECEIPT_ADVICE :receiptAdvice (receiptAdvice :customerAID (agent-identifier :name buyer@test) :id "REC_ADV_0" :issueDateTime 20080724T101448491 :orderReference "PUR_ORD_0" :receiptDateTime 20080724T101441491 :receivedItems (set) :supplierAID (agent-identifier :name seller@test)) :supplier (agent-identifier :name intermediary@test))) true)) ))
+
+message# UBL receipt advice # inform ((ubl receiptAdvice "receiptAdvice.ubl"))
+
+#########
+
+##message# Direct payment order to bank # inform ((done (action (agent-identifier :name buyer@test) (SEND_PAYMENT_ORDER :bank (agent-identifier :name bankAagent@test) :paymentOrder (paymentOrder :amount 299.0 :creditorAID (agent-identifier :name seller@test) :creditorBankAID (agent-identifier :name bankBagent@test) :debtorAID (agent-identifier :name buyer@test) :debtorBankAID (agent-identifier :name bankAagent@test) :id "PAY_ORD_1" :invoiceReference "INV_0" :issueDateTime 20080724T105634038))) true))
+
+##################
+
+#ubl#message# Payment advice # inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name buyer@test) (SEND_PAYMENT_ADVICE :paymentAdvice (paymentAdvice :amount 299.0 :creditorAID (agent-identifier :name seller@test) :debtorAID (agent-identifier :name buyer@test) :id "PAY_ADV_0" :invoiceReference "INV_0" :issueDateTime 20080723T115702397 :paymentDateTime 20080723T115654620) :supplier (agent-identifier :name intermediary@test))) true)) ))
+
+message# UBL payment advice # inform ((ubl paymentAdvice "paymentAdvice.ubl"))
+
+#########################
+
+###inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name bankAagent@test) (SEND_PAYMENT_ADVICE :paymentAdvice (paymentAdvice :amount 299.0 :creditorAID (agent-identifier :name seller@test) :debtorAID (agent-identifier :name buyer@test) :id "PAY_ADV_0" :invoiceReference "INV_0" :issueDateTime 20080723T115702397 :paymentDateTime 20080723T115654620) :supplier (agent-identifier :name intermediary@test))) true)) ))
+
+#message# loan done # inform ((done (action (agent-identifier :name bank@test) (LOAN_MONEY :buyer (agent-identifier :name buyer@test) :package (set "television" "phone") :price 250 :seller (agent-identifier :name seller@test))) true))
+
+####################
+
+image# enterpriseA
+
+receiver# buyer@test
+#gui#receiver# bankA@test
+
+

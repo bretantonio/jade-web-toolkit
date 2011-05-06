@@ -1,0 +1,62 @@
+
+# DO NOT CHANGE THE NAME of the ??_institution META-REFERENCE
+# REMARK: a given meta-reference name must have the same type all along the file...
+
+# (institutional-action ??inst ??pattern ??obs ??cdt ??effect)
+# ??_actor is the author of the action, to be used in preconditions or effects
+
+
+#############
+###  NEW  ###
+#############
+
+(institutional-action ??_institution 
+	(PROMISE_TO :action ??_action :creditor ??_creditor :institution ??_institution :condition (fact ??_condition) :deadline (fact ??_deadline)) 
+	(set ??_creditor) 
+	(fact true) 
+	(fact true))
+
+
+############
+### OLD ###
+############
+
+(institutional-action ??_institution 
+	(PROMISE_THAT :creditor ??_creditor :institution ??_institution :validity (fact ??_validity) :what (fact ??_what)) 
+	(set ??_creditor) 
+	(fact (until (fact ??_what) (fact ??_validity) )) 
+	(fact true)  
+)
+
+(institutional-action ??_institution 
+	(PROMISE_TO :action ??_action :creditor ??_creditor :institution ??_institution :validity (fact ??_validity)) 
+	(set ??_creditor) 
+	(fact true) 
+	(fact (since 
+		(fact (O (done (action ??_actor ??_action) true))) 
+		(fact ??_validity)
+	))
+)
+
+# todo institutional precondition = I done(action)
+
+(institutional-action ??_institution
+	(GIVE_FINE_TO :condemned ??_condemned :amount ??_amount :institution ??_institution :reason (fact (and (O (done ??_alpha true)) (not (done ??_alpha true)))) :delay (fact ??_delay) :reference ??_reference)
+	(set ??_condemned)
+	#institutional condition: hold the role of institution (add a role of judge ?)
+	(fact (and (and (O (done ??_alpha true)) (not (done ??_alpha true))) (D ??_institution (holder ??_actor roleInstitution))))
+	#institutional effect
+	(fact (power ??_condemned ??_institution (fact true) (PAY :amount ??_amount :receiver ??_actor :reference ??_reference) (fact (not (O (done ??_alpha true)))) ) )
+)
+
+(institutional-action ??_institution
+	(GIVE_FINE_TO :condemned ??_condemned :amount ??_amount :institution ??_institution :reason (fact ??_reason) :delay (fact ??_delay) :reference ??_reference)
+	(set ??_condemned)
+	#institutional condition: hold the role of institution (add a role of judge ?)
+	(fact (and ??_reason (D ??_institution (holder ??_actor roleInstitution))))
+	#institutional effect
+	(fact (since (fact (O (done (action ??_condemned (PAY :amount ??_amount :receiver ??_actor :reference ??_reference)) true))) (fact ??_delay) ))
+)
+
+
+

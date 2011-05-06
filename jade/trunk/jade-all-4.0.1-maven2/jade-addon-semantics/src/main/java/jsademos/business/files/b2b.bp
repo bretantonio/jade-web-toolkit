@@ -1,0 +1,60 @@
+
+#############
+#### NEW ####
+#############
+
+# list of formulas to be interpreted only by the concerned agent and the mediator
+# (business-process ??agent ??formula)
+
+
+(business-process-debug (agent-identifier :name buyer@test) (fact (implies aaa bbb)))
+
+(business-process-debug (agent-identifier :name buyer@test) (fact (implies (p ??id) (q ??id))))
+
+(business-process-debug (agent-identifier :name seller@test) (fact (implies (q ??id) (r ??id))))
+
+
+(business-process-debug (agent-identifier :name buyer@test) (fact (implies (and (aa ??ida) (bb ??idb)) (cc ??ida ??idb))))
+
+(business-process-debug (agent-identifier :name buyer@test) (fact (implies (and (aa ??ida) (bb 1)) (cc ??ida))))
+
+(business-process-debug (agent-identifier :name buyer@test) (fact (implies (and a b) c)))
+
+
+
+(business-process-debug
+	(agent-identifier :name seller@test) 
+	(fact (implies 
+		(and 
+			(document (paymentAdvice 
+				:creditorAID (agent-identifier :name seller@test)
+				:invoiceReference ??invoiceReference 
+			))
+			(document (invoice 
+				:id ??invoiceReference 
+				:orderReference ??orderReference
+			))
+		) 
+		(can-deliver (agent-identifier :name seller@test) ??orderReference)
+	))
+)
+
+
+(business-process-debug
+	(agent-identifier :name buyer@test)
+	(fact (implies
+		(document (deliveryNote :orderReference ??orderReference))
+		(can-pay (agent-identifier :name buyer@test) ??orderReference)
+	))
+)
+
+
+#############
+#### OLD ####
+#############
+
+# unique ref should be enough to identify the package and price ...
+#(business-process-link (fact (can-pay ??buyer ??seller ??pack ??price ??ref)) (fact (done (action ??seller (DELIVER_PACKAGE :buyer ??buyer :package ??pack :price ??price :ref ??ref)) true)) )
+#(business-process-link (fact (can-deliver ??seller ??buyer ??pack ??price ??ref)) (fact (done (action ??buyer (PAY_PACKAGE :package ??pack :price ??price :ref ??ref :seller ??seller)) true)) )
+
+

@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+JSA ant build file
+
+It is created according a JADE's build.xml.
+-->
+
+<project name="Jade Semantic Agent" default="compile" basedir=".">
+	<description>JSA build file</description>
+	<property environment="env"/>
+	<property file="buildJSA.properties"/>
+	<property name="version" value="1.8"/>
+	<property name="build.compiler" value="modern"/>
+	<property name="javac.optimize" value="on"/>
+	<property name="javac.debug" value="on"/>
+	
+	<!-- set global properties for this build -->
+	<property name="root" location="."/>
+	<property name="src" location="src"/>
+	<property name="dist" location=".."/>
+	<property name="doc" location="doc/api"/>
+	<property name="build" location="classes"/>
+	<property name="libJADEDir" value="../../lib"/>
+	<property name="libJADELeapDir" value="../../leap/j2se/lib"/>
+	<property name="libJADEPJAVADir" value="../../leap/pjava/lib" />
+    <property name="leap-dir" value="../../leap"/>
+
+	<property name="pjava-root" value="${root}\pjava"/>
+	<property name="pjava-src" value="${root}\pjava\src"/>
+   	<property name="pjava-lib" value="${root}\pjava\lib"/>
+   	<property name="pjava-build" value="${root}\pjava\build"/>
+
+	<property name="j2se-root" value="${root}\j2se"/>
+   	<property name="j2se-lib" value="${root}\j2se\lib"/>
+   	<property name="j2se-build" value="${root}\j2se\build"/>
+	
+
+	<!--******************** TARGETS ********************-->
+	<!-- HELP -->
+  	<target name="help" description="show the usage of the most frequently used targets of this ant file">
+  		<echo message="ant clean             (clean all jar and build files)"/>
+  		<echo/>
+  	   	<echo message="ant dist              (make the JSA distribution)"/>
+  		<echo/>
+   		<echo message="ant &lt;what&gt; compile    (compile a JSA component)"/>
+   		<echo message="ant &lt;what&gt; lib"/>
+  		<echo message="    &lt;what&gt; = j2se, pjava                                   (JSA kernel)"/>
+  		<echo message="             sqlwrapper, emotion, institutions                   (JSA extensions)"/>
+  		<echo message="             business, booktrading, temperature, emotionalagent  (JSA demos)"/>
+  		<echo/>
+  	   	<echo message="ant &lt;what&gt; run        (to run a JSA demo, demos must have been compiled before)"/>
+  		<echo message="    &lt;what&gt; = business, booktrading, temperature, emotionalagent"/>
+  		<echo message="    NOTE 1: demos are run with JADE-Leap, JadeLeap.jar must be properly installed in ../../leap/"/>
+  		<echo message="    NOTE 2: the emotionalagent demo requires the jcommon and jfreechart jar files in ./lib/"/>
+  		<echo/>
+   		<echo message="Examples: ant j2se lib                (compiles the JSA kernel jar for the J2SE env.)"/>
+   		<echo message="          ant sqlwrapper lib          (compiles the sqlwrapper JSA extension jar)"/>
+   		<echo message="          ant temperature compile run (compile and run the temperature demo)"/>
+  	</target>
+
+
+	<!-- JAVA DOC -->
+	<target name="doc" depends="init" description="generate javadoc documentation">
+	      	<javadoc destdir="${doc}" author="true" version="true"
+	      		     windowtitle="Jade Semantics Add-On ${version} API Reference" use="true"
+	      		     overview="src/overview.html">
+	      		<classpath>
+	        		<fileset dir="${libJADEDir}" includes="*.jar"/>
+	      		</classpath>
+		  	<packageset dir="src" defaultexcludes="yes">
+				<include name="jade/semantics/**"/>
+		  	</packageset>
+	    	</javadoc>
+	</target>
+	
+	<!-- EXTERNAL TOOLS (used by the pJava and .net environments -->
+	<target name="ext_tools" unless="j2se" description="defines the proper external tools such as the pproc">
+		<!-- Preprocessor -->
+		<taskdef name = "pproc"    classname="leapTools.Preprocessor">
+			<classpath path ="${leap-dir}/resources/antTasks/leapTools.jar"/>
+		</taskdef>
+		<!-- Minimizer -->
+		<taskdef name = "minimize"    classname="leapTools.Minimizer">
+			<classpath path ="${leap-dir}/resources/antTasks/leapTools.jar"/>
+		</taskdef>
+		<!-- Preverifier -->
+		<taskdef  name="preverify" classname="com.stampysoft.ant.j2me.PreverifyTask">
+			<classpath path ="${leap-dir}/resources/antTasks/StampysoftAntTasks.jar" />
+		</taskdef>
+	</target>	
+
+	<!-- DIST -->
+	<target name="dist" depends="init">
+		<zip zipfile="../semanticsAddOn-${version}.zip" basedir="../.."
+			 update="false">
+			<include name="add-ons/semantics/*"/>
+			
+			<include name="add-ons/semantics/doc/*"/>
+			<include name="add-ons/semantics/doc/cookbook/**"/>
+			<include name="add-ons/semantics/doc/papers/**/*.pdf"/>
+			<include name="add-ons/semantics/doc/tutorials/english/**/*.pdf"/>
+			<include name="add-ons/semantics/doc/tutorials/exercises/*"/>
+			<include name="add-ons/semantics/doc/tutorials/exercises/src/**"/>
+			<include name="add-ons/semantics/doc/tutorials/solutions/*"/>
+			<include name="add-ons/semantics/doc/tutorials/solutions/src/**"/>
+
+			<include name="add-ons/semantics/src/overview.html"/>
+			<include name="add-ons/semantics/src/jsademos/**"/>
+			<include name="add-ons/semantics/src/jade/semantics/**"/>
+			<include name="add-ons/semantics/src/jade/tools/**"/>
+
+			<exclude name="**/.*"/>
+			<exclude name="**/*~"/>
+			<exclude name="**/.xvpics"/>
+			<exclude name="**/Thumbs.db"/>
+			<exclude name="**/APDescription.txt"/>
+			<exclude name="add-ons/semantics/classes"/>
+			<exclude name="add-ons/semantics/*lib"/>
+			<exclude name="add-ons/semantics/j2se"/>
+			<exclude name="add-ons/semantics/pjava"/>
+			<exclude name="add-ons/semantics/doc/**/_*"/>
+			<exclude name="add-ons/semantics/doc/tutorials/**/*.txt"/>
+			<exclude name="add-ons/semantics/src/jsademos/*2.java"/>
+			<exclude name="add-ons/semantics/src/jsademos/business/exes/**/*"/>
+			<exclude name="add-ons/semantics/src/jade/semantics/ext/institutions/docs/**"/>
+		</zip>
+	</target>
+
+	<!-- JAVA -->
+	<target name="j2se" description="J2SE environment">
+		<property name="j2se"  value="true"/>
+	</target>
+	<target name="pjava" description="PJAVA environment (java-1.1-home must be set in the buildJSA.properties file)">
+		<property name = "pjava"  value = "true"/>
+	</target>
+	<target name = "all" depends = "j2se, pjava"/>
+
+	<target name = "sqlwrapper" depends="j2se" description="sqlwrapper JSA extension">
+		<property name="sqlwrapper"  value="true"/>
+	</target>
+	<target name = "emotion" depends="j2se" description="emotion JSA extension">
+		<property name = "emotion"  value = "true"/>
+	</target>
+	<target name = "institutions" depends="j2se" description="institutions JSA extension">
+		<property name = "institutions"  value = "true"/>
+	</target>
+	<target name = "temperature" depends="j2se" description="temperature JSA demo">
+		<property name = "temperature"  value = "true"/>
+	</target>
+	<target name = "booktrading" depends="j2se" description="booktrading JSA demo">
+		<property name = "booktrading"  value = "true"/>
+	</target>
+	<target name = "emotionalagent" depends="j2se, emotion" description="emotionalagent JSA demo">
+		<property name = "emotionalagent"  value = "true"/>
+	</target>
+	<target name = "business" depends="j2se, institutions" description="business JSA demo">
+		<property name = "business"  value = "true"/>
+	</target>
+
+	<!-- INIT -->
+	<target name="init" depends="init-j2se, init-pjava"
+		description="Initialization of selected environment"/>
+	<target name="init-j2se" if="j2se">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the directory structure -->
+		<mkdir dir="${doc}"/>
+		<mkdir dir="${j2se-lib}"/>
+		<mkdir dir="${j2se-build}"/>
+	</target>
+	<target name="init-pjava" if="pjava">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the directory structure -->
+		<mkdir dir="${pjava-root}"/>
+		<mkdir dir="${pjava-src}"/>
+		<mkdir dir="${pjava-lib}"/>
+		<mkdir dir="${pjava-build}"/>
+	</target>
+	
+	<!-- SETUP PJAVA -->
+	<target name="do-setup" if="pjava" depends="init,ext_tools"
+	        description="Setup the build environment">
+	  <!-- 1) Copy JADE sources -->
+	  <copy todir="${pjava-src}">
+			<fileset dir="${src}/jade"/>
+	  </copy>
+	  <!-- 3) Preprocess the whole -->
+	  <pproc basedir="${pjava-src}" type="pjava"/>
+	</target>
+
+<!-- *************** COMPILATION TARGETS *************** -->
+	<target name="compile" depends="init, compile-j2se, compile-pjava, compile-sqlwrapper, compile-emotion, compile-institutions, compile-temperature, compile-booktrading, compile-emotionalagent, compile-business"
+	        description="Compile for selected environment"/>
+	<target name="lib" depends="compile"/>
+	<!-- JSA kernel -->
+	<target name="compile-j2se" if="j2se">
+	      <javac srcdir="${src}" destdir="${j2se-build}" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jade/semantics/**,jade/tools/**"
+	      	     excludes="**/package-info.java,jade/semantics/ext/**">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/jsa.jar"
+			basedir="${j2se-build}"
+			excludes="jsademos/**,jade/semantics/ext/**"
+		/>
+	</target>	
+	<target name="compile-pjava" if="pjava" depends="do-setup">
+		<javac srcdir="${pjava-src}"
+		       destdir="${pjava-build}"
+		       nowarn="off" 
+		       optimize="${javac.optimize}" 
+		       debug="${javac.debug}" 
+		       deprecation="on"
+		       compiler="classic"
+		       source="1.1"
+		       target="1.1">
+	      <classpath>
+	        <fileset dir="${libJADEPJAVADir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${pjava-lib}/jsa.jar"
+			basedir="${pjava-build}"
+			excludes="jsademos/**,jade/semantics/ext/**"
+		/>
+	</target>
+
+	<!-- JSA extensions -->
+	<!--
+	<target name="ext" depends="init, compile-j2se, lib-j2se, sqlwrapper, emotion, institutions"
+	        description="Compile a JSA extension"/> -->
+	<target name="compile-sqlwrapper" if="sqlwrapper">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jade/semantics/ext/sqlwrapper/**"
+	      	     excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/jsa-sqlwrapper.jar"
+			basedir="${j2se-build}"
+			includes="jade/semantics/ext/sqlwrapper/**"
+		/>
+	</target>	
+	<target name="compile-emotion" if="emotion">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jade/semantics/ext/emotion/**"
+     	         excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	        <fileset dir="${jfree-lib}" includes="**/*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/jsa-emotion.jar"
+			basedir="${j2se-build}"
+			includes="jade/semantics/ext/emotion/**"
+		/>
+	</target>	
+	<target name="compile-institutions" if="institutions">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jade/semantics/ext/institutions/**"
+         	     excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/jsa-institutions.jar"
+			basedir="${j2se-build}"
+			includes="jade/semantics/ext/institutions/**"
+		/>
+		<jar destfile="${j2se-lib}/jsa-institutions.jar"
+		    basedir="${src}"
+		    includes="jade/semantics/ext/institutions/**/*.gif"
+		    update="true"
+		/>
+	</target>	
+	<!-- JSA demos -->
+    <target name="init-demo" if="j2se" depends="init">
+	    <copy todir="${j2se-build}/jsademos">
+		<fileset dir="${src}/jsademos" excludes="**/*.java,**/*.sh,**/*.bat,**/.*"/>
+	    </copy>
+    </target>
+
+	<target name="compile-temperature" if="temperature" depends="init-demo">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jsademos/temperature/**"
+         	     excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/demo-temperature.jar"
+			basedir="${j2se-build}"
+			includes="jsademos/temperature/**"
+		/>
+	</target>	
+	<target name="compile-booktrading" if="booktrading" depends="init-demo">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jsademos/booktrading/**"
+         	     excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/demo-booktrading.jar"
+			basedir="${j2se-build}"
+			includes="jsademos/booktrading/**"
+		/>
+	</target>	
+	<target name="compile-emotionalagent" if="emotionalagent" depends="init-demo">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jsademos/emotionalagent/**"
+         	     excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	        <fileset dir="${jfree-lib}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/demo-emotionalagent.jar"
+			basedir="${j2se-build}"
+			includes="jsademos/emotionalagent/**"
+		/>
+	</target>	
+	<target name="compile-business" if="business" depends="init-demo">
+	      <javac srcdir="${src}" destdir="${j2se-build}" nowarn="off" optimize="${javac.optimize}" debug="${javac.debug}" deprecation="on"
+	      	     includes="jsademos/business/**"
+        	     excludes="**/package-info.java">
+	      <classpath>
+	        <fileset dir="${libJADEDir}" includes="*.jar"/>
+	      </classpath>
+	    </javac>
+		<jar destfile="${j2se-lib}/demo-business.jar"
+			basedir="${j2se-build}"
+			includes="jsademos/business/**"
+		/>
+	</target>	
+		
+	<!-- CLEAN -->
+	<target name="clean" depends="clean-j2se, clean-pjava"/>
+	<target name="clean-j2se" if="j2se">
+		<!-- Delete the ${build} directory tree -->
+		<delete includeEmptyDirs="true">
+			<fileset dir="${j2se-build}" excludes="**/*.mf"/>
+			<fileset dir="${j2se-lib}" includes="*.jar"/>
+		</delete>
+	</target>
+	<target name="clean-pjava" if="pjava">
+		<!-- Delete the ${build} directory tree -->
+		<delete includeEmptyDirs="true">
+			<fileset dir="${pjava-build}" excludes="**/*.mf"/>
+			<fileset dir="${pjava-lib}" includes="*.jar"/>
+			<fileset dir= "${pjava-src}"/>
+		</delete>
+	</target>
+	
+	<!-- RUN DEMOS -->
+	<target name = "run" depends="run-business, run-booktrading, run-temperature, run-emotionalagent"
+		description = "Run a JSA demo"/>
+
+	<target name="run-business" if="business" description="launch the business demo">
+		<java classname="jsademos.business.MainClass" fork="true">
+            <classpath>
+            	<fileset dir="${libJADELeapDir}" includes="*.jar"/>
+            	<fileset dir="${j2se-lib}"   includes="*.jar"/>
+            </classpath>
+		</java>
+	</target>
+	
+    <target name="run-booktrading" if="booktrading" description="launch the booktrading demo">        
+	<java classname="jade.Boot" fork="true" dir="${src}/jsademos/booktrading">
+        <classpath>
+        	<fileset dir="${libJADELeapDir}" includes="*.jar"/>
+        	<fileset dir="${j2se-lib}"   includes="*.jar"/>
+        </classpath>
+		<arg value="-gui"/>
+		<arg line="-name test"/>
+		<arg value="-nomtp"/>
+		<arg value="isbnholder:jsademos.booktrading.IsbnHolderAgent(isbn.txt);bookseller1:jsademos.booktrading.BookSellerAgent(seller1.txt,isbnholder);bookseller2:jsademos.booktrading.BookSellerAgent(seller2.txt,isbnholder);bookbuyer:jsademos.booktrading.BookBuyerAgent(isbnholder,bookseller1,bookseller2)"/>
+	</java>
+    </target>
+
+    <target name="run-temperature" if="temperature" description="launch the temperature demo">        
+	<java classname="jade.Boot" fork="true" dir="${src}/jsademos/temperature">
+        <classpath>
+        	<fileset dir="${libJADELeapDir}" includes="*.jar"/>
+        	<fileset dir="${j2se-lib}"   includes="*.jar"/>
+        </classpath>
+		<arg value="-gui"/>
+		<arg line="-name test"/>
+		<arg value="-nomtp"/>
+		<arg value="dfagent:jsademos.temperature.DFAgent;bestsensor:jsademos.temperature.SensorAgent(2,dfagent@test);sensor:jsademos.temperature.SensorAgent(0,dfagent@test);bettersensor:jsademos.temperature.SensorAgent(1,dfagent@test);display:jsademos.temperature.DisplayAgent(dfagent@test);son:jsademos.temperature.ManAgent(son.txt,display@test,mother@test,showkb);mother:jsademos.temperature.DemoAgent(mother.txt);daughter:jsademos.temperature.DemoAgent(daughter.txt)"/>
+	</java>
+    </target>
+
+    <target name="run-emotionalagent" if="emotionalagent" description="launch the emotional agent demo">        
+	<java classname="jade.Boot" fork="true" dir="${src}/jsademos/emotionalagent">
+        <classpath>
+        	<fileset dir="${libJADELeapDir}" includes="*.jar"/>
+        	<fileset dir="${j2se-lib}"   includes="*.jar"/>
+        	<fileset dir="${jfree-lib}" includes="*.jar"/>
+        </classpath>
+		<arg value="-gui"/>
+		<arg line="-name test"/>
+		<arg value="-nomtp"/>
+		<arg value="agent:jsademos.emotionalagent.MyEmotionalAgent(kb.txt);ihm:jsademos.emotionalagent.InterfaceJSAAgent(kb.txt)"/>
+	</java>
+    </target>
+</project> 
