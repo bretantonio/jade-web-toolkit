@@ -19,6 +19,10 @@
 		<module>jade-addon-android</module>
 		<module>jade-addon-java-sniffer</module>
 		<module>jade-addon-security</module>
+		<module>jade-addon-ontology-beangenerator</module>
+		<module>jade-addon-jadesharp</module>
+		<module>jade-addon-orbacus-mtp</module>
+		<module>jade-addon-fipa-xml-aclcodec</module>
 	</modules>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
