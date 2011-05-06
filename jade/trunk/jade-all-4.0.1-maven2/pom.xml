@@ -18,6 +18,7 @@
 		<module>jade-addon-semantics</module>
 		<module>jade-addon-android</module>
 		<module>jade-addon-java-sniffer</module>
+		<module>jade-addon-security</module>
 	</modules>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
