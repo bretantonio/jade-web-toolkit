@@ -11,6 +11,13 @@
 		<module>jade-osgi</module>
 		<module>jade-addon-persistence</module>
 		<module>jade-addon-ascml</module>
+		<module>jade-addon-wsig</module>
+		<module>jade-addon-wsdc</module>
+		<module>jade-addon-miscellaneous</module>
+		<module>jade-addon-dsc</module>
+		<module>jade-addon-semantics</module>
+		<module>jade-addon-android</module>
+		<module>jade-addon-java-sniffer</module>
 	</modules>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
