@@ -1,0 +1,148 @@
+<!--
+	<H3>The blocksword benchmark agent.</H3>
+
+	Uses the blocksworld scenario to measure Jadex performance.
+
+<pre>
+<font face="Arial, Helvetica, sans-serif">
+Benchmarks:
+
+P4 3 GHz (HyperThreading), JADE 3.2, Java 1.4.2_01
+
+	Jadex-0.921:
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 267
+	Standard deviation of runs (millis): 5
+
+	Jadex-0.93beta (JBind):
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 342
+	Standard deviation of runs (millis): 5
+
+	Jadex-0.93beta (JBind patch):
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 331
+	Standard deviation of runs (millis): 5
+
+	Jadex 0.93beta (clean_membrane):
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 196
+	Standard deviation of runs (millis): 8
+
+	Jadex 0.93beta (pre_deliberation):
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 290
+	Standard deviation of runs (millis): 8
+
+	Jadex 0.93beta (deliberation):
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 204
+	Standard deviation of runs (millis): 5
+
+P4M 1,5 GHz (Centrino), JADE 3.2, Java 1.4.2_01
+
+	Jadex 0.93beta (JBind)
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 287
+	Standard deviation of runs (millis): 5
+
+	Jadex 0.93beta (deliberation_jan)
+	Benchmark: 10 runs with 10 goals each.
+	Avg. time per run (millis): 143
+	Standard deviation of runs (millis): 5
+</font>
+</pre>
+
+-->
+
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Benchmark"
+	package="jadex.examples.blocksworld">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.*</import>
+		<import>java.awt.Color</import>
+	</imports>
+
+	<beliefs>
+		<belief name="mode" class="String">
+			<fact>StackBlocksPlan.MODE_NORMAL</fact>
+		</belief>
+		<belief name="table" class="Table">
+			<fact>new Table()</fact>
+		</belief>
+		<belief name="bucket" class="Table">
+			<fact>new Table("Bucket", Color.lightGray)</fact>
+		</belief>
+	    <beliefset name="blocks" class="Block">
+			<fact>new Block(new Color(240, 16, 16), $beliefbase.table)</fact>
+			<fact>new Block(new Color(16, 16, 240), $beliefbase.table)</fact>
+			<fact>new Block(new Color(240, 240, 16), $beliefbase.table.allBlocks[0])</fact>
+			<fact>new Block(new Color(16, 240, 16), $beliefbase.table.allBlocks[2])</fact>
+			<fact>new Block(new Color(240, 16, 240), $beliefbase.bucket)</fact>
+			<fact>new Block(new Color(16, 240, 240), $beliefbase.bucket)</fact>
+			<fact>new Block(new Color(240, 240, 240), $beliefbase.bucket)</fact>
+		</beliefset>
+	</beliefs>
+	
+	<goals>
+		<achievegoal name="clear">
+			<parameter name="block" class="Block" />
+			<targetcondition>
+ 				$goal.block.isClear()
+ 			</targetcondition>
+		</achievegoal>
+		<achievegoal name="stack">
+			<parameter name="block" class="Block" />
+			<parameter name="target" class="Block" />
+			<targetcondition>
+ 				$goal.block.lower==$goal.target
+ 			</targetcondition>
+		</achievegoal>
+		<achievegoal name="configure">
+			<parameter name="configuration" class="Table" />
+			<targetcondition>
+				$beliefbase.table.configurationEquals($goal.configuration)
+				<affected beliefref="blocks" eventtype="SystemEvent.BSFACT_EVENT" />
+			</targetcondition>
+		</achievegoal>
+	</goals>
+
+	<plans>
+		<!-- plan to clear a block, by moving to the table whats on top of it. -->
+		<plan name="clear">
+			<bindings>
+				<binding name="upper">
+					select $upper from $beliefbase.blocks
+					where $upper.getLower()==$event.goal.block
+				</binding>
+			</bindings>
+			<body>new StackBlocksPlan($upper, $beliefbase.table, $beliefbase.mode, true)</body>
+			<trigger>
+				<goal ref="clear"/>
+			</trigger>
+		</plan>
+		<plan name="stack">
+			<body>new StackBlocksPlan($event.goal.block, $event.goal.target, $beliefbase.mode, true)</body>
+			<trigger>
+				<goal ref="stack"/>
+			</trigger>
+		</plan>
+		<plan name="configure">
+			<body>new ConfigureBlocksPlan($event.goal.configuration)</body>
+			<trigger>
+				<goal ref="configure"/>
+			</trigger>
+		</plan>
+<!--		<plan name="gui" initial="true">
+			<body>new GuiPlan()</body>
+		</plan>
+-->		<plan name="benchmark" initial="true">
+			<body>new BenchmarkPlan()</body>
+		</plan>
+	</plans>
+
+</agent>
+

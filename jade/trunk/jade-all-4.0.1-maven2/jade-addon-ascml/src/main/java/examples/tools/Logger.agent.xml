@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="LogManager" package="jade.tools.logging" type="jade" class="LogManagerAgent" description="This is the LoggerAgent provided by JADE"
+	   icon="examples/tools/logger.gif">
+</agent>

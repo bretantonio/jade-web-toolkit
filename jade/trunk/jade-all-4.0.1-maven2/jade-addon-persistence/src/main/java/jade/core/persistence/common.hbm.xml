@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+  <!-- A FIPA agent identifier -->
+  <class name="jade.core.AID">
+
+    <id column="aid_id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <discriminator column="aid_class"/>
+
+    <property name="name"/>
+
+    <array name="addressesArray" cascade="all">
+      <key column="AID"/>
+      <index column="idx"/>
+      <element column="elem" type="string"/>
+    </array>
+
+    <array name="resolversArray" cascade="all">
+      <key column="AID"/>
+      <index column="idx"/>
+      <many-to-many column="elem" class="jade.core.AID"/>
+    </array>
+
+    <subclass name="jade.content.OntoAID"/>
+
+  </class>
+
+  <!-- A FIPA ACL Message -->
+  <class name="jade.lang.acl.ACLMessage">
+
+    <id column="msg_id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <!-- Basic slots -->
+    <property name="performative"/>
+    <many-to-one name="sender" cascade="all"/>
+
+    <component name="receivers">
+      <list name="data" table="acl_receivers" cascade="all-delete-orphan">
+        <key column="owner"/>
+        <index column="idx"/>
+        <many-to-many column="elem" class="jade.core.AID"/>
+      </list>
+    </component>
+
+    <component name="replyTo">
+      <list name="data" table="acl_replyto" cascade="all-delete-orphan">
+        <key column="owner"/>
+        <index column="idx"/>
+        <many-to-many column="elem" class="jade.core.AID"/>
+      </list>
+    </component>
+
+    <!-- Content slots -->
+    <property name="content"/>
+    <property name="byteSequenceContent"/>
+
+    <!-- Descriptive slots -->
+    <property name="encoding"/>
+    <property name="language"/>
+    <property name="ontology"/>
+    <property name="protocol"/>
+
+    <!-- Conversation slots -->
+    <property name="replyWith"/>
+    <property name="inReplyTo"/>
+    <property name="conversationId"/>
+
+
+    <!-- Envelope -->
+    <component name="envelope" class="jade.domain.FIPAAgentManagement.Envelope">
+
+      <many-to-one name="from" column="env_from" cascade="all" class="jade.core.AID"/>
+
+      <component name="to">
+        <list name="data" table="env_to" cascade = "all-delete-orphan">
+          <key column="owner"/>
+          <index column="idx"/>
+          <many-to-many column="elem" class="jade.core.AID"/>
+        </list>
+      </component>
+
+      <component name="intendedReceivers">
+        <list name="data" table="env_intrecv" cascade = "all-delete-orphan">
+          <key column="owner"/>
+          <index column="idx"/>
+          <many-to-many column="elem" class="jade.core.AID"/>
+        </list>
+      </component>
+
+      <property name="comments"/>
+      <property name="aclRepresentation"/>
+      <property name="payloadLength"/>
+      <property name="payloadEncoding"/>
+      <property name="Date"/>
+
+      <component name="properties">
+        <list name="data" table="env_props" cascade = "all-delete-orphan">
+          <key column="owner"/>
+          <index column="idx"/>
+          <composite-element class="jade.domain.FIPAAgentManagement.Property">
+            <property name="name"/>
+            <property name="svalue"/>
+          </composite-element>
+        </list>
+      </component>
+
+    </component> <!-- End of Envelope -->
+
+
+    <!-- User defined properties -->
+    <property name="userDefinedProperties"/>
+
+  </class>
+
+
+  <class name="jade.mtp.MTPDescriptor">
+
+    <id column="id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <property name="name"/>
+    <property name="className"/>
+
+    <array name="addresses" table="mtpdesc_addrs" cascade="all">
+      <key column="mtpdesc"/>
+      <index column="idx"/>
+      <element column="elem" type="string"/>
+    </array>
+
+    <array name="supportedProtocols" table="mtpdesc_protos" cascade="all">
+      <key column="mtpdesc"/>
+      <index column="idx"/>
+      <element column="elem" type="string"/>
+    </array>
+
+  </class>
+
+</hibernate-mapping>

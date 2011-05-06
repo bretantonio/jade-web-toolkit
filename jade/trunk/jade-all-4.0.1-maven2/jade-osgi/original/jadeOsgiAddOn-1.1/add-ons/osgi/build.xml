@@ -1,0 +1,117 @@
+<project name="jadeOsgi" default="compile" basedir=".">
+
+	<property file="build.properties"/>
+	<property name="version" value="1.1"/>
+	<property name="build" value="classes"/>
+	<property name="doc" value="doc"/>
+	<property name="lib" value="lib"/>
+	<property name="resources" value="resources"/>
+	<property name="examplesSrc" location="examples/src"/>
+
+	<path id="classpath">
+		<pathelement location="${build}"/>
+		<fileset file="${jade-home}/lib/jade.jar"/>
+		<fileset file="${osgi-framework-jar}"/>
+	</path>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<condition property="src" value="src/main/java" else="src">
+			<available type="dir" file="src/main/java"/>
+		</condition>
+		<!-- Create the directories structure used to store files -->
+		<mkdir dir="${build}"/>
+		<mkdir dir="${lib}"/>
+		<mkdir dir="${doc}/api"/>
+	</target>
+
+	<target name="compile" depends="init" description="Compile jadeOsgi sources">
+		<javac srcdir="${src}"
+           destdir="${build}"
+           nowarn="off"
+           optimize="${optimised-build}"
+           debug="${debug-build}"
+           debuglevel="lines,vars,source"
+           deprecation="on">
+			<classpath>
+				<path refid="classpath"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}" quiet="true"/>
+		<delete dir="${doc}" quiet="true"/>
+		<delete dir="${lib}" quiet="true"/>
+	</target>
+
+	<target name="bundle" depends="compile" description="Create jadeOsgi bundle">
+		<unzip dest="${build}" overwrite="false">
+			<fileset file="${jade-home}/lib/jade.jar"/>
+		</unzip>
+		<delete dir="${build}/META-INF" quiet="true"/>
+		<copy file="${jade-home}/lib/commons-codec/commons-codec-1.3.jar" todir="${build}/lib" />
+		<jar jarfile="${lib}/jadeOsgiBundle.jar" manifest="${resources}/MANIFEST.MF">
+			<fileset dir="${build}" includes="lib/**,jade/**,FIPA/**"/>
+		</jar>
+	</target>
+
+	<!-- Compile the javadoc code from ${src} into ${doc} -->
+	<target name="doc" depends="compile">
+		<mkdir dir="${doc}/api" />
+		<javadoc sourcepath="${src}" packagenames="jade.osgi, jade.osgi.service.agentFactory, jade.osgi.service.runtime" destdir="${doc}/api" author="true" windowtitle="JADE OSGI classes">
+			<classpath>
+				<path refid="classpath"/>
+			</classpath>
+		</javadoc>
+	</target>
+
+	<target name="dist" depends="clean, doc, bundle, bundle-examples" description="create the distribution ZIP file"> 
+		<echo message="GENERATE THE PDF FORM OF THE JADE-OSGI GUIDE, PUT IT IN THE LOCAL DIRECTORY (jade/add-ons/osgi) AND THEN PRESS ENTER -->" />
+		<input />
+		<mkdir dir="${jade-home}/doc" />
+		<mkdir dir="${jade-home}/doc/tutorials" />
+		<copy file="JadeOsgiGuide.pdf" todir="${jade-home}/doc/tutorials" />
+
+		<delete file="../jadeOsgiAddOn-${version}.zip" quiet="true" />
+		<zip zipfile="../jadeOsgiAddOn-${version}.zip" basedir="../..">
+			<exclude name="add-ons/osgi/JadeOsgiGuide.*" />
+			<exclude name="add-ons/osgi/pom.xml"/>
+			<exclude name="add-ons/osgi/startJadeOsgi.*"/>
+			<exclude name="add-ons/osgi/osgi/**"/>
+			<exclude name="add-ons/${build}/**"/>
+			
+			<include name="add-ons/osgi/build.xml"/>
+			<include name="add-ons/osgi/build.properties"/>
+			<include name="doc/tutorials/JadeOsgiGuide.pdf" />
+			<zipfileset dir="${src}" prefix="add-ons/osgi/src"/>
+			<include name="add-ons/osgi/doc/**" />
+			<include name="add-ons/osgi/cfg/**" />
+			<include name="add-ons/osgi/lib/agent*" />
+			<include name="add-ons/osgi/resources/**" />
+			<include name="add-ons/osgi/examples/**" />
+		</zip>
+		
+		<copy file="${lib}/jadeOsgiBundle.jar" todir=".." />
+	</target>
+	
+	<!-- EXAMPLES related targets -->
+
+	<target name="compile-examples" depends="init" description="Compile OSGI examples sources">
+		<javac srcdir="${examplesSrc}" debug="yes" destdir="${build}" encoding="ISO-8859-1" includeAntRuntime="no">
+			<classpath refid="classpath"/>
+		</javac>
+		<echo>Examples compilation complete</echo>
+	</target>
+
+	<target name="bundle-examples" depends="compile-examples" description="Create example bundles">
+		<jar jarfile="${lib}/agentHolderBundle.jar" manifest="${resources}/AGENT_HOLDER_MANIFEST.MF">
+			<fileset dir="${build}" includes="agentHolder/**"/>
+		</jar>
+		<jar jarfile="${lib}/agentCreatorBundle.jar" manifest="${resources}/AGENT_CREATOR_MANIFEST.MF">
+			<fileset dir="${build}" includes="agentCreator/**"/>
+		</jar>
+	</target>
+
+</project>

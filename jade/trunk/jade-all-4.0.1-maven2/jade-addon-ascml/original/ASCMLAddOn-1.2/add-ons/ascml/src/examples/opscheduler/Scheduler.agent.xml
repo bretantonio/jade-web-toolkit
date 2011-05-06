@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="SchedulerAgent" package="org.realagents.pa.scheduler" type="jade" class="SchedulerAgent" description="This is the Scheduler agent">
+
+</agent>

@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>jade-4.0.1-all-project</groupId>
+	<artifactId>jade-4.0.1-all-project</artifactId>
+	<name>JADE Web Toolkit (JWT)</name>
+	<version>4.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>jade-core</module>
+		<module>jade-osgi</module>
+		<module>jade-addon-persistence</module>
+		<module>jade-addon-ascml</module>
+	</modules>
+	<properties>
+		<encodingtype>utf-8</encodingtype>
+		<jdkversion>1.6</jdkversion>
+	</properties>
+	<!-- <scm> <connection>scm:svn:http://jade-web-toolkit.googlecode.com/svn</connection> 
+		<developerConnection>scm:svn:https://jade-web-toolkit.googlecode.com/svn</developerConnection> 
+		<url>https://jade-web-toolkit.googlecode.com/svn</url> </scm> -->
+	<description>JADE(Java Agent DEvelopment Framework) and WADE(Workflows and Agents Development Environment) based experimental project</description>
+	<url>http://code.google.com/p/jade-web-toolkit/</url>
+	<issueManagement>
+		<system>JWT By Google Code</system>
+		<url>http://code.google.com/p/jade-web-toolkit/issues/list</url>
+	</issueManagement>
+	<organization>
+		<name>Kim, Dong-Sup</name>
+		<url>http://www.facebook.com/abreqadhabra</url>
+	</organization>
+	<repositories>
+		<!-- <repository> <id>jade-web-toolkit-maven2-repo</id> <name>JWT Maven 
+			Repository</name> <url>dav:https://jade-web-toolkit.googlecode.com/svn/trunk/maven/2</url> 
+			</repository> -->
+		<repository>
+			<id>jwt-mvn</id>
+			<url>http://jade-web-toolkit.googlecode.com/svn/trunk/repo</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+		<repository>
+			<id>hibernate</id>
+			<name>Maven Repository for hibernate </name>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.jvnet.wagon-svn</groupId>
+				<artifactId>wagon-svn</artifactId>
+				<version>1.9</version>
+			</extension>
+		</extensions>
+
+		
+	</build>
+
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+  <!-- The root node: a saved JADE container -->
+
+  <class name="jade.core.persistence.SavedContainer">
+
+    <id column="id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <!-- The name of this container -->
+    <property name="name"/>
+
+    <!-- The agents active on the container -->
+    <set name="agents" table="savedcontainer_agents" cascade="all-delete-orphan">
+      <key column="container"/>
+      <many-to-many column="elem" class="jade.core.persistence.SavedAgent"/>
+    </set>
+
+    <!-- The installed MTPs -->
+    <set name="installedMTPs" table="savedcontainer_mtps" cascade="all-delete-orphan">
+      <key column="container"/>
+      <many-to-many column="elem" class="jade.mtp.MTPDescriptor"/>
+    </set>
+
+    <!-- FIXME: Add the list of active services -->
+
+
+  </class>
+
+</hibernate-mapping>

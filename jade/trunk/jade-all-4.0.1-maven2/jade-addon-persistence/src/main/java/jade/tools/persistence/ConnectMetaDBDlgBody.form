@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.0" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="firstColumnPanel">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
+        <Property name="axis" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="aliasLabel">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="aliasText"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Alias: "/>
+            <Property name="verticalAlignment" type="int" value="3"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="urlLabel">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="urlText"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="URL: "/>
+            <Property name="verticalAlignment" type="int" value="3"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="secondColumnPanel">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
+        <Property name="axis" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JTextField" name="aliasText">
+          <Properties>
+            <Property name="columns" type="int" value="40"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="urlText">
+          <Properties>
+            <Property name="columns" type="int" value="40"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

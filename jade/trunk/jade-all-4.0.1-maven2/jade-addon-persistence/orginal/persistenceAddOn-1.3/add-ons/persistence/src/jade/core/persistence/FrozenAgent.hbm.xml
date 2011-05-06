@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+  <!-- The root node: a frozen JADE agent -->
+  <class name="jade.core.persistence.FrozenAgent">
+
+    <id column="id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <!-- The (possibly remote) link to the message queue of this frozen agent  -->
+    <property name="messageQueueFK"/>
+
+    <many-to-one name="agent" cascade="all"/>
+
+  </class>
+
+</hibernate-mapping>

@@ -1,0 +1,53 @@
+<!--
+	<H3>An observer agent allows to view an environment.</H3>
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Observer"
+	package="jadex.examples.hunterprey.environment">
+
+	<imports>
+		<import>jadex.examples.hunterprey.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jade.core.AID</import>
+		<import>jade.content.lang.sl.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="actsensecap" file="jadex/examples/hunterprey/creature/actsense/Creature.capability.xml"/>
+	</capabilities>
+
+	<beliefs>
+
+		<!-- The creature -->
+		<belief name="my_self" class="Creature">
+			<assignto ref="actsensecap.my_self"/>
+			<fact>
+				new Observer($agent.jadeAgent.getLocalName(),
+ 					$agent.jadeAgent.getAID(), new Location(0,0))
+ 			</fact>
+		</belief>
+
+		<!-- The current vision. -->
+		<beliefref name="vision">
+			<concrete ref="actsensecap.vision"/>
+		</beliefref>
+
+		<!-- The location of the highscore. -->
+		<belief name="highscore" class="String">
+			<fact>"highscore.dmp"</fact>
+		</belief>
+
+	</beliefs>
+
+	<plans>
+		<!-- Create the environment gui. -->
+		<plan name="gui" initial="true">
+			<body>new ObserverGUIPlan()</body>
+		</plan>
+	</plans>
+
+</agent>
+

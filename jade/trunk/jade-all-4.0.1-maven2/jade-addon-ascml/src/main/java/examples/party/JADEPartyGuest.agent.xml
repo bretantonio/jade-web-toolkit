@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="JADEPartyGuest" package="examples.party" type="jade" class="GuestAgent" icon="../src/examples/party/PartySociety_Guest.gif" description="This is a Guest-agent of the JADE-Party">
+</agent>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="BirthdayParty" icon="..\\src\\examples\\party\\PartySociety.gif" package="examples.party"
+	description="This is a modification of the JADE-Party that ships with the JADE distribution. It was originally designed as a 'stress-test' and serves now as an example for the ASCML. The party starts when a minimum number of guests have arrived. The host selects one guest at random, and tells them a rumour. Then two other guests are selected at random and introduced to each other. Guests taking part in an introduction are afterwards repeatedly introduced to other guests. Guests knowing about the host's rumour tell it to other guests during an introduction. When a guest hears the rumour for the first time, it notifies the host. When all the guests have heard the rumour, the party ends and the guests leave.">
+	<imports>
+		<import>Test-Import 1</import>
+		<import>Test-Import 2</import>
+	</imports>
+	<agenttypes>
+		<agenttype name="examples.party.JADEPartyGuest"/>
+		<agenttype name="examples.party.JADEPartyHost"/>
+	</agenttypes>
+	<societyinstances default="SmallParty">
+		<societyinstance name="SmallParty">
+			<agentinstances>
+				<agentinstance name="BirthdayChild" type="JADEPartyHost">
+					<parameter name="guestsToWaitFor">
+ 						<value> 10 </value>
+					</parameter>
+					<tooloption type="benchmark" enabled="false">
+						<!--<property name="AID">myAID</property>-->
+					</tooloption>
+ 					<!--<dependency>
+						 <delay quantity="1234"/>
+					 </dependency>
+					<dependency>
+						<agenttype name="MyAgentType" quantity="2"/>
+					</dependency>
+					<dependency>
+						<agentinstance name="MyAgentInstance" status="running">
+							<provider name="MyAgentInstanceProvider">
+								<address>MyFirstAddress</address>
+								<address>MySecondAddress</address>
+							</provider>
+						</agentinstance>
+					</dependency>
+					<dependency>
+						<service name="MyService" type="MyServiceType" ownership="MyOwnerShip">
+							<protocol>MyFirstServiceProtocol</protocol>
+							<protocol>MySecondServiceProtocol</protocol>
+							<ontology>MyFirstServiceOntology</ontology>
+							<ontology>MySecondServiceOntology</ontology>
+							<language>MyFirstServiceLanguage</language>
+							<language>MySecondServiceLanguage</language>
+							<property name="MyFirstPropertyName">MyFirstPropertyValue</property>
+							<property name="MySecondPropertyName">MySecondPropertyValue</property>
+							<provider name="MyServiceProvider">
+								<address>MyFirstAddress</address>
+								<address>MySecondAddress</address>
+					    	</provider>
+ 						</service>
+					</dependency>
+                    <dependency>
+						<societyinstance societytype="MySocietyType" societyinstance="MySocietyInstance" status="not_running">
+							<provider name="MySocietyInstanceProvider">
+								<address>MyFirstAddress</address>
+								<address>MySecondAddress</address>
+							</provider>
+						</societyinstance>
+					</dependency>
+					<dependency>
+						<societytype name="MySocietyType" quantity="3"/>
+					</dependency>
+					-->
+				</agentinstance>
+			</agentinstances>
+			<societyinstancerefs>
+				<societyinstanceref name="Guests" quantity="1" namingscheme="%T ms" societytype="BirthdayParty" societyinstance="SmallGuestpool"/>
+			</societyinstancerefs>
+		</societyinstance>
+
+		<societyinstance name="SmallGuestpool" quantity="1" namingscheme="%N" description="This is just a helper society instance for the SmallParty.">
+			<agentinstances>
+				<agentinstance name="Guest" type="JADEPartyGuest" quantity="3" namingscheme="%N"/>
+			</agentinstances>
+		</societyinstance>
+
+		<societyinstance name="Remote SmallParty">
+			<societyinstancerefs>
+				<societyinstanceref name="RemoteParty" quantity="1" namingscheme="%T ms" societytype="examples.party.BirthdayParty" societyinstance="SmallParty">
+					<launcher name="ascml@algorithma.de:1099/JADE">
+						<!--<address>http://algorithma.de:7778/acc</address>-->
+					</launcher>
+				</societyinstanceref>
+			</societyinstancerefs>
+		</societyinstance>
+
+		<societyinstance name="Svens SmallParty">
+			<societyinstancerefs>
+				<societyinstanceref name="RemoteParty" quantity="1" namingscheme="%T ms" societytype="examples.party.BirthdayParty" societyinstance="SmallParty">
+					<launcher name="ASCML@FORD:1099/JADE">
+						<address>http://127.0.0.1:7778/acc</address>
+					</launcher>
+				</societyinstanceref>
+			</societyinstancerefs>
+		</societyinstance>		
+
+	</societyinstances>
+</society>

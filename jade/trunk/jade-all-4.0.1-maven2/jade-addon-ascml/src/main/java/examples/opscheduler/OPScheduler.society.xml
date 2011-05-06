@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: OPScheduler.society.xml,v 1.1 2005/07/27 14:00:59 medha Exp $ -->
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="OPScheduler Society" icon="/examples/opscheduler/OPScheduler.gif" package="org.realagents.pa"
+	description="A Ping Pong Society to test the benchmarker">
+	<agenttypes>
+		<agenttype name="org.realagents.pa.ward.StationAgent"/>
+		<agenttype name="org.realagents.pa.scheduler.SchedulerAgent"/>
+	</agenttypes>
+	<societyinstances default="OPScheduler">
+		<societyinstance name="OPScheduler">
+			<agentinstances>
+				<agentinstance name="Scheduler" type="SchedulerAgent">
+				</agentinstance>
+				<agentinstance name="Station" type="StationAgent">
+				</agentinstance>
+			</agentinstances>
+		</societyinstance>
+	</societyinstances>
+</society>

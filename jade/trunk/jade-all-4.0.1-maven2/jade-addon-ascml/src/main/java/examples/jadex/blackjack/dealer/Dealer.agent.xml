@@ -1,0 +1,439 @@
+<!--
+	<H3>The blackjack dealer controls the game.</H3>
+	
+	The dealer registers itself at the DirectoryFacilitator
+	and waits for player agents to join the table.
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Dealer"
+	package="jadex.examples.blackjack.dealer">
+
+	<imports>
+		<import>jadex.examples.blackjack.*</import>
+		<import>jadex.examples.blackjack.gui.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.util.jade.*</import>
+		<import>jade.core.AID</import>
+		<import>jade.lang.acl.*</import>
+		<import>java.util.logging.*</import>
+		<import>java.util.*</import>
+	</imports>
+
+	<capabilities>
+		<!-- this capability provides easy access to "out-of-the-box"-plans
+			 allowing - for example - to register at the DF. -->
+		<capability name="dfcap" file="DF"/>
+	</capabilities>
+	
+	<!-- 
+	     These are the dealers beliefs. None of these beliefs should be edited in the ADF 
+	     because all beliefs are initialised by the plans during the game or have 
+	     expedient start-up values (like the three beliefs below).
+	-->
+	<beliefs>
+		<!-- The card set used to play the game. -->
+		<belief name="cardSet"  class="CardSet">
+			<fact> new CardSet() </fact>
+		</belief>
+		<!-- The amount of money won by the dealer. -->
+		<belief name="moneyWon"	    class="Integer">
+			<fact> 0 </fact>
+		</belief>
+		<!-- The number of games that have been played. -->
+		<belief name="gamesPlayed"     class="Integer">
+			<fact> 0 </fact>
+		</belief>
+		
+		<!-- 
+		    The number of seconds to wait before restarting a game.
+			Can be adjusted in the GUI.
+		-->
+		<belief name="restartWaitSeconds"     class="Integer">
+			<fact> 10 </fact>
+		</belief>
+		<!-- 
+		    The number of seconds to wait before drawing a card.
+			Can be adjusted in the GUI.
+		-->
+		<belief name="cardDrawWaitSeconds"     class="Integer">
+			<fact> 1 </fact>
+		</belief>
+		<!-- 
+		    When set to true, each step in the game must be manually
+			issued in the GUI.
+		-->
+		<belief name="singleStepMode"     class="Boolean">
+			<fact> false </fact>
+		</belief>
+		
+		<!--
+			Following beliefs are written <belief .../>, because they contain no facts
+			at the beginning of a game. The facts are created during runtime,
+			i.e. facts are only added to the 'player'-belief, when the dealer
+			decided to accept a player's join-request.
+			When you start the jadex-BDIViewer during a game, you can see how the
+			beliefs change during runtime.
+		-->
+		<!-- The current cards of the dealer. -->
+		<belief name="dealerCards" class="Vector" />
+
+		<!-- The player AIDs as Tuple(playernumber, AID). -->
+		<beliefset name="player" class="Tuple"/>
+
+		<!-- The player names as Tuple(playernumber, String). -->
+		<beliefset name="playerName" class="Tuple" />
+
+		<!-- The player cards as Tuple(playernumber, Vector). -->
+		<beliefset name="playerCards" class="Tuple" />
+
+		<!-- The player bets as Tuple(playernumber, integer). -->
+		<beliefset name="playerBets" class="Tuple" />
+
+		<!-- The player accounts as Tuple(playernumber, integer). -->
+		<beliefset name="playerAccounts" class="Tuple" />
+
+		<!-- The player strategies as Tuple(playernumber, String). -->
+		<beliefset name="playerStrategy" class="Tuple" />
+
+		<!-- The player colors as Tuple(playernumber, String). -->
+		<beliefset name="playerColor" class="Tuple" />
+
+		<!-- The history of a player, represented as tuples: Tuple(name, round, account, color). -->
+		<beliefset name="playerResultHistory" class="Tuple" />
+
+		<!-- The history of the dealer, represented as tuples: Tuple(round, account). -->
+		<beliefset name="dealerResultHistory" class="Tuple" />
+		
+		<!-- 
+			It's possible that a few different manager (possibly from remote Players) 
+			want to track their players during the game, therefor a beliefset containing 
+			all manager-AIDs is needed.
+		 -->
+
+		<beliefset name="tracker" class="AID"/>
+
+		<!-- 
+			If 'true' the dealer sends an invitation to each player at the end of each round. 
+	    	The player may decide to accept the invitation and not to leave the table, 
+	    	that means, that a player is shown in the panel on the GUI where he/she has been 
+	    	shown before.
+	    -->
+	    <belief name="invitePlayer"	class="Boolean">
+	    	<fact> true </fact>
+	    </belief>
+	</beliefs>
+	
+	<!-- 
+	     The dealer has only one initial goal: registering a 
+	     dealing-service at the DF and renew this registration 
+	     every 10 seconds.
+	-->
+	<goals>
+		<!-- Used for registering the dealer at the df. -->
+		<maintaingoalref name="df_keep_registered">
+			<concrete ref="dfcap.df_keep_registered"/>
+		</maintaingoalref>
+		<!-- Used for deregistering the dealer at the df. -->
+		<achievegoalref name="df_deregister">
+			<concrete ref="dfcap.df_deregister"/>
+		</achievegoalref>
+
+		<!-- Register the dealer at the df on startup. -->
+		<initialgoal ref="df_keep_registered">
+			<!-- The services to register. -->
+			<parameter name="description">
+ 				<value>"services"</value>
+ 			</parameter>
+			<!-- The lease time for the registriation. --> 
+			<parameter name="leasetime">
+ 				<value>6000000</value>
+ 			</parameter>
+			<!--<parameter name="address">"http://134.100.11.53:1521/acc"</parameter>
+			<parameter name="df">new AID("df@vsispro3:1099/JADE")</parameter>-->
+		</initialgoal>
+	</goals>
+	
+	<!-- 
+	     These are all the plans, the dealer will execute during a game.
+	     There is one plan for every major task. Have a look into the
+	     plan-classes to get a detailed insight in whats going on there.
+	-->
+	<plans>
+		<!-- Initialize the dealer agent at startup. -->
+		<plan name="init" initial="true">
+			<body>new DealerInitPlan()</body>
+		</plan>
+		<!-- React on changes and update the GUI. -->
+		<plan name="gui" initial="true">
+			<body>new GUIUpdatePlan()</body>
+		</plan>
+		<!-- Show the statistics window. -->
+		<plan name="statistic">
+			<body>new StatisticShowPlan()</body>
+			<trigger>
+				<internalevent ref="statistic"/>
+			</trigger>
+		</plan>
+		<!-- Start a new game. -->
+		<plan name="start">
+			<body>new DealerStartPlan()</body>
+			<trigger>
+				<internalevent ref="gameStart"/>
+			</trigger>
+		</plan>
+		<!-- Accept requests from players that want to draw another card. -->
+		<plan name="givecard">
+			<body>new DealerGiveCardPlan()</body>
+			<trigger>
+				<messageevent ref="inform_draw"/>
+			</trigger>
+		</plan>
+		<!-- Accept notifications from players that have finished their game. -->
+		<plan name="finish">
+			<body>new DealerFinishPlan()</body>
+			<trigger>
+				<internalevent ref="gameStart"/>
+			</trigger>
+		</plan>
+		<!-- Send invitation to all players to join the next game. -->
+		<plan name="invite">
+			<body>new DealerInvitePlan()</body>
+			<trigger>
+				<internalevent ref="invitation"/>
+			</trigger>
+		</plan>
+		<!-- Shut down the dealer. -->
+		<plan name="shutDown">
+			<body>new DealerShutDownPlan()</body>
+			<trigger>
+				<messageevent ref="inform_shutdown"/>
+			</trigger>
+		</plan>
+	</plans>
+	
+	<!-- events -->
+	<events>
+		<!-- User pressed the statistic-Button. -->
+		<internalevent name="statistic"/>
+		<!--
+			This internal-event is received by the DealerStartPlan as well 
+			as the DealerFinishPlan. These plans are instantiated once this
+			internal event is triggered.
+		-->
+		<internalevent name="gameStart"/>
+		<!--
+			Send invitations to the player-agents, who played on the dealer's table
+			last round. The players, who accept the invitation may stay for one more round and they
+			keep - and this is the motivation for these invitations - their player-number and their
+			assigned panel on the GUI.
+		-->
+		<internalevent name="invitation"/>
+		<!--
+			Inform the GUI, that the evaluation of this round is finished and that
+			the gui can prepare to restart. Restarting means, the progressbar is counting
+			down and then forces the GUIUpdatePlan to dispatch a restartGame-event.
+		-->
+		<internalevent name="prepareRestart"/>
+		<!--
+			Issued by the GUI when the GUIOptionPanel finished the countdown
+			to start the next round. This internal event is received by the DealerFinishPlan and forces the plan
+			to finalize this round and to dispatch a new event for DealerInitPlan to open
+			the game for new players.
+		-->
+		<internalevent name="restartGame"/>
+		<!--
+			The start/restart-event is dispatched by the GUIUpdatePlan
+			and forces the DealerInitPlan to start the game.
+		-->
+		<internalevent name="startPlaying"/>
+		<!--
+			Hide and dispose the dealer-GUI and deregister the dealer at the DF.
+		-->
+		<internalevent name="shutDown"/>
+		<!-- Send an internal-event that the evaluation of all results is finished. -->
+		<internalevent name="roundFinished"/>
+		<!-- Issued when a player does not respond. -->
+		<internalevent name="playerNoResponse">
+			<!-- The player, that didn't respond. -->
+			<parameter name="player" class="int" />
+		</internalevent>
+		<!--
+			Before a new card can be drawn, a drawCardRequest must be sent to the
+			GUI, because the user may force the agent to play slower.
+		-->
+		<internalevent name="drawCardRequest">
+			<!-- The player or dealer, that wishes to draw a card. -->
+			<parameter name="who" class="String" />
+		</internalevent>
+		<!--
+			The draw card request has been granted, now tell the requestSubmitter
+			that a card may be drawn.
+		-->
+		<internalevent name="drawCard">
+			<!-- The player or dealer, that wishes to draw a card. -->
+			<parameter name="who" class="String" />
+		</internalevent>
+
+		<!-- player messages -->
+		<!-- Player request to join the game. -->
+		<messageevent name="request_join">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.REQUEST</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"join"</value>
+			</parameter>
+		</messageevent>
+		<!-- A player wants to draw another card. -->
+		<messageevent name="inform_draw">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"draw"</value>
+			</parameter>
+		</messageevent>
+		<!-- A player makes a bet. -->
+		<messageevent name="inform_bet">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"bet"</value>
+			</parameter>
+		</messageevent>
+		<!-- A player has finished its game (i.e. doesn't want to draw any more cards). -->
+		<messageevent name="inform_finished">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content" class="String">
+				<value>"finished"</value>
+			</parameter>
+		</messageevent>
+		<!-- A player answers to an invitation. -->
+		<messageevent name="inform_invitation">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"invitation"</value>
+			</parameter>
+		</messageevent>
+
+		<!-- manager messages -->
+
+		<!-- The manager is shutting down the BlackJack application. -->
+		<messageevent name="inform_shutdown">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"manager:shutDown"</value>
+			</parameter>
+		</messageevent>
+		<!-- The manager registers as tracker on game settings. -->
+		<messageevent name="query_tracking">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.QUERY_REF</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"manager:registerAsTracker"</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+	<!-- expressions -->	
+	<expressions>
+		<!-- Get player number for a given $playerAID. -->
+		<expression name="getPlayerNumber">
+			SELECT IOTA $player.get(0) 
+			FROM $player IN $beliefbase.player 
+			WHERE $player.get(1) == $playerAID
+		</expression>
+		<!-- Get player cards for a given $playerAID. -->
+		<expression name="getPlayerCardByAID">
+			SELECT IOTA $playerCards.get(1) 
+			FROM $playerCards IN $beliefbase.playerCards 
+			WHERE $playerCards.get(0) == 
+				(SELECT IOTA $player.get(0) 
+				 FROM $player IN $beliefbase.player
+				 WHERE $player.get(1) == $playerAID)
+		</expression>
+		<!-- Get player cards for a given $playerNumber. -->
+		<expression name="getPlayerCardByNumber">
+			SELECT IOTA $playerCards.get(1) 
+			FROM $playerCards IN $beliefbase.playerCards 
+			WHERE $playerCards.get(0) == $playerNumber
+		</expression>
+		<!-- Get player AID for a given $playerNumber. -->
+		<expression name="getAID">
+			SELECT IOTA $player.get(1) 
+			FROM $player IN $beliefbase.player 
+			WHERE $player.get(0) == $playerNumber
+		</expression>
+		<!-- Get player name for a given $playerNumber. -->
+		<expression name="getName">
+			SELECT IOTA $playerName.get(1) 
+			FROM $playerName IN $beliefbase.playerName 
+			WHERE $playerName.get(0) == $playerNumber
+		</expression>
+		<!-- Get player account for a given $playerNumber. -->
+		<expression name="getAccount">
+			SELECT IOTA $playerAccounts.get(1) 
+			FROM $playerAccounts IN $beliefbase.playerAccounts 
+			WHERE $playerAccounts.get(0) == $playerNumber
+		</expression>
+		<!-- Get player strategy for a given $playerNumber. -->
+		<expression name="getStrategy">
+			SELECT IOTA $playerStrategy.get(1) 
+			FROM $playerStrategy IN $beliefbase.playerStrategy 
+			WHERE $playerStrategy.get(0) == $playerNumber
+		</expression>
+		<!-- Get player color for a given $playerNumber. -->
+		<expression name="getColor">
+			SELECT IOTA $playerColor.get(1) 
+			FROM $playerColor IN $beliefbase.playerColor 
+			WHERE $playerColor.get(0) == $playerNumber
+		</expression>
+		<!-- Get player bet for a given $playerNumber. -->
+		<expression name="getBet">
+			SELECT IOTA $playerBets.get(1) 
+			FROM $playerBets IN $beliefbase.playerBets 
+			WHERE $playerBets.get(0) == $playerNumber
+		</expression>
+	</expressions>
+	
+	<!-- 
+	     logging-properties, needed to debug the application.
+	     Start the Jadex-Logging-Agent to see whats going on behind
+	     the scenes
+	 -->
+<!--	<properties>
+		<property name="logging.level">Level.INFO</property>
+	</properties>-->
+	
+	<!-- 
+	     This is the service description for the dealer. With this description
+	     the dealers is registered at the directory facilitator.
+	-->
+	<servicedescriptions>
+		<servicedescription name="dealing" type='"blackjack"' ownership="University of Hamburg"/>
+	</servicedescriptions>
+	
+	<!-- 
+	     This is the agent-description for the dealer. With this description
+	     the dealers is registered at the directory facilitator.
+	     Note, that the dealer only offers one service, that is 'dealing'
+	     (see <servicedescriptions> above).
+	-->
+	<agentdescriptions>
+		<agentdescription name="services">
+			<service>dealing</service>
+		</agentdescription>
+	</agentdescriptions>
+</agent>
+

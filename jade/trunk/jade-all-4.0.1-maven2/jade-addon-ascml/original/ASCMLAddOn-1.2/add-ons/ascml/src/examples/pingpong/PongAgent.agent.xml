@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+        name="PongAgent" package="examples.pingpong" type="jade" class="PongAgent" description="This is a Pong-agent for the PingPongSociety">
+        <parameters>
+                <parameter name="df" type="String" optional="true" description="Which df to ask for a Ping Agent"/>
+                <parameter name="transport" type="String" optional="true" description="Transport to use for communication"/>
+                <parameter name="delay" type="String" optional="true" description="msec delay for processing"/>
+                <parameter name="verbose" type="String" optional="true" description="more feedback"/>
+        </parameters>
+</agent>

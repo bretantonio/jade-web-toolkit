@@ -1,0 +1,75 @@
+<!--
+	<H3>The lazy prey.</H3>
+
+	The lazy prey does only move when chased by a wolf.
+	Otherwise it sits and waits.
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="LazyPrey"
+	package="jadex.examples.hunterprey.creature">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.examples.hunterprey.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="actsensecap" file="jadex/examples/hunterprey/creature/actsense/Creature.capability.xml"/>
+	</capabilities>
+
+	<beliefs>
+		
+		<!-- The creature -->
+		<belief name="my_self" class="Creature">
+			<assignto ref="actsensecap.my_self"/>
+			<fact>new Prey($agent.jadeAgent.getLocalName(),
+ 					$agent.jadeAgent.getAID(), new Location(10,10))</fact>
+		</belief>
+
+		<!-- The current vision. -->
+		<beliefref name="vision">
+			<concrete ref="actsensecap.vision"/>
+		</beliefref>
+
+		<!-- The known hunters. -->
+		<beliefsetref name="hunters">
+			<concrete ref="actsensecap.hunters"/>
+		</beliefsetref>
+
+		<!-- The know obstacles. -->
+		<beliefsetref name="obstacles">
+			<concrete ref="actsensecap.obstacles"/>
+		</beliefsetref>		
+
+	</beliefs>
+
+	<goals>
+		<maintaingoal name="keep_alone" exclude="never">
+			<maintaincondition>
+				$beliefbase.vision==null ||
+				(select $object
+ 				from $beliefbase.vision.getObjects()
+				where $object instanceof Hunter).size()==0
+			</maintaincondition>
+		</maintaingoal>
+
+		<achievegoalref name="move">
+			<concrete ref="actsensecap.move"/>
+		</achievegoalref>
+
+		<initialgoal ref="keep_alone"/>
+	</goals>
+
+	<plans>
+		<!-- Dumb move plan. -->
+		<plan name="escape">
+			<body>new EscapePreyPlan()</body>
+			<trigger>
+				<goal ref="keep_alone"></goal>
+			</trigger>
+		</plan>
+	</plans>
+
+</agent>
+

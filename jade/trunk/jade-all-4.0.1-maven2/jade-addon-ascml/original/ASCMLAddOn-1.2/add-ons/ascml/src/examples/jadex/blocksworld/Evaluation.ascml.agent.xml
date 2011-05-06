@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="Jadex-Blocksworld-EvaluationAgent" package="jadex.runtime.impl" icon=".\\examples\\jadex\\blocksworld\\blocksworld20x20.png" type="jadex" class="JadeWrapperAgent" description="Uses the blocksworld scenario to evaluate Jadex performance. Results are written to .csv file.">
+
+	<parameters>
+		<parameter name="class" type="String" optional="false" description="Class to start">
+			<value>.\examples\jadex\blocksworld\Evaluation.agent.xml</value>
+		</parameter>
+	</parameters>
+
+</agent>

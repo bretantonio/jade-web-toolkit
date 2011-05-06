@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AgentCreator
+Bundle-SymbolicName: agentCreator
+Bundle-Version: 1.0.0
+Bundle-Activator: agentCreator.AgentCreatorActivator
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: jade.jadeOsgi;bundle-version="1.0.0"

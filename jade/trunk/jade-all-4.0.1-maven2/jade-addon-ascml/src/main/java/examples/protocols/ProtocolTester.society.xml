@@ -1,0 +1,131 @@
+<!--
+	Protocol Tester Scenario.
+-->
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="ProtocolTester" package="examples.protocols"
+	description="This examples permits to launch an Initiator-agent
+	and some Responder-agents to test the AchieveREResponder and
+	AchieveREInitiator protocols.">
+
+	<!-- not needed, but built in for testing purposes -->
+	<imports>
+		<import>examples.protocols</import>
+	</imports>
+	
+	<!-- The available agent types in this society -->
+	<agenttypes>
+		<agenttype name="Initiator"/>
+		<agenttype name="Responder"/>
+	</agenttypes>
+
+	<!-- -->
+	<scenarios>
+		<scenario name="MiniScene" description="The Mini-scenario uses only one responder.">
+			<agents>
+				<agent name="Requester" type="Initiator">
+					<parameterset name="receivers">
+						<value>Fabio</value>
+					</parameterset>
+					<dependency>
+						<agent name="Fabio"></agent>
+					</dependency>
+				</agent>
+				<agent name="Fabio" type="Responder"></agent>
+			</agents>
+		</scenario>
+
+		<scenario name="DefaultScene" description="The default scenario handles 3 responders.">
+			<agents>
+				<agent name="Requester" type="Initiator">
+					<parameterset name="receivers">
+						<value>Hans</value>
+						<value>Franz</value>
+						<value>Kai</value>
+					</parameterset>
+					<dependency delay="3000">
+						<agenttype name="Responder" quantity="ALL"/>
+					</dependency>
+				</agent>
+				<agent name="Hans" type="Responder"></agent>
+				<agent name="Franz" type="Responder"></agent>
+				<agent name="Kai" type="Responder" ></agent>
+			</agents>
+		</scenario>
+		
+		<scenario name="ToolScene" description="The tools-scenario uses sniffer, debugger.">
+			<agents>
+				<agent name="Requester" type="Initiator">
+					<parameterset name="receivers">
+						<value>Hans</value>
+						<value>Franz</value>
+					</parameterset>
+					<dependency>
+						<agenttype name="Responder" quantity="ALL"/>
+					</dependency>
+					<tooloption type="sniff"></tooloption>
+					<tooloption type="debug"></tooloption>
+				</agent>
+				<agent name="Hans" type="Responder">
+					<tooloption type="sniff"></tooloption>
+				</agent>
+				<agent name="Franz" type="Responder">
+					<tooloption type="sniff"></tooloption>
+				</agent>
+			</agents>
+		</scenario>
+		
+		<scenario name="ScenarioReferenceScene" description="This Scenario references the MiniScenario and adds one more Responder">
+			<scenarioref name="MiniSceneReference" society="ProtocolTester" scenario="MiniScene">
+				<dependency>
+					<!-- 
+						this dependency means 'Hans' has to be started first, then the
+					    referenced-scenario. This is logically wrong, but for testing purposes ok
+					-->
+					<agent name="Fabio"></agent>
+				</dependency>
+				<launcher name="MyLauncherName">
+					<address>
+						MyLauncherAddress_1
+					</address>
+					<address>
+						MyLauncherAddress_2
+					</address>
+				</launcher>
+			</scenarioref>
+			<agents>
+				<agent name="Fabio" type="Responder">
+					<!-- MiniScene has to be started first, cause it contains the Initiator-agent -->
+					<dependency>
+						<scenario name="MiniScene"></scenario>
+					</dependency>
+				</agent>
+			</agents>
+		</scenario>
+		<!--
+		<scenario name="remote" description="The remote scenario uses a remote responder.">
+			<agents>
+				<agent name="requester" type="initiator">
+					<parameterset name="receivers">
+						<value>hans</value>
+						<value>franz</value>
+						<value>kai</value>
+					</parameterset>
+					<dependency>
+						<agent name="locally"></agent>
+						#comment <agent name="remoty"> Not possible because of naming scheme
+						<agent name="remoty@localhost:1099/JADE">
+							<provider name="ams@localhost:1099/JADE">
+								<address>http://localhost:7778/acc</address>
+							</provider>
+						</agent>
+					</dependency>
+				</agent>
+				#comment <agent name="remoty" type="responder"></agent>
+				<agent name="locally" type="responder"></agent>
+			</agents>
+		</scenario>
+		-->
+	</scenarios>
+
+</society>

@@ -1,0 +1,116 @@
+<!--
+	<H3>The blackjack Manager helps with starting agents.</H3>
+
+	Provides a GUI to start/stop agents, and close the complete BlackJack application.
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Manager"
+	package="jadex.examples.blackjack.manager">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.util.jade.*</import>
+		<import>java.util.logging.*</import>
+		<import>jade.core.AID</import>
+		<import>jade.lang.acl.*</import>
+	</imports>
+	
+	<capabilities>
+		<!-- this capability provides easy access to "out-of-the-box"-plans
+			 allowing - for example - to register at the DF. -->
+		<capability name="dfcap" file="DF"/>
+	</capabilities>
+
+	<beliefs>
+		<!-- The players initially displayed.
+			 The GUI may change, when the dealer announces the number of allowed players. -->
+		<beliefset name="playerStartupProperties" class="Tuple">
+			<fact> new Tuple(new Object[]{"Heinz", 100, "#FFC0C0", "ConstantVeryCareful"}) </fact>
+			<fact> new Tuple(new Object[]{"Erna",  100, "#FFE0C0", "ConstantCareful"}) </fact>
+			<fact> new Tuple(new Object[]{"Fritz", 100, "#FFFFC0", "ConstantRisky"}) </fact>
+			<fact> new Tuple(new Object[]{"Lotte", 100, "#E0FFC0", "ConstantVeryRisky"}) </fact>
+			<fact> new Tuple(new Object[]{"Karl",  100, "#C0FFE0", "StochasticTable"}) </fact>
+			<fact> new Tuple(new Object[]{"Marie", 100, "#C0FFFF", "StochasticTable"}) </fact>
+			<fact> new Tuple(new Object[]{"Hubert", 100, "#C0E0FF", "StochasticTable"}) </fact>
+			<fact> new Tuple(new Object[]{"Rosi", 100, "#C0C0FF", "StochasticTable"}) </fact>			
+		</beliefset>
+		
+		<!-- Player information stored as Tuple(name, account, color, strategy). -->
+		<beliefset name="runningPlayer" class="Tuple" />
+		<!-- The id of a manually started local dealer. -->
+		<belief name="localDealerAID"  class="AID" />
+		
+	</beliefs>
+
+	<goals>
+		<!-- Used to search for the dealer. -->
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+	</goals>
+	
+	<plans>
+		<!-- Plan to create the GUI, and update when the beliefbase changes. -->
+		<plan name="guiManager" initial="true">
+			<body>new GUIManagerPlan()</body>
+		</plan>
+		<!-- Plan to start / stop dealer and player agents. -->
+		<plan name="agentManager" initial="true">
+			<body>new AgentManagerPlan()</body>
+		</plan>
+	</plans>
+
+	<events>
+		<!-- Start an agent. -->
+		<internalevent name="start">
+			<!-- The agent to start (localDealer or player). -->
+			<parameter name="what" class="String" />
+		</internalevent>
+		<!-- Stop an agent. -->
+		<internalevent name="stop">
+			<!-- The agent to stop (localDealer, player or all). -->
+			<parameter name="what" class="String" />
+		</internalevent>
+		<!-- Message sent by dealer to inform the manager about the number of allowed players. -->
+		<messageevent name="inform_maxplayer">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"maxplayer"</value>
+			</parameter>
+		</messageevent>
+		<!-- Message sent by dealer to inform the manager about the status of a player. -->
+		<messageevent name="inform_playerplaying">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"playerPlaying"</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+	<expressions>
+		<!-- Get the player tuple with the given $playerName. -->
+		<expression name="runningPlayer">
+			SELECT IOTA $runningPlayer 
+			FROM $runningPlayer IN $beliefbase.runningPlayer 
+			WHERE $runningPlayer.get(0) == $playerName
+		</expression>
+	</expressions>	
+	
+	<!-- 
+	     logging-properties, needed to debug the application.
+	     Start the Jadex-Logging-Agent to see whats going on behind
+	     the scenes
+	 -->
+<!--	<properties>
+		<property name="logging.level">Level.WARNING</property>
+	</properties>
+-->	
+</agent>
+

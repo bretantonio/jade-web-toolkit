@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<project name="ASCML" default="compile" basedir=".">
+	<description>ASCML - Agent Society Configuration Manager and Launcher build file</description>
+
+	<!-- Include local properties (if present). -->
+	<property file="ant.properties"/>
+
+	<property name="ascml.includes" value="**/"/>
+	<property name="ascml.excludes" value=""/>
+
+	<property name="classes.dir" value="classes"/>
+	<property name="doc.dir" value="doc"/>
+	<property name="jdoc.dir" value="${doc.dir}/api"/>
+	<property name="src.dir" value="src"/>
+	
+	<property name="dist.dir" value="lib"/>
+	<property name="dist" value="../.."/>
+	<property name="version" value="0.9"/>
+	<property name="name" value="ASCML"/>
+	<property name="dist.jar.dir" value="${name}-${version}"/>
+	<property name="jarfile.bin" value="${name}-bin-${version}.jar"/>
+	<property name="zipfile.src" value="${name}-src-${version}.zip"/>
+
+	<property name="optimize" value="off" />
+	<property name="debug" value="true" />
+	<property name="deprecation" value="true"/>
+
+	<path id="classpath">
+		<pathelement path="${classes.dir}"/>
+		<pathelement path="${classpath}"/>
+		<fileset dir=".">
+			<include name="lib/**/*.jar"/>
+		</fileset>
+		<fileset dir="${JADE_HOME}">
+			<include name="lib/**/*.jar"/>
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${JIBX_HOME}">
+			<include name="lib/**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="applet-sign" depends="dist-applet">
+       		<signjar jar="ASCML-Applet.jar" alias="ASCML-Key" keypass="AgentLauncher" storepass="ASCML@JADE" keystore="cert/ASCML.key"/>
+	</target>
+
+	<target name="clean" depends="init" description="remove all class files and jars">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${classes.dir}" includes="**/*"/>
+			<fileset dir="${jdoc.dir}" includes="**/*"/>
+			<fileset dir="${dist.dir}" includes="${name}-bin*.jar"/>
+			<fileset dir="${dist.dir}" includes="${name}-src*.zip"/>
+			<fileset dir="${dist.dir}" includes="${name}-Applet*.jar"/>
+		</delete>
+	</target>
+
+        <target name="cleanall" depends="init,clean" description="clean, and remove all ASCML config files">
+                <delete includeEmptyDirs="true">
+                        <fileset dir="." includes="ascml.repository.properties.xml"/>
+                        <fileset dir="." includes="APDescription.txt"/>
+                        <fileset dir="." includes="MTPs-Main-Container.txt"/>
+                </delete>
+        </target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}"
+			destdir="${classes.dir}"
+			classpathref="classpath"
+			debug="true">
+			<patternset includes="${ascml.includes}" />
+			<patternset excludes="${ascml.excludes}" />
+		</javac>
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.dir}" includes="**/*.gif **/*.png **/*.xml" />
+		</copy>
+		<echo message="apply JiBX-binding-compiler"/>
+		<java classname="org.jibx.binding.Compile" failonerror="true" fork="true">
+			<classpath refid="classpath"/>
+			<!--<arg value="-v" />-->
+			<arg value="${src.dir}/jade/tools/ascml/model/jibx/binding.xml" />
+		</java>
+		<!--<copy todir="${classes.dir}/jade/tools/benchmarking">
+			<fileset file="${src.dir}/jade/tools/benchmarking/BenchmarkAdapterAgentTemplate.java" />
+		</copy>-->
+	</target>
+
+	<target name="copy-snapshot" depends="dist-src">
+		<copy file="ASCML-src-0.1.zip" 
+		verbose="true"
+		tofile="/opt/projects/agentcities/main/agents/ASCML/ASCML-CVS-snapshot.zip">
+		</copy>	
+	</target>
+
+        <target name="examples.jar" depends="compile">
+                <javac srcdir="${src.dir}/examples"
+                        destdir="${classes.dir}"
+                        classpathref="classpath"
+                        debug="true">
+                </javac>
+                <copy
+                        verbose="true"
+                        todir="${classes.dir}/examples">
+                        <fileset dir="${src.dir}/examples" includes="*"/>
+                </copy>
+                <jar destfile="${dist.dir}/examples.jar" basedir="${classes.dir}/examples"/>
+        </target>
+        
+        <target name="debug" depends="dist-bin" if="netbeans.home" description="Debug Project">
+            <nbjpdastart name="ASCML" addressproperty="jpda.address" transport="dt_socket">
+                <classpath refid="classpath" />
+            </nbjpdastart>
+            <java classpathref="classpath" classname="jade.Boot" fork="true">
+                <arg value="ascml:jade.tools.ascml.launcher.AgentLauncher" />
+                <jvmarg value="-Xdebug"/>
+                <jvmarg value="-Xnoagent"/>
+                <jvmarg value="-Djava.compiler=none"/>
+                <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+            </java>
+        </target>
+
+	<target name="dist-applet" depends="dist-bin">
+		<copy file="ascml.repository.properties.xml" todir="${classes.dir}" />
+		<jar destfile="${dist.dir}/ASCML-Applet.jar"  basedir="${classes.dir}"/>
+	</target>	
+
+	<!-- target name="dist" depends="init,clean,compile,doc,dist-bin,dist-src"
+		description="Erstellt Jar Dateien fuer das Projekt">
+	</target -->
+
+	<target name="dist-bin" depends="init,compile">
+		<jar destfile="${dist.dir}/${jarfile.bin}" basedir="${classes.dir}"/>
+	</target>
+
+	<target name="dist-src">
+		<delete dir="${dist.dir}/${dist.jar.dir}"/>
+		<mkdir dir="${dist.dir}/${dist.jar.dir}/${src.dir}"/>
+		<copy todir="${dist.dir}/${dist.jar.dir}/${src.dir}/">
+			<fileset dir="${src.dir}" includes="**/*" excludes="**/CVS/*,**/CVS"/>
+		</copy>
+		<copy todir="${dist.dir}/${dist.jar.dir}/${doc.dir}">
+			<fileset dir="${doc.dir}" includes="**/*" excludes="**/CVS/*,**/CVS"/>
+		</copy>
+		<copy todir="${dist.dir}/${dist.jar.dir}/${jdoc.dir}">
+			<fileset dir="${jdoc.dir}" includes="**/*" excludes="**/CVS/*,**/CVS"/>
+		</copy>
+		<copy file="build.xml" todir="${dist.dir}/${dist.jar.dir}" />
+		<copy file=".project" todir="${dist.dir}/${dist.jar.dir}" failonerror ="false" />
+		<copy file=".classpath" todir="${dist.dir}/${dist.jar.dir}" failonerror ="false" />
+		<zip destfile="${dist.dir}/${zipfile.src}" basedir="${dist.dir}/${dist.jar.dir}"/>
+		<delete dir="${dist.dir}/${dist.jar.dir}"/>
+	</target>
+	
+	<!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="init, cleanall, compile, doc, dist-bin">
+    <jar jarfile="${dist}/${zipfile.src}">
+      <fileset dir="${dist}" includes="add-ons/ascml/${src.dir}/**"/>
+      <fileset dir="${dist}" includes="add-ons/ascml/${doc.dir}/**"/>
+      <fileset dir="${dist}" includes="add-ons/ascml/*"/>
+      <fileset dir="${dist}" includes="add-ons/ascml/${dist.dir}/**"/>
+    </jar>
+  </target>
+  
+
+	<target name="doc" depends="init"
+		description="create the java documentation files">
+		<javadoc 
+			destdir = "${jdoc.dir}" 
+			classpathref = "classpath"
+			packagenames = "jade.tools.ascml.*"
+			windowtitle  = "ASCML API"
+			doctitle     = "Agent Society Configuration Manager and Launcher - Documentation"
+			header       = "ASCML - Agent Society Configuration Manager and Launcher"
+			splitindex   = "false"
+			sourcepath   = "src"
+			destDir      = "${jdoc.dir}"
+			overview     = "${doc.dir}/ascml.html"
+			access       = "public">
+			<!-- fileset dir = "${src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+			<link href="${jdkdocs}"/-->
+		</javadoc>
+	</target>
+
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${jdoc.dir}"/>
+	</target>
+
+        <target name="jade-help" description="Print jade -help text">
+            <java classpathref="classpath" classname="jade.Boot" fork="true">
+                <arg value="-help" />
+            </java>
+        </target>
+
+	<target name="jar-sign" depends="dist-applet,applet-sign">
+        	<signjar jar="dist/jade.jar" alias="ASCML-Key" keypass="AgentLauncher" storepass="ASCML@JADE" keystore="cert/ASCML.key"/>
+	        <signjar jar="dist/Base64.jar" alias="ASCML-Key" keypass="AgentLauncher" storepass="ASCML@JADE" keystore="cert/ASCML.key"/>
+	       	<signjar jar="dist/iiop.jar" alias="ASCML-Key" keypass="AgentLauncher" storepass="ASCML@JADE" keystore="cert/ASCML.key"/>
+       		<signjar jar="dist/jadeTools.jar" alias="ASCML-Key" keypass="AgentLauncher" storepass="ASCML@JADE" keystore="cert/ASCML.key"/>
+       		<signjar jar="dist/http.jar" alias="ASCML-Key" keypass="AgentLauncher" storepass="ASCML@JADE" keystore="cert/ASCML.key"/>
+	</target>
+
+	<target name="lib" depends="dist-bin" description="compile the libs">
+	</target>
+
+        <target name="run" depends="dist-bin" description="Run ASCML">
+            <java classpathref="classpath" classname="jade.Boot" fork="true">
+                <arg value="ascml:jade.tools.ascml.launcher.AgentLauncher" />
+            </java>
+	</target>
+       
+        <target name="run-gui" depends="dist-bin" description="Run ASCML with RMS gui">
+            <java classpathref="classpath" classname="jade.Boot" fork="true">
+                <arg value="-gui" />
+                <arg value="ascml:jade.tools.ascml.launcher.AgentLauncher" />
+            </java>
+	</target>
+
+        <target name="run-nogui" depends="dist-bin" description="Run ASCML without any gui">
+            <java classpathref="classpath" classname="jade.Boot" fork="true">
+                <arg value='ascml:jade.tools.ascml.launcher.AgentLauncher("nogui")' />
+            </java>
+	</target>
+</project>
+
+
+

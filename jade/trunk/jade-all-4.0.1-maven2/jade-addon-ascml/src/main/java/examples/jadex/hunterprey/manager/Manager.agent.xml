@@ -1,0 +1,41 @@
+<!--
+	<H3>The manager agent can be started to launch a
+	hunterprey scenario.</H3>
+-->
+
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Manager"
+	package="jadex.examples.hunterprey.manager">
+
+	<imports>
+		<import>jadex.*</import>
+		<import>jadex.planlib.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="startcap" file="jadex.planlib.StartAgents"/>
+	</capabilities>
+
+	<goals>
+		<performgoalref name="start_agents">
+			<concrete ref="startcap.start_agents"/>
+		</performgoalref>
+		<initialgoal ref="start_agents">
+			<parameterset name="agentinfos">
+				<value>new StartAgentInfo("jadex.examples.hunterprey.environment.Environment", "Environment_%n", 2000, null)</value>
+				<value>new StartAgentInfo("jadex.examples.hunterprey.creature.DumbPrey", "Dumbo_%n", 0, null)</value>
+				<value>new StartAgentInfo("jadex.examples.hunterprey.creature.DumbPrey", "Duffy_%n", 0, null)</value>
+				<!--<value>new StartAgentInfo("jadex.examples.hunterprey.creature.LazyPrey", "Heinz_%n", 0, null)</value>-->
+				<!--<value>new StartAgentInfo("jadex.examples.hunterprey.creature.LazyPrey", "Harald_%n", 0, null)</value>-->
+				<value>new StartAgentInfo("jadex.examples.hunterprey.creature.CleverPrey", "Clever_%n", 0, null)</value>
+				<value>new StartAgentInfo("jadex.examples.hunterprey.creature.CleverPrey", "Charlton_%n", 0, null)</value>
+				<value>new StartAgentInfo("jadex.examples.hunterprey.creature.DumbHunter", "Lenny_%n", 0, null)</value>
+				<value>new StartAgentInfo("jadex.examples.hunterprey.creature.DumbHunter", "Louis_%n", 0, null)</value>
+				<!--<value>new StartAgentInfo("jadex.examples.hunterprey.creature.CleverHunter", "Willy_%n", 0, null)</value>-->
+				<!--<value>new StartAgentInfo("jadex.examples.hunterprey.creature.CleverHunter", "Wolfram_%n", 0, null)</value>-->
+			</parameterset>
+		</initialgoal>
+	</goals>
+
+</agent>
