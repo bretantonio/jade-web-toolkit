@@ -1,0 +1,84 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>About Bit-efficient Envelope Codec</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<h1>About Bit-efficient Envelope Codec for JADE</h1>
+<i>Author: <a href="mailto:Heikki.J.Helin@teliasonera.com">Heikki Helin</a>
+(<a href="http://www.teliasonera.com">TeliaSonera</a>), Mikko Laukkanen (<a href="http://www.teliasonera.com">TeliaSonera</a>), <a href="mailto:ahti.syreeni@teliasonera.com">Ahti Syreeni</a>
+(<a href="http://www.teliasonera.com">TeliaSonera</a>)</i>
+<p><i>Date: December 17, 2007</i></p>
+<p><i>Java platform: Sun JDK 1.5</i></p>
+<p><i><a href="http://jade.tilab.com/">JADE</a> version 3.5</i>
+<p><i>If MIDP version is compiled: <a href="http://java.sun.com/products/sjwtoolkit/">Java Wireless Toolkit 2.2</a> and LEAP add-on for <a href="http://jade.tilab.com">JADE 3.5</a></i></p>
+<p>JADE can use different Message Transport Protocols. The MTP HTTP (version implemented in CASCOM project) uses bit-efficient encoding 
+of message envelope (<a href="http://www.fipa.org/specs/fipa00088/SC00088D.html">FIPA 00088</a>) as default. With this bit-efficient envelope-codec and 
+the MTP HTTP users of JADE can send and receive messages with bit-efficient envelopes. Escpecially, bit-efficient
+envelope coding and the MTP is the way for JADE to communicate with mobile CASCOM Agent Platform.
+<em>Note that this component is not directly used by JADE, the MTP HTTP implementation uses it.</em>.
+
+<h2>Installation and Compiling</h2>
+
+Please see the README.txt found in the distribution zip-file for detailed instructions.
+
+<!--
+In order to install bit-efficient envelope codec the following steps must be performed:
+<ul>
+<li>
+The bit-efficient envelope codec must be downloaded from the <a href="http://jade.tilab.com/" target="new">JADE</a>
+download page.</li>
+<li>
+after downloading you <b>MUST</b> unzip the package under the root
+of the jade distribution tree. You should end having a hierarchy like jade/add-ons/BEFipaEnvelope</li>
+<li>
+If you want to compile the MIDP version, you <b>MUST</b> have installed <strong>and compiled</strong> the LEAP add-on for JADE 3.5.
+</li>
+
+<li>
+If you really want to use this codec with current JADE, you should download the HTTP MTP implementation that uses this codec from <a href="http://jade.tilab.com/" target="new">JADE website</a>. 
+</li>
+</ul>
+<h2> Compiling</h2>
+<ol>
+<li>If you haven't compiled JADE, compile it first. </li>
+<li>If you want to compile for J2ME MIDP, also compile LEAP-add-on MIDP version first</li>.
+<li>Commands to compile and use this project:
+<ul>
+    <li><strong>ant compile</strong> - compile J2SE files</li>
+    <li><strong>ant lib</strong> - create J2SE .jar-files</li> 
+    <li><strong>ant doc</strong>- generate javadoc to doc/api</li>
+    <li><strong>ant dist</strong> - create distribution package to your jade/add-ons directory</li>
+    <li><strong>ant test</strong> - run JUnit tests</li>
+    <li><strong>ant lib-midp</strong> - create MIDP .jar-files </li>
+    <li><strong>ant test-midp</strong> - run MIDP tests in emulator</li>
+</ul>
+</li>
+</ol>
+<p>You will find compiled jar-files in lib-directory.</p>
+-->
+
+
+<h2>Configuration, Usage and Examples</h2>
+
+This component is used by MTPs, not directly by JADE. Please see the manual of your MTP. Please notice that
+this codec is currently only supported by the HTTP MTP implementation (from CASCOM Project). 
+
+
+<hr>
+<center>
+<p><font face="Arial"><font size=-1><a href="http://jade.tilab.com/">JADE</a>
+is a trademark of
+<a href="http://www.tilab.com">TILAB</a>. <a href="http://jade.tilab.com/">JADE</a>
+has been developed jointly by <a href="http://www.cselt.it">CSELT</a> and
+the <a href="http://www.ce.unipr.it">Computer Engineering Group</a> of
+the <a href="http://www.unipr.it">University of Parma</a>.</font></font>
+<br><font face="Arial"><font size=-1>The BE-ACL codec implementation was
+developed by <a href="http://www.teliasonera.com">TeliaSonera Corporation</a>.</font></font></center>
+
+<p><br>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html>
+<body background='#ffffff'>
+<br>
+
+<br>
+<br>
+<object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+    	width="300"
+	    height="400"
+	    codebase="http://java.sun.com/products/plugin/1.3/jinstall-13-win32.cab#Version=1,3,0,0">
+    <param name="archive" value=".\lib\clientapplet.jar, .\lib\jade.jar, .\lib\Base64.jar, .\lib\iiop.jar, .\lib\jadeTools.jar, .\lib\http.jar, .\lib\sax2.jar">
+    <param name="code" value="client.ClientApplet">
+
+    <!-- the host name of the jade platform; this MUST be filled. -->
+    <param name="jadeHostName" value="<jadeHostName>">
+    <!-- the port of the jade platform -->
+    <param name="jadePort" value="2002">
+    <!-- the applet container port-->
+    <param name="appletContainerPort" value="2004">
+
+    <param name="type" VALUE="application/x-java-applet;version=1.2">
+
+    <comment>
+        <embed type="application/x-java-applet;version=1.3"
+                width="300"
+                height="400"
+                align="baseline"
+                archive=".\lib\clientapplet.jar, .\lib\jade.jar, .\lib\Base64.jar, .\lib\iiop.jar, .\lib\jadeTools.jar, .\lib\http.jar, .\lib\sax2.jar"
+                code="client.ClientApplet"
+                pluginspage="http://java.sun.com/products/plugin/1.3/plugin-install.html">
+        </embed>
+        <noembed>
+            No JDK 1.3 support for APPLET!!
+        </noembed>
+    </comment>
+ </object>
+
+</body>
+</html>

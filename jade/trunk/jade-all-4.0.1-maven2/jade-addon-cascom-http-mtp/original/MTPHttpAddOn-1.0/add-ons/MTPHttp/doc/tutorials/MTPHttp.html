@@ -1,0 +1,134 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>About MTP HTTP and CASCOM Messaging Gateway</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<h1>HTTP Message Transport Protocol with bit-efficient envelopes and CASCOM Messaging Gateway</h1>
+<i>Author: <a href="mailto:Heikki.J.Helin@teliasonera.com">Heikki Helin</a>
+(<a href="http://www.teliasonera.com">TeliaSonera</a>), Mikko Laukkanen (<a href="http://www.teliasonera.com">TeliaSonera</a>), <a href="mailto:ahti.syreeni@teliasonera.com">Ahti Syreeni</a>
+(<a href="http://www.teliasonera.com">TeliaSonera</a>)</i>
+<p><i>Date: December 17, 2007</i></p>
+<p><i>Version: 1.0</i></p>
+<p><i>Java platform: Sun JDK 1.5</i></p>
+<p><i><a href="http://jade.tilab.com/">JADE</a> version 3.5</i>
+<p><i>If MIDP version is compiled: <a href="http://java.sun.com/products/sjwtoolkit/">Java Wireless Toolkit 2.2</a> and LEAP add-on for <a href="http://jade.tilab.com">JADE 3.5</a></i></p>
+<p>This is a modified version of the JADE 3.3 HTTP MTP implementation. With this MTP HTTP implementation users of JADE are able to send and receive messages with different envelope encodings over HTTP-protocol 
+(the default JADE MTP accepts only XML-encoding for envelopes). At this time, only bit-efficient envelope codec is available for this MTP. </p>
+<p>
+In addition, this package contains additional sources for CASCOM Messaging Gateway,
+which makes possible to communicate with CASCOM Agent platform (or JADE) even if it is
+behind firewall. That is usually case when mobile phone is in UMTS network. This MTP is used by JADE and CASCOM Agent Platforms, CASCOM Messaging Gateway is usually used by CASCOM Agent Platform.. This distribution contains J2SE and MIDP2.0/CLDC1.1 versions.
+</p>
+
+<h2>Installation and compiling</h2>
+<p>
+Please see README.txt found in the distribution package.
+</p>
+
+
+<h2>CASCOM Messaging Gateway</h2>
+
+<h4>The purpose of the CASCOM Messaging Gateway</h4>
+<p>CASCOM Messaging Gateway is targetted to CASCOM Agent Platforms running in mobile devices but is also compatible with JADE.</p>
+<p>Due to unreliable wireless connections, possible firewalls and NAT, the current JADE message transport system has to be improved for mobile devices. Connection to mobile devices can be lost in any time so message buffering is needed. Devices are often in a private network (e.g., in most cases when using a GPRS connection) and also many devices in a fixed network can be behind a firewall. For these cases, there should be a gateway for agent platforms.</p>
+<p>The messaging gateway (MsgGW) is only needed in cases where mobile device has no public IP-address. 
+The CASCOM Messaging Gateway is a buffer for messages going to the agent platforms in mobile devices. The gateway does not do address translations as the agent platforms using the gateway are expected to use the address of the gateway. That is, the agents situated in an agent platform in a private network will never use their private IP-addresses as their transport addresses, but instead use the gateway’s address. Further, the messaging gateway is totally transparent to agents. For the time being, the address of the gateway has to be given as parameter to the CASCOM agent platform situated in a mobile device. This way it can be made sure that using the gateway is fully invisible to the agents, and the gateway does not have to parse ACL messages. The gateway forwards the messages (both directions) based on information found on message envelopes. </p>
+<p>Once the agent platform has established connection to the CASCOM Messaging Gateway, the (HTTP) connection must be left open so that the gateway is able to send messages to the agent platform which is behind a firewall.  When the connection is closed (by the platform or because of unreliable wireless connection), the gateway leaves messages to the buffer waiting for the next time the connection is established. </p>
+
+<div>
+<img style="text-align:center" src="mtphttp-cascomgw.gif" title="Figure 1: CASCOM Messaging Gateway"/>
+<p style="textalign:center;font-weight:bold;">Figure 1: CASCOM Messaging Gateway</p>
+</div>
+
+<p>Figure 1 represents the buffering of the CASCOM Messaging Gateway. Gateway receives ACL message with an envelope that has receiver address (to –field) agent@mobile1. Because the platform name is mobile1 and there is currently registered client with CASCOM-ID mobile1, the gateway forwards the message to the buffer of mobile1-platform. Because the platform mobile1 happens to be currently connected to this gateway, the message is directly sent to the platform from the buffer. Because the mobile2 platform (which is registered to this gateway) is not currently connected, the messages addressed to someagent@platform2 will wait in the gateway buffer for the next time the mobile2 platform connects to this gateway.</p>
+<p>Gateway does not buffer mobile-originated messages. Platforms use their own buffers for outgoing messages but they send them thru the gateway, which routes them to the destination.</p>
+
+<h4>How to use CASCOM Messaging Gateway</h4>
+
+<p>After creating the .jars, the CASCOM Messaging Gateway can be found in lib-directory (cascomgw-standalone.jar).</p>
+
+You can start it with
+<ul>
+	<li>java -jar cascomgw-standalone.jar http://youraddress:port/acc</li>
+</ul>
+
+<p>The parameter is optional. You can leave it out if you see that the gateway is running in right network address anyway (e.g you have only one network interface).</p>
+
+<p>In order to make MTP use the CASCOM Messaging Gateway, give following parameters when starting JADE:</p>
+<ul>
+ <li>-mtp jade.mtp.http2.MessageTransportProtocol</li>
+ <li>-platform-id your-platform-id</li>
+ <li>-jade_mtp_http_cascomGatewayAddress http://youraddress:port/acc</li>
+ <li>-jade_mtp_http_connectionManager cascom.jade.mtp.http.CascomGWConnectionManager</li>
+ <li>-jade_mtp_http_connectionAgent youragent</li>
+</ul>
+
+<p>Optional parameters can be used:</p>
+<ul>
+<li>-jade_mtp_http_autoreconnect  (RECOMMENDED, automatically reconnect to gateway if connection is lost, otherwise connectionAgent must exist to open the connection)</li>
+<li>-jade_mtp_http_autoRegister (open connection to gateway at startup, otherwise it will be opened only by connectionAgent or when first message is sent using this MTP)</li>
+</ul>
+
+<p>The connectionAgent -parameter is the local name of the agent that will receive nofitication if connection to gateway is closed. Only that
+ agent has permission to control the connection to gateway using the following commands:</p>
+<ul>
+<li>close-connection</li>
+<li>open-connection</li>
+</ul>
+
+<p>The commands to gateway are sent as normal ACLMessages, having the command as message content:</p>
+<pre>
+	  String cmd="open-connection";
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.setContent(cmd);
+        AID rec = new AID("mtp@whatever", AID.ISGUID);
+        rec.addAddresses("http://"+getProperty(Profile.MAIN_HOST,"none")+":0/acc");        
+        System.out.println("Sending control message to: http://"+getProperty(Profile.MAIN_HOST,"none")+":0/acc");        
+        msg.addReceiver(rec);
+        msg.setDefaultEnvelope();
+        msg.getEnvelope().setAclRepresentation("fipa.acl.rep.bitefficient.std");
+        send(msg);
+</pre>
+
+<p>The MTP responses with following messages:</p>
+<ul>
+<li>connection-open</li>
+<li>connection-closed error:</li>
+</ul>
+<p><em>connection-open</em> means that connection is now open, <em>connection-closed:error:[errormessage]</em> means that connection is closed and the error message may contain information why (e.g TCP error). If the connection agent is specified, it will receive notification every time connection is lost or open</p>
+
+
+
+
+<h2>Examples</h2>
+
+<h4>Using the MTP HTTP in Jade</h4>
+
+Following examples are executed in home directory of JADE:
+
+<ul>
+<li>Example (Windows OS): java -cp lib\jade.jar;lib\jadeTools.jar;add-ons\MTPHttp\lib\MTPHttp.jar;add-ons\BEFipaEnvelope\lib\BEFipaEnvelope.jar;add-ons\BEFipaMessage\lib\BEFipaMessage.jar jade.Boot -mtp jade.mtp.http2.MessageTransportProtocol(http://192.168.0.3:10600/acc) -gui</li>
+<li>Example (Linux OS): java -cp lib/jade.jar:lib/jadeTools.jar:add-ons/MTPHttp/lib/MTPHttp.jar:add-ons/BEFipaEnvelope/lib/BEFipaEnvelope.jar:add-ons/BEFipaMessage/lib/BEFipaMessage.jar jade.Boot -mtp jade.mtp.http2.MessageTransportProtocol(http://192.168.0.3:10600/acc) -gui</li>
+</ul>
+
+<p>After starting the JADE with MTP you can use the DummyAgent of JADE to test sending messages between JADE platforms.</p>
+
+
+<hr>
+<center>
+<p><font face="Arial"><font size=-1><a href="http://jade.tilab.com/">JADE</a>
+is a trademark of
+<a href="http://www.tilab.com">TILAB</a>. <a href="http://jade.tilab.com/">JADE</a>
+has been developed jointly by <a href="http://www.cselt.it">CSELT</a> and
+the <a href="http://www.ce.unipr.it">Computer Engineering Group</a> of
+the <a href="http://www.unipr.it">University of Parma</a>.</font></font>
+<br><font face="Arial"><font size=-1>The BE-ACL codec implementation was
+developed by <a href="http://www.teliasonera.com">TeliaSonera Corporation</a>.</font></font></center>
+
+<p><br>
+</body>
+</html>

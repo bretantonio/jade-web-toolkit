@@ -1,0 +1,1 @@
+java -classpath .\classes;.\lib\jade.jar;.\lib\Base64.jar;.\lib\iiop.jar;.\lib\jadeTools.jar;.\lib\http.jar;.\lib\sax2.jar server.Server 2002 2003

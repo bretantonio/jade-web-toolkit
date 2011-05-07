@@ -1,0 +1,218 @@
+<project name="BEFipaMessage" default="lib" basedir=".">
+<!--
+ * JADE - Java Agent DEvelopment Framework is a framework to develop
+ * multi-agent systems in compliance with the FIPA specifications.
+ * Copyright (C) 2000 CSELT S.p.A.
+ * 
+ * GNU Lesser General Public License
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation,
+ * version 2.1 of the License.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA  02111-1307, USA.
+-->
+
+  <!-- set global properties for this build -->
+  <property name="src" value="src"/>
+  <property name="build" value="classes"/>
+  <property name="doc" value="doc"/>
+  <property name="lib" value="lib"/>
+
+  <property name="libJADEDir" value="../../lib"/>
+
+  <!-- LEAP is needed when compiling for MIDP -->
+  <!-- the location for Java Wireless Toolkit should be found in buildLEAP.properties -->
+  <property name="leap.dir" value="../../leap"/>
+  <property name="jade.midp.jar" value="${leap.dir}/midp/lib/JadeLeap.jar"/>
+  <property file="${leap.dir}/buildLEAP.properties"/>
+
+  <!-- Set the jar-file for Antenna for compiling J2ME -->
+  <property name="antenna.jar" value="${lib}/antenna-bin-0.9.14.jar"/>
+  <property name="junit.jar" value="${lib}/junit-4.1.jar"/>
+
+
+    
+  <!-- Distribution must be in jade/add-ons/BEFipaMessage -->
+  <property name="dist" value="../.."/>
+
+  <path id="classpath.j2se">
+        <pathelement location="../.."/>
+        <fileset dir="${libJADEDir}">
+            <include name="**.jar"/>
+        </fileset>
+        <fileset dir="${lib}">
+            <include name="junit*.jar"/>
+        </fileset>
+  </path>  
+  <path id="classpath.j2se.run">
+        <pathelement location="${lib}/BEExamples.jar"/>
+        <pathelement location="${lib}/BEFipaMessage.jar"/>
+        <path refid="classpath.j2se"/>
+  </path>
+  <path id="classpath.j2se.test">
+        <pathelement location="${lib}/BETest.jar"/>
+        <pathelement location="${junit.jar}"/>
+        <path refid="classpath.j2se.run"/>
+  </path>
+  
+
+    
+  <!-- NOTE: MIDP version of Jade-Leap is needed for MIDP-compilation -->
+  <path id="boot.classes">
+    <pathelement location="${j2me-wtk-home}/lib/midpapi20.jar"/>
+    <pathelement location="${j2me-wtk-home}/lib/cldcapi11.jar"/>
+  </path>
+  
+  <path id="classpath.midp">
+        <pathelement location="${jade.midp.jar}"/>
+        <pathelement location="${lib}/BEExamples-midp.jar"/>
+        <pathelement location="${lib}/BEFipaMessage-midp.jar"/>
+  </path>
+
+             
+  <property name="unverified" value="unverified"/>
+  <property name="midp" value="midp"/>
+  <property name="test" value="test"/>
+  <property name="examples-midp" value="examples/midp"/>
+  <property name="build-midp" value="${build}/${midp}"/>
+  <property name="lib-midp" value="${lib}/${midp}"/>
+  <property name="doc-midp" value="${doc}/${midp}"/>
+  <property name="manifest-examples" value="manifest-examples.mf"/>
+  <property name="wtk.cldc.version" value="1.1"/>
+  <property name="wtk.midp.version" value="2.0"/>
+  
+
+  <!-- CLDC 1.1 required for MIDP. CLDC 1.0 will not work because of missing java.lang.Float -->
+  <property name="j2mewtk.home" value="${j2me-wtk-home}"/>
+  <!-- Antenna tasks requires wtk.home -->
+  <property name="wtk.home" value="${j2me-wtk-home}"/>
+  
+    <taskdef name="wtkrun" classname="de.pleumann.antenna.WtkRun" classpath="${antenna.jar}"/>
+    <taskdef name="wtkjad" classname="de.pleumann.antenna.WtkJad" classpath="${antenna.jar}"/>
+    <taskdef name="wtkpreverify" classname="de.pleumann.antenna.WtkPreverify" classpath="${antenna.jar}"/>
+    
+    
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the directories structure used to store files -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${lib}"/>
+    <mkdir dir="${doc}/api"/>  
+  </target>
+
+
+  <target name="init-midp" depends="init">
+    <!-- Create the directories structure used to store files -->
+    <mkdir dir="${build-midp}"/>
+    <mkdir dir="${unverified}"/>
+  </target>
+
+  <!-- Compile the javadoc code from ${src} into ${doc} -->
+  <target name="doc" depends="init" description="generate javadoc documentation">
+    <javadoc destdir="${doc}/api" classpathref="classpath.j2se" author="true" windowtitle="BitEfficient ACLCodec" sourcepath="${src}" packagenames="cascom.fipa.acl.*, cascom.fipa.envelope.*, cascom.fipa.util.*"/>
+  </target>
+
+  <!-- Compile the java code from ${src} into ${build} -->
+  <target name="compile" depends="init">
+        <echo>Required libraries: JADE 3.3 (or later) .jar file at directory: ${libJADEDir}</echo>  
+        <javac source="1.5"  srcdir="${src}" destdir="${build}" classpathref="classpath.j2se" nowarn="off" optimize="on" deprecation="on">
+            <include name="**/**.java"/>
+            <exclude name="${examples-midp}/**"/>        
+        </javac>
+  </target>
+
+  <!-- Compile the java code from ${src} into ${build}/midp for MIDP version -->
+  <target name="compile-midp" depends="init-midp">
+        <echo>Required libraries:</echo>
+        <echo> - JadeLeap (MIDP) -jar location: ${jade.midp.jar}</echo>
+        <echo> - Java Wireless Toolkit location: ${j2me-wtk-home}</echo>
+        <echo> - Sources location: ${src}</echo>
+        <javac
+	   target="1.4"
+	   source="1.4" 
+           destdir="${unverified}"
+           srcdir="${src}" 
+           classpathref="classpath.midp" 
+           deprecation="on"
+           bootclasspathref="boot.classes">
+                <include name="cascom/**"/>
+                <include name="${examples-midp}/**"/>
+        </javac>
+        <wtkpreverify cldc="false" classpathref="classpath.midp" srcdir="${unverified}" destdir="${build-midp}" /> 
+  </target>
+
+  <!-- Make MIDP jars file and put in ${lib} -->
+  <target name="lib-midp" depends="compile-midp">
+    <jar jarfile="${lib}/BEExamples-midp.jar" manifest="${manifest-examples}">
+      <fileset dir="${build-midp}" includes="**/DummyEncoderDecoder.class"/>
+    </jar>
+    <jar jarfile="${lib}/BEFipaMessage-midp.jar">
+      <fileset dir="${build-midp}" includes="**/cascom/fipa/acl/*"/>
+      <fileset dir="${build-midp}" includes="**/cascom/fipa/util/*"/>
+    </jar>
+    <copy file="BEExamples.jad" tofile="${lib}/BEExamples.jad"/>
+    <wtkjad jadfile="${lib}/BEExamples.jad" jarfile="${lib}/BEExamples-midp.jar" update="true"/>    
+  </target>
+
+  <!-- Make jars file and put in ${lib} -->
+  <target name="lib" depends="init, compile">
+    <jar jarfile="${lib}/BEExamples.jar">
+      <fileset dir="${build}" includes="**/DummyDecoder.class"/>
+      <fileset dir="${build}" includes="**/DummyEncoder.class"/>
+    </jar>
+    <jar jarfile="${lib}/BEFipaMessage.jar">
+      <fileset dir="${build}" includes="**/cascom/fipa/acl/*"/>
+      <fileset dir="${build}" includes="**/cascom/fipa/util/*"/>
+    </jar>
+    
+    <jar jarfile="${lib}/BETest.jar">
+      <fileset dir="${build}" includes="test/**"/>
+    </jar>
+  </target>
+
+  <!-- Make distribution zip file and put in jade/add-ons -->
+  <target name="dist" depends="clean, lib, lib-midp, doc">
+    <jar jarfile="${dist}/add-ons/BEFipaMessageAddOn.zip">
+      <fileset dir="${dist}" includes="add-ons/BEFipaMessage/${doc}/tutorials/*.*" excludes=".svn/*"/>
+      <fileset dir="${dist}" includes="add-ons/BEFipaMessage/${src}/**" excludes=".svn/*"/>
+      <fileset dir="${dist}" includes="add-ons/BEFipaMessage/*" excludes="svn/*"/>
+      <fileset dir="${dist}" includes="add-ons/BEFipaMessage/${lib}/*" excludes=".svn/*"/>
+    </jar>
+  </target>
+
+  
+  <target name="all" depends="init, doc, compile, lib, dist"/>
+
+  <!-- delete ${build} and ${lib} directories -->
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} directory tree -->
+    <delete includeEmptyDirs="true" failOnError="false">
+      <fileset dir="${build}"/>
+	<fileset dir="${doc}/api"/>
+	<fileset dir="${unverified}"/>
+    </delete>
+  </target>
+  
+  <target name="run-midp" depends="lib-midp">
+    <wtkrun jadfile="${lib}/BEExamples.jad" classpathref="classpath.midp"/>    
+  </target>
+
+ 
+  <!-- Test J2SE version of BEFipaMessage with JUnit 4 -->
+  <target name="test" depends="lib">
+    <java fork="yes" classpathref="classpath.j2se.test" classname="org.junit.runner.JUnitCore">
+        <arg line="test.BEFipaMessageTest"/>
+    </java>
+  </target>
+</project>

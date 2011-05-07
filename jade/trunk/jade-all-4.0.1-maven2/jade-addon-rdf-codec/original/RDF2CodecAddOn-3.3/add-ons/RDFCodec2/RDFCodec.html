@@ -1,0 +1,581 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="ProgId" content="Word.Document">
+<meta name="Originator" content="Microsoft Word 9">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>How to use the RDF support with JADE</title>
+<link rel="File-List"
+href="./How%20to%20use%20the%20RDF%20support%20with%20JADE_files/filelist.xml">
+<link rel="Edit-Time-Data"
+href="./How%20to%20use%20the%20RDF%20support%20with%20JADE_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Rosalba Bochicchio</o:Author>
+  <o:LastAuthor>Rosalba Bochicchio</o:LastAuthor>
+  <o:Revision>71</o:Revision>
+  <o:TotalTime>188</o:TotalTime>
+  <o:Created>2001-10-19T08:48:00Z</o:Created>
+  <o:LastSaved>2001-10-29T13:48:00Z</o:LastSaved>
+  <o:Pages>3</o:Pages>
+  <o:Words>1034</o:Words>
+  <o:Characters>5899</o:Characters>
+  <o:Company>TILAB</o:Company>
+  <o:Lines>49</o:Lines>
+  <o:Paragraphs>11</o:Paragraphs>
+  <o:CharactersWithSpaces>7244</o:CharactersWithSpaces>
+  <o:Version>9.3821</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:HyphenationZone>14</w:HyphenationZone>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:"MS Mincho";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"\FF2D\FF33 \660E\671D";
+	mso-font-charset:128;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:128;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h3
+	{mso-style-next:Normale;
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:18.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:EN-GB;
+	font-weight:bold;}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:EN-GB;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{margin-right:0in;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+code
+	{mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";}
+p.Normale, li.Normale, div.Normale
+	{mso-style-name:Normale;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 56.7pt 56.7pt 56.7pt;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:1204443674;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1366026786 1654184982 -207954028 -1201613162 -163838404 1822850692 475668910 -2106017420 853456786 -791256992;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:1371345125;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1455622236 370978522 1616567662 1560304942 1192813112 869814564 1394792294 10126326 120361122 924865734;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-bidi-font-family:"Times New Roman";}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1027"/>
+</xml><![endif]-->
+<!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor="#FFFFFF" link="#0000FF" vlink="#0000FF"
+lang="EN-US" style="tab-interval:35.4pt">
+
+<h1><span lang="EN-GB" style="mso-ansi-language:EN-GB">How to use the RDF support with JADE<o:p></o:p></span></h1>
+
+<p><i><span lang="EN-GB" style="mso-ansi-language:EN-GB">Author: Rosalba Bochicchio</span><span lang="EN-GB" style="mso-ansi-language:EN-GB"></i>(<em>TILAB S.p.A.</em>)<o:p></o:p></span></p>
+
+<p><i><span lang="EN-GB" style="mso-ansi-language:EN-GB">Date: April 7, 2003 </span><span lang="EN-GB" style="mso-ansi-language:EN-GB"><o:p></o:p></span></i></p>
+
+<p><i><span lang="EN-GB" style="mso-ansi-language:EN-GB">Java platform: </span><span lang="IT" style="mso-ansi-language:IT"></i><a href="http://java.sun.com/j2se/1.3/"><i><span lang="EN-GB" style="mso-ansi-language:EN-GB">Sun
+JDK 1.4 Windows</span></span><span lang="IT" style="mso-ansi-language:EN-GB"></i></a><i> </span><span lang="EN-GB" style="mso-ansi-language:EN-GB"><o:p></o:p></span></i></p>
+
+<p><i><span lang="IT" style="mso-ansi-language:IT"></i><a href="http://jade.cselt.it/"><i><span lang="FR" style="mso-ansi-language:FR">JADE</span></span><span lang="FR" style="mso-ansi-language:FR"></i></a><i>
+version: 3.0<o:p></o:p></span></i></p>
+
+<p><i><span lang="FR" style="mso-ansi-language:FR">Requirements: a SAX parser (e.g. </span><span lang="IT" style="mso-ansi-language:IT"></i><a
+href="http://xml.apache.org/xerces-j/index.html" target="new"><i><span lang="FR" style="mso-ansi-language:FR"></i>Xerces</span></span><span lang="FR" style="mso-ansi-language:FR"></a>). Note that JDK1.4 natively includes it.<i><o:p></o:p></span></i></p>
+
+<p style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;MS Mincho&quot;;mso-ansi-language:
+EN-GB">This tutorial describes how to
+install and use the RDF support with JADE. The RDF support
+allows encoding/decoding content expressions to be used in the
+":content" slot of ACL messages according to a syntax based
+on RDF/RDFS. The RDFCodec.java class implements the Codec
+interface of JADE (jade.content.lang.Codec) and allows converting
+back and forth between strings in RDF format and
+AbsContentElement (abstract descriptor of the message content).
+Since the RDFCodec uses the package jade.content and its
+sub-packages, it requires JADE 3.0.</span><span lang="EN-GB" style="mso-ansi-language:
+EN-GB"><o:p></o:p></span></p>
+
+<h2><span lang="EN-GB" style="mso-ansi-language:EN-GB">Installation.<o:p></o:p></span></h2>
+
+<p style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">In order to install the RDF
+support&nbsp;the following steps must be performed:<o:p></o:p></span></p>
+
+<ul type="disc">
+    <li class="MsoNormal"
+    style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     text-align:justify;mso-list:l0 level1 lfo3;tab-stops:list .5in"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:
+     EN-GB">
+        Download the RDFCodec add-on from the "Add-ons & Third party contributions" section of the </span><span lang="IT" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:IT"><a
+        href="http://jade.cselt.it/" target="new"><span lang="EN-GB" style="mso-ansi-language:
+     EN-GB">JADE</span></span><span lang="EN-GB" style="font-size:11.0pt;
+     mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB"></a>
+        site. <o:p></o:p></span></li>
+    <li class="MsoNormal"
+    style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     text-align:justify;mso-list:l0 level1 lfo3;tab-stops:list .5in"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:
+     EN-GB">Unzip the RDFCodec add-on under the
+        root of the jade distribution tree. You should end up having
+        a directory called jade/add-ons/RDFCodec. <o:p></o:p></span></li>
+</ul>
+
+<h2><span lang="EN-GB" style="mso-ansi-language:EN-GB">Compiling<o:p></o:p></span></h2>
+
+<p style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">For handling the compilation
+process of the RDFCodec you have to use the build.xml file
+located in the RDFCodec directory. Move to the directory
+containing the build.xml and run ant.</p>
+
+<h2><span lang="EN-GB" style="mso-ansi-language:EN-GB">Configuration and Usage<o:p></o:p></span></h2>
+
+<p style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">The current configuration uses
+Xerces as the default SAX parser. So if you don't want to make
+any changes you just have to download Xerces from the link
+provided above and make sure it is added to the classpath when
+starting (either by including it into the $CLASSPATH environment
+variable - %CLASSPATH% under windows or by specifing it on the
+command line). </p>
+
+<p style="text-align:justify">Here is an example.</p>
+
+<p class="MsoNormal"><code><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+10.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:EN-GB">java -classpath
+./lib/jade.jar:./lib/iiop.jar:./add-ons/RDFCodec/lib/xerces.jar:./add-ons/RDFCodec/lib/rdf.jar
+jade.Boot </span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:
+EN-GB"></code>( for Unix )</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:EN-GB"> <br>
+</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;
+mso-ansi-language:EN-GB">or</span><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:EN-GB"><br>
+</span><code><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:10.0pt;
+font-family:&quot;Courier New&quot;;mso-ansi-language:EN-GB">java -classpath
+.\lib\jade.jar;.\lib\iiop.jar;.\add-ons\RDFCodec\lib\xerces.jar;.\add-ons\RDFCodec\lib\rdf.jar
+jade.Boot</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"></code> </span><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">( for Windows )</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><o:p></o:p></span></p>
+
+<p class="MsoNormal"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-GB">If you want to use another xml parser you
+have to specify in the command line the system property <em>org.xml.sax.parser<span style="font-style:normal">.</span><o:p></o:p></span></em></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">When an agent
+wants to send an RDF encoded message, it must register the
+language with the </span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:EN-GB">registerLanguage() </span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:
+EN-GB">method of the </span><span lang="EN-GB" style="font-size:11.0pt;
+mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:EN-GB">ContentManager</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:
+EN-GB">
+class. For example (assuming </span><span lang="EN-GB" style="font-size:
+11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:
+EN-GB">manager</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-GB"> is the </span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">ContentManager</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">):<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p align="center" class="MsoNormal" style="text-align:center"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">manager.registerLanguage(new
+RDFCodec());<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">Moreover it is
+recommended to set the language of the message. For example
+(assuming ACLmsg is the ACL message):<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB"><span style="mso-spacerun: yes">&nbsp;&nbsp; </span><o:p></o:p></span></p>
+
+<p align="center" class="MsoNormal" style="text-align:center"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">ACLmsg.setLanguage(RDFCodec.NAME);</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:
+EN-GB"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;
+</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">Using RDFCodec,
+the messages are arrays of byte in RDF format; the tags used are
+those defined in the subsequent RDF schema.<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="DE" style="font-size:
+11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:
+DE">&lt;?xml
+version=\&quot;1.0\&quot;?&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="DE" style="font-size:
+11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:
+DE">&lt;rdf:RDF <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="DE" style="font-size:
+11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:
+DE"><span style="mso-spacerun: yes">&nbsp; </span>xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;
+<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="DE" style="font-size:
+11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;mso-ansi-language:
+DE"><span style="mso-spacerun: yes">&nbsp; </span>xmlns:rdfs=&quot;http://www.w3.org/TR/1999/PR-rdf-schema-19990303#&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><b><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;!---
+resources ---&gt;<o:p></o:p></span></b></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;Object&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;!--- superclass ---&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;rdfs:Resource&quot;/&gt;<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;AttributeDescription&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;#Object&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;Term&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;#Object&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;Aggregate&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;#Term&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;Primitive&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;#Term&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;ContentElement&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;#Object&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdfs:Class
+rdf:about=&quot;ContentElementList&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:subClassOf rdf:resource=&quot;#ContentElement&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdfs:Class&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><b><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;!---
+properties ---&gt;<o:p></o:p></span></b></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdf:Property
+rdf:about=&quot;type&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:domain rdf:resource=&quot;#Object&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:range rdf:resource=&quot;rdfs:Literal&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:Property&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdf:Property
+rdf:about=&quot;Attributes&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:domain rdf:resource=&quot;#Object&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:range
+rdf:resource=&quot;#AttributeDescription&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:Property&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdf:Property
+rdf:about=&quot;attributeValue&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:domain
+rdf:resource=&quot;#AttributeDescription&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:range rdf:resource=&quot;#Object&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:Property&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdf:Property
+rdf:about=&quot;aggregateElements&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:domain rdf:resource=&quot;Aggregate&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:range rdf:resource=&quot;Term&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:Property&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdf:Property
+rdf:about=&quot;primitiveValue&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:domain rdf:resource=&quot;#Primitive&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:range rdf:resource=&quot;rdfs:Literal&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:Property&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;rdf:Property
+rdf:about=&quot;contentElementListElements&quot;&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:domain rdf:resource=&quot;#ContentElementList&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&lt;rdfs:range rdf:resource=&quot;#ContentElement&quot;/&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:Property&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Courier New&quot;;
+mso-ansi-language:EN-GB">&lt;/rdf:RDF&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<h2><span lang="EN-GB" style="mso-ansi-language:EN-GB">Examples<o:p></o:p></span></h2>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">After setting
+properly the CLASSPATH, execute the following command to start
+Sender and Receiver agents: <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p align="left" class="MsoBodyText" style="text-align:left"><code><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:10.0pt">java
+jade.Boot </span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt"></code>receiver:examples.rdfcontent.Receiver
+sender:examples.rdfcontent.Sender<o:p></o:p></span></p>
+
+<p class="MsoNormal"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">To see the
+messages RDF format, execute the following command:<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p align="left" class="MsoBodyText" style="text-align:left"><code><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:10.0pt">java
+jade.Boot &#150;gui</span><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt"><o:p></o:p></span></code></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="text-align:justify"><span lang="EN-GB" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;mso-ansi-language:EN-GB">after, utilize
+the gui to run receiver and sender agents; utilize the sniffer
+agent to see the messages.<o:p></o:p></span></p>
+<span lang="IT" style="mso-ansi-language:IT">
+<hr>
+</span>
+<p align="center" style="text-align:center"><span lang="IT" style="mso-ansi-language:
+IT"><a
+href="http://jade.cselt.it/"><span lang="EN-GB" style="font-size:10.0pt;
+font-family:Arial;mso-ansi-language:EN-GB">JADE</span></span><span lang="EN-GB" style="mso-ansi-language:EN-GB"></a> is a trademark of </span><span lang="IT" style="mso-ansi-language:IT"><a
+href="http://www.cselt.it/"><span lang="EN-GB" style="font-size:10.0pt;font-family:Arial;mso-ansi-language:EN-GB">CSELT</span></span><span lang="EN-GB" style="mso-ansi-language:EN-GB"></a>. </span><span lang="IT" style="mso-ansi-language:IT"><a
+href="http://jade.cselt.it/"><span lang="EN-GB" style="font-size:10.0pt;font-family:Arial;mso-ansi-language:EN-GB">JADE</span></span><span lang="EN-GB" style="mso-ansi-language:EN-GB"></a> has been developed jointly
+by </span><span lang="IT" style="mso-ansi-language:IT"><a href="http://www.cselt.it/"><span lang="EN-GB" style="font-size:10.0pt;font-family:Arial;mso-ansi-language:EN-GB">CSELT</span></span><span lang="EN-GB" style="mso-ansi-language:EN-GB"></a> and the </span><span lang="IT" style="mso-ansi-language:IT"><a
+href="http://www.ce.unipr.it/"><span lang="EN-GB" style="font-size:10.0pt;font-family:Arial;mso-ansi-language:EN-GB">Computer Engineering Group</span></span><span lang="EN-GB" style="mso-ansi-language:
+EN-GB"></a> of
+the </span><span lang="IT" style="mso-ansi-language:IT"><a href="http://www.unipr.it/"><span lang="EN-GB" style="font-size:10.0pt;
+font-family:Arial;mso-ansi-language:EN-GB">University of Parma</span></span><span lang="EN-GB" style="mso-ansi-language:EN-GB"><o:p></o:p></span></a></p>
+
+<p align="center" style="text-align:center">&nbsp;</p>
+</body>
+</html>

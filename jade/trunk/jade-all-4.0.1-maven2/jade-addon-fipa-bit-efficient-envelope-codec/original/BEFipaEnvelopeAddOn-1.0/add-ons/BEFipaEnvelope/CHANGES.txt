@@ -1,0 +1,3 @@
+[05-Dec-07] Version 1.0
+-- Code is now also MIDP 2.0/CLDC 1.1 compatible
+-- First release

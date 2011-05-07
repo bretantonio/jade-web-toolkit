@@ -1,0 +1,1 @@
+e:\progra~1\jdk1.3.1_01\bin\keytool -export -alias rsatest -file rsatest.cer -keystore test_store

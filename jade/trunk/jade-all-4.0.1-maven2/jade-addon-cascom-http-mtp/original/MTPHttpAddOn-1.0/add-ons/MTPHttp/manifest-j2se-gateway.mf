@@ -1,0 +1,2 @@
+Main-Class: cascom.jade.mtp.http.CascomGWMain
+Classpath: lib/BEFipaEnvelope.jar;lib/BEFipaMessage.jar;lib/JadeLeap.jar

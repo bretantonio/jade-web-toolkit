@@ -1,0 +1,57 @@
+<project name="taglib" default="compile" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="src" value="src"/>
+  <property name="build" value="classes"/>
+  <property name="web" value="web"/>
+  <property name="lib" value="lib"/>
+  <property name="dist" value="../.."/>
+  <property name="libJADEDir" value="../../lib"/>
+  <property name="classpath" value="${libJADEDir}/jade.jar;${libJADEDir}/servlet.jar;"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the directories structure used to store files -->
+    <mkdir dir="${web}/WEB-INF/${build}"/>
+  </target>
+
+  <!-- Compile the java code from ${src} into ${build} -->
+  <target name="compile" depends="init">
+    <javac srcdir="${src}/jade" destdir="${web}/WEB-INF/${build}" classpath="${classpath}" nowarn="off" optimize="on" deprecation="on"/>
+  </target>
+
+  <!-- Compile the examples code from ${src}/examples into ${web}/WEB-INF/${build} -->
+  <target name="examples" depends="init">
+    <javac srcdir="${src}/examples" destdir="${web}/WEB-INF/${build}" classpath="${classpath}" nowarn="off" optimize="on" deprecation="on"/>
+    <jar jarfile="${web}/WEB-INF/lib/jspagents.jar">
+      <fileset dir="${web}/WEB-INF/${build}" includes="examples/**"/>
+    </jar>
+  </target>
+
+  <!-- Make jars file and put in ${lib} -->
+  <target name="lib" depends="init, compile">
+    <jar jarfile="${web}/WEB-INF/lib/jadetaglib.jar">
+      <fileset dir="${web}/WEB-INF/${build}" includes="jade/wrapper/taglib/**"/>
+    </jar>
+  </target>
+  
+  <!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="init, compile, lib, examples">
+    <jar jarfile="${dist}/taglibAddOn.zip">
+      <fileset dir="${dist}" includes="add-ons/taglib/${src}/**"/>
+      <fileset dir="${dist}" includes="add-ons/taglib/*"/>
+      <fileset dir="${dist}" includes="add-ons/taglib/${web}/*"/>
+      <fileset dir="${dist}" includes="add-ons/taglib/${web}/WEB-INF/*"/>
+      <fileset dir="${dist}" includes="add-ons/taglib/${web}/WEB-INF/lib/*"/>
+    </jar>
+  </target>
+  
+  <target name="all" depends="init, compile, examples, lib, dist"/>
+  <!-- delete ${build} and ${lib} directories -->
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} directory tree -->
+    <delete includeEmptyDirs="true" file="${web}/WEB-INF/lib/jadetaglib.jar">
+      <fileset dir="${web}/WEB-INF/${build}/jade"/>
+    </delete>
+  </target>
+</project>

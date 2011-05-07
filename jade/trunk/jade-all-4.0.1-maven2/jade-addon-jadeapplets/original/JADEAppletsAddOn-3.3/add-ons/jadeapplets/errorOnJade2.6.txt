@@ -1,0 +1,30 @@
+jade.core.IMTPException: Communication Failure [nested message is: Error occurre
+d in server thread; nested exception is:
+        java.lang.ClassFormatError: Illegal constant pool type]
+        at jade.imtp.rmi.AgentContainerAdapter.createAgent(AgentContainerAdapter
+.java:132)
+        at jade.core.RealMobilityManager.handleMove(RealMobilityManager.java:280
+)
+        at jade.core.AgentContainerImpl.handleMove(AgentContainerImpl.java:913)
+        at jade.core.Agent.notifyMove(Agent.java:2163)
+        at jade.core.Agent.mainLoop(Agent.java:1667)
+        at jade.core.Agent.run(Agent.java:1511)
+        at java.lang.Thread.run(Unknown Source)
+Nested Exception is:
+java.rmi.ServerError: Error occurred in server thread; nested exception is:
+        java.lang.ClassFormatError: Illegal constant pool type
+java.lang.ClassFormatError: Illegal constant pool type
+        at sun.rmi.transport.StreamRemoteCall.exceptionReceivedFromServer(Unknow
+n Source)
+        at sun.rmi.transport.StreamRemoteCall.executeCall(Unknown Source)
+        at sun.rmi.server.UnicastRef.invoke(Unknown Source)
+        at jade.imtp.rmi.AgentContainerRMIImpl_Stub.createAgent(Unknown Source)
+        at jade.imtp.rmi.AgentContainerAdapter.createAgent(AgentContainerAdapter
+.java:129)
+        at jade.core.RealMobilityManager.handleMove(RealMobilityManager.java:280
+)
+        at jade.core.AgentContainerImpl.handleMove(AgentContainerImpl.java:913)
+        at jade.core.Agent.notifyMove(Agent.java:2163)
+        at jade.core.Agent.mainLoop(Agent.java:1667)
+        at jade.core.Agent.run(Agent.java:1511)
+        at java.lang.Thread.run(Unknown Source)

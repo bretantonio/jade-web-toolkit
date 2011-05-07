@@ -1,0 +1,112 @@
+<project name="jadeapplet" default="compile" basedir=".">
+
+    <!-- set global properties for this build -->
+    <property name="src" value="src"/>
+    <property name="build" value="classes"/>
+    <property name="lib"  value="lib"/>
+    <property name="doc"  value="doc"/>
+    <property name="dist" value="../.."/>
+
+    <!-- Copy the necessary JADE files from JADE distribution   -->
+    <target name="copy-jade-lib">
+        <copy todir="${lib}">
+            <fileset dir="${dist}/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile">
+        <!-- Compile the java code from ${src} into ${classes} -->
+        <javac srcdir="${src}" destdir="${build}">
+            <classpath>
+                <pathelement path="${lib}/jade.jar"/>
+                <pathelement path="${lib}/Base64.jar"/>
+                <pathelement path="${lib}/jadeTools.jar"/>
+                <pathelement path="${lib}/iiop.jar"/>
+                <pathelement path="${lib}/http.jar"/>
+                <pathelement path="${lib}/sax2.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!--  Create the jar archive  -->
+    <target name="applet-jar">
+        <jar jarfile="${lib}/clientapplet.jar">
+            <fileset dir="${build}" includes="**/*.class"/>
+        </jar>
+    </target>
+
+    <!--  Create and sign the jar archive  -->
+    <target name="applet-jar-sign" depends="applet-jar">
+        <signjar jar="${lib}/clientapplet.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+    </target>
+
+    <!--  Sign the jar archive  -->
+    <target name="applet-jar-signonly">
+        <signjar jar="${lib}/clientapplet.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+    </target>
+
+    <!--  Sign the necessary JADE jar files  -->
+    <target name="jade-lib-sign">
+        <signjar jar="${lib}/jade.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+        <signjar jar="${lib}/base64.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+        <signjar jar="${lib}/iiop.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+        <signjar jar="${lib}/jadeTools.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+        <signjar jar="${lib}/http.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+        <signjar jar="${lib}/sax2.jar" alias="rsatest" storepass="applet" keystore="test_store"/>
+    </target>
+
+    <!-- Delete the ${build} directory tree and ${lib}/clientapplet.jar -->
+    <target name="clean">
+        <delete includeEmptyDirs="true">
+            <fileset dir="${build}" includes="**/*"/>
+            <fileset dir="${lib}" includes="clientapplet.jar"/>
+        </delete>
+    </target>
+
+    <!-- Delete the ${build} and ${lib} directory tree -->
+    <target name="clean-all">
+        <delete includeEmptyDirs="true">
+            <fileset dir="${build}" includes="**/*"/>
+            <fileset dir="${lib}" includes="**/*"/>
+        </delete>
+    </target>
+
+    <!-- Delete the ${lib} directory tree -->
+    <target name="clean-lib">
+        <delete file="${lib}/*.jar" />
+    </target>
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the needed directories -->
+        <mkdir dir="${build}"/>
+        <mkdir dir="${lib}"/>
+        <mkdir dir="${doc}/api"/>
+    </target>
+    <!-- Compile the javadoc code from ${src} into ${doc} -->
+    <target name="doc" depends="init" description="generate javadoc documentation">
+      <javadoc destdir="${doc}/api" author="true" windowtitle="JADE Applets API" sourcepath="${src}" packagenames="client.*, mobileagent.*, server.*">
+          <classpath>
+              <pathelement path="${lib}/jade.jar"/>
+              <pathelement path="${lib}/Base64.jar"/>
+              <pathelement path="${lib}/jadeTools.jar"/>
+              <pathelement path="${lib}/iiop.jar"/>
+              <pathelement path="${lib}/http.jar"/>
+              <pathelement path="${lib}/sax2.jar"/>
+          </classpath>
+      </javadoc>
+    </target>
+
+    <!-- Make distribution zip file and put in ${dist} -->
+    <target name="dist" depends="init, clean-all, copy-jade-lib, compile, clean-lib, applet-jar-sign">
+        <jar jarfile="${dist}/JADEAppletsAddOn.zip">
+            <fileset dir="${dist}" includes="add-ons/jadeapplets/${src}/**"/>
+            <fileset dir="${dist}" includes="add-ons/jadeapplets/*"/>
+            <fileset dir="${dist}" includes="add-ons/jadeapplets/${doc}/**"/>
+        </jar>
+    </target>
+
+</project>

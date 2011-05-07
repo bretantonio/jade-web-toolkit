@@ -1,0 +1,116 @@
+README file for RDFCodec for JADE, Version $Name: JADE-3_3 $
+
+
+INTRODUCTION
+============
+
+This add-on contains a content language codec for JADE that encodes/decodes
+content expressions according to a syntax based on RDF.
+In particular the class RDFCodec.java implements the Codec interface of JADE
+and allows converting back and forth between strings in RDF format 
+and AbsContentElement (abstract descriptor of the message content).
+See the RDFCodec tutorial for more details.
+
+LICENSE
+=======
+See file LICENSE
+
+
+SYSTEM REQUIREMENTS
+===================
+
+This RDFCodec requires 
+	- JADE 2.61 or later.
+	- JDK1.3 or later
+	- The Sax APIs and a SAX parser (e.g. Xerces). JDK1.4 (or later)
+		already includes them. 
+
+INSTALLATION
+============
+
+This RDFCodec is contained into a separate JAR file, named rdf.jar; 
+in order to be used, the rdf.jar file must be added to the CLASSPATH
+environment variable. 
+
+
+USING THE RDFCodec
+==================
+In order to use RDFCodec, you must register the language with the registerLanguage method
+of the ContentManager class:
+
+es:   manager.registerLanguage(new RDFCodec());
+
+Moreover it is recommended to set the language of the message:
+   
+es:   ACLmsg.setLanguage(RDFCodec.NAME); 
+    
+Using RDFCodec, the messages are arrays of byte in RDF format; the tags used 
+are those defined in the subsequent rdf schema.
+
+<?xml version=\"1.0\"?>
+<rdf:RDF 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:rdfs="http://www.w3.org/TR/1999/PR-rdf-schema-19990303#">
+
+<rdfs:Class rdf:about="Object">
+	<!--- superclass --->
+        <rdfs:subClassOf rdf:resource="rdfs:Resource"/>	
+</rdfs:Class>
+<rdfs:Class rdf:about="AttributeDescription">
+	<rdfs:subClassOf rdf:resource="#Object"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="Term">
+	<rdfs:subClassOf rdf:resource="#Object"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="Aggregate">
+	<rdfs:subClassOf rdf:resource="#Term"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="Primitive">
+	<rdfs:subClassOf rdf:resource="#Term"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="ContentElement">
+	<rdfs:subClassOf rdf:resource="#Object"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="ContentElementList">
+	<rdfs:subClassOf rdf:resource="#ContentElement"/>
+</rdfs:Class>
+
+
+<rdf:Property rdf:about="type">
+	<rdfs:domain rdf:resource="#Object"/>
+	<rdfs:range rdf:resource="rdfs:Literal"/>
+</rdf:Property>
+<rdf:Property rdf:about="Attributes">
+	<rdfs:domain rdf:resource="#Object"/>
+	<rdfs:range rdf:resource="#AttributeDescription"/>
+</rdf:Property>
+<rdf:Property rdf:about="attributeValue">
+	<rdfs:domain rdf:resource="#AttributeDescription"/>
+	<rdfs:range rdf:resource="#Object"/>
+</rdf:Property>
+<rdf:Property rdf:about="aggregateElements">
+	<rdfs:domain rdf:resource="Aggregate"/>
+	<rdfs:range rdf:resource="Term"/>
+</rdf:Property>
+<rdf:Property rdf:about="primitiveValue">
+	<rdfs:domain rdf:resource="#Primitive"/>
+	<rdfs:range rdf:resource="rdfs:Literal"/>
+</rdf:Property>
+<rdf:Property rdf:about="contentElementListElements">
+	<rdfs:domain rdf:resource="#ContentElementList"/>
+	<rdfs:range rdf:resource="#ContentElement"/>
+</rdf:Property>
+
+
+</rdf:RDF>
+
+
+EXAMPLE
+=======
+
+After setting properly the CLASSPATH, execute the following command to start Sender and Receiver agents: 
+
+prompt> java jade.Boot sender:examples.rdfcontent.Sender receiver:examples.rdfcontent.Receiver
+
+
+

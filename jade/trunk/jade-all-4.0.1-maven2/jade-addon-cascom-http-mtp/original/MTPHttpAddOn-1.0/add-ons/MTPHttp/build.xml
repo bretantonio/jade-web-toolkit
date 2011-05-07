@@ -1,0 +1,303 @@
+<project name="MTP HTTP for Jade" default="compile" basedir=".">
+<!--
+ * ***************************************************************
+ * JADE - Java Agent DEvelopment Framework is a framework to develop
+ * multi-agent systems in compliance with the FIPA specifications.
+ * Copyright (C) 2000 CSELT S.p.A.
+ * 
+ * GNU Lesser General Public License
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation,
+ * version 2.1 of the License.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA  02111-1307, USA.
+ * **************************************************************
+-->
+    <!-- Installation directory of Jade, should be default as this is add-on -->    
+    <property name="dir.jade" value="../../"/>        
+    <!-- the lib directory of JADE, should be default, all .jar -files will be
+         added to the classpath -->
+    <property name="jade.j2se.dir" value="${dir.jade}/lib"/>
+    <property name="jade.jar" value="${dir.jade}/lib/jade.jar"/>
+    <property name="dir.BEFipaMessage" value="${dir.jade}/add-ons/BEFipaMessage"/>    
+    <property name="dir.BEFipaEnvelope" value="${dir.jade}/add-ons/BEFipaEnvelope"/>    
+    
+    <!-- JadeLeap MIDP version needed when compiled to MIDP -->
+    <property name="dir.leap" value="../../leap"/>    
+    <property file="${dir.leap}/buildLEAP.properties"/>
+    <property name="jadeLeapMIDP.jar" value="${dir.leap}/midp/lib/JadeLeap.jar"/>    
+
+
+    <!-- External software, should be in lib-directory  -->
+    <property name="lib" value="lib"/>            
+    <property name="beMessage-j2se.jar" value="${dir.BEFipaMessage}/lib/BEFipaMessage.jar"/>
+    <property name="beMessage-midp.jar" value="${dir.BEFipaMessage}/lib/BEFipaMessage-midp.jar"/>
+
+    <!-- Source directory of BEFipaEnvelope  -->
+    <property name="beEnvelope-j2se.jar" value="${dir.BEFipaEnvelope}/lib/BEFipaEnvelope.jar"/>
+    <property name="beEnvelope-midp.jar" value="${dir.BEFipaEnvelope}/lib/BEFipaEnvelope-midp.jar"/>  
+
+    <property name="junit.jar" value="${lib}/junit-4.1.jar"/>  
+    <property name="antenna.jar" value="${lib}/antenna-bin-0.9.14.jar"/>  
+           
+    
+    <!-- The actual source files of this project -->  
+    <property name="src" value="src"/>
+    <property name="src.all" value="${src}/all"/> <!-- source code for all java versions -->
+    <property name="src.midp" value="${src}/midp"/> <!-- midp specific code -->
+    <property name="src.j2se" value="${src}/j2se"/> <!-- j2se specific code -->
+                  
+    <property name="classes" value="classes"/>
+    <property name="work" value="work"/>
+    <property name="doc" value="doc"/>
+    <property name="dist" value="../../"/>
+
+    <property name="midp" value="midp"/>
+    <property name="j2se" value="j2se"/>
+    <property name="src-midp" value="${work}/${midp}/${src}"/>
+    <property name="classes-midp" value="${classes}/${midp}"/>
+    <property name="lib-midp" value="${lib}"/>
+    <property name="unverified-midp" value="${work}/${midp}/unverified"/>
+    <property name="classes-j2se" value="${classes}/${j2se}"/>
+    <property name="lib-j2se" value="${lib}"/>
+    <property name="doc-j2se" value="${doc}"/>
+    <property name="src-j2se" value="${work}/${j2se}/${src}"/>
+
+    <property name="manifest-midp" value="manifest-midp.mf"/>
+    <property name="manifest-j2se" value="manifest-j2se.mf"/>
+    <property name="manifest-j2se-gw" value="manifest-j2se-gateway.mf"/>
+    
+    
+     <path id="classpath.j2se">
+        <pathelement location="../.."/>
+        <fileset dir="${jade.j2se.dir}">
+            <include name="**.jar"/>
+        </fileset>
+        <pathelement location="${junit.jar}"/>
+        <pathelement location="${beEnvelope-j2se.jar}"/>
+        <pathelement location="${beMessage-j2se.jar}"/>
+    </path>  
+    <path id="classpath.j2se.test">
+        <pathelement location="${junit.jar}"/>
+        <fileset dir="${lib-j2se}">
+            <include name="**.jar"/>
+            <exclude name="*-midp.jar"/>
+        </fileset>        
+        <path refid="classpath.j2se"/>
+    </path>
+  
+    
+    <path id="boot.classes">
+        <pathelement location="${j2me-wtk-home}/lib/midpapi20.jar"/>
+        <pathelement location="${j2me-wtk-home}/lib/cldcapi11.jar"/>
+    </path>
+  
+    <!-- NOTE: MIDP version of Jade-Leap is needed for MIDP-compilation -->
+    <path id="classpath.midp">
+        <pathelement location="${src-midp}"/>
+        <pathelement location="${beEnvelope-midp.jar}"/>
+        <pathelement location="${beMessage-midp.jar}"/>
+        <pathelement location="${jadeLeapMIDP.jar}"/>
+    </path>
+    <path id="classpath.midp.test">
+        <fileset dir="${lib-midp}">
+            <include name="**.jar"/>
+        </fileset>        
+        <path refid="classpath.midp"/>
+    </path>
+        
+
+    <!-- Properties for MIDP compiler, requires jadeLeap  -->
+    <property name="wtk.cldc.version" value="1.1"/>
+    <property name="wtk.midp.version" value="2.0"/>
+    <property name="boot-midp-classes" value="${j2me-wtk-home}/lib/midpapi20.jar;${j2me-wtk-home}/lib/cldcapi11.jar"/>
+    <property name="j2mewtk.home" value="${j2me-wtk-home}"/>
+  
+    <!-- Antenna tasks for running MIDP, comment out, if you don't need. Requires wtk.home -->
+    <property name="wtk.home" value="${j2me-wtk-home}"/>
+    <taskdef name="wtkrun" classname="de.pleumann.antenna.WtkRun" classpath="${antenna.jar}"/>
+    <taskdef name="wtkjad" classname="de.pleumann.antenna.WtkJad" classpath="${antenna.jar}"/>
+    <taskdef name="wtkpreverify" classname="de.pleumann.antenna.WtkPreverify" classpath="${antenna.jar}"/>  
+    
+        
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the directories structure used to store files -->
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${work}"/>
+    </target>
+
+    <target name="init-midp" depends="init">
+        <mkdir dir="${classes-midp}"/>
+        <mkdir dir="${unverified-midp}"/>
+    </target>
+    <target name="init-j2se" depends="init">
+        <mkdir dir="${classes-j2se}"/>
+        <mkdir dir="${doc-j2se}/api"/>
+    </target>
+       
+    
+    <!-- Compile the java code from ${src} into ${build}/midp for MIDP version -->
+    <target name="compile-midp" depends="init-midp">
+        <!-- copy sources from this project but exclude package that works only in J2SE -->        
+        <copy todir="${src-midp}">
+            <fileset dir="${src.all}">
+                <include name="**/**.java"/>
+            </fileset>
+        </copy>
+        <copy todir="${src-midp}">
+            <fileset dir="${src.midp}">
+                <include name="**/**.java"/>
+            </fileset>
+        </copy>
+    	<javac
+           source="1.4"
+           target="1.4"
+           destdir="${unverified-midp}"
+           srcdir="${src-midp}" 
+           deprecation="on"
+           bootclasspath="${boot-midp-classes}"
+           classpathref="classpath.midp">
+                <include name="**/**.java"/>                
+        </javac>
+        <wtkpreverify cldc="false" classpathref="classpath.midp" srcdir="${unverified-midp}" destdir="${classes-midp}" />         
+    </target>    
+    
+    
+    <!-- Compile the java code from ${src} into ${build} -->
+    <target name="compile" depends="init-j2se">
+       <copy todir="${src-j2se}">
+            <fileset dir="${src.all}">
+                <include name="**/**.java"/>
+            </fileset>
+        </copy>
+        <copy todir="${src-j2se}">
+            <fileset dir="${src.j2se}">
+                <include name="**/**.java"/>
+            </fileset>
+        </copy>        
+        <javac source="1.5" srcdir="${src-j2se}" destdir="${classes-j2se}" classpathref="classpath.j2se" nowarn="off" optimize="on" deprecation="on">
+            <include name="**/**.java"/>
+        </javac>
+    </target>
+                   
+    <!-- Make MIDP jars file and put in ${lib} -->
+    <target name="lib-midp" depends="compile-midp">
+        <jar jarfile="${lib}/MTPHttp-midp.jar" manifest="${manifest-midp}">
+            <fileset dir="${classes-midp}">
+			<include name="**/**"/>
+                  <exclude name="cascom/jade/mtp/http/CascomGatewayServer.java"/>
+		</fileset>
+        </jar>
+    </target>
+
+
+  <!-- Make jars file and put in ${lib} -->
+    <target name="lib" depends="compile">
+        <jar jarfile="${lib}/MTPHttp.jar" manifest="${manifest-j2se}">
+            <fileset dir="${classes-j2se}">
+                <include name="**"/>		     
+		    <!-- Do not include CASCOM Gateway Server -->
+                <exclude name="cascom/jade/mtp/http/CascomGatewayServer.java"/>
+                <exclude name="cascom/jade/mtp/http/CascomGWMain.java"/>
+                <exclude name="test/**"/>
+            </fileset>
+        </jar>
+        <jar jarfile="${lib}/MTPTests.jar" manifest="${manifest-j2se}">
+            <fileset dir="${classes-j2se}">
+                <include name="test/**"/>
+            </fileset>
+        </jar>
+        <jar jarfile="${lib}/cascomgw.jar" manifest="${manifest-j2se-gw}">
+            <fileset dir="${classes-j2se}">
+                <include name="cascom/jade/mtp/http/CascomGatewayServer.java"/>
+                <include name="cascom/jade/mtp/http/CascomGWMain.java"/>
+            </fileset>
+        </jar>
+
+	  <ant target="make-gw-stanalone"/>
+    </target>
+    <target name="make-gw-stanalone">
+	  <property name="tmp" value="tmp"/>
+	  <mkdir dir="${tmp}"/>
+        <unjar src="${beEnvelope-j2se.jar}" dest="${tmp}"/>
+        <unjar src="${beMessage-j2se.jar}" dest="${tmp}" />
+        <unjar src="${jade.jar}" dest="${tmp}" />
+
+        <jar jarfile="${lib}/cascomgw-standalone.jar" manifest="${manifest-j2se-gw}">
+            <fileset dir="${classes-j2se}">
+                <include name="**/**"/>
+            </fileset>
+            <fileset dir="${tmp}">
+                <include name="**/**"/>
+            </fileset>
+        </jar>
+	<delete includeEmptyDirs="true" failOnError="false">
+	      <fileset dir="${tmp}"/>
+	</delete>
+    </target>
+    
+ <!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="clean, lib, lib-midp, doc">
+    <zip zipfile="${dist}/add-ons/MTPHttpAddOn.zip">
+      <fileset dir="${dist}" includes="add-ons/MTPHttp/doc/**" excludes=".svn/*" />
+      <fileset dir="${dist}" includes="add-ons/MTPHttp/*" />
+      <fileset dir="${dist}" includes="add-ons/MTPHttp/${src}/**" excludes=".svn/*" />
+      <fileset dir="${dist}" includes="add-ons/MTPHttp/${lib}/**" excludes=".svn/*" />
+    </zip>
+  </target>
+
+  <target name="test" depends="lib">  
+    <java  maxmemory="1024M" fork="yes" classpathref="classpath.j2se.test" classname="org.junit.runner.JUnitCore">
+        <jvmarg value="-Xmx1024M"/>
+        <arg line="test.MTPHttpJUnitTests"/>
+    </java>  
+  </target>
+ 
+  
+    <target name="run" depends="lib">
+    <java fork="yes" classname="jade.Boot" classpathref="classpath.j2se.test">
+        <arg line="-mtp jade.mtp.http2.MessageTransportProtocol"/>
+        <arg line="-aclcodecs cascom.fipa.acl.BitEffACLCodec"/>
+        <arg line="-gui"/>
+        
+        <!-- You can give IP if needed
+        <arg line="-jade_mtp_http_host 192.168.2.132"/>     
+        <arg line="-jade_mtp_http_port 10500"/>     
+        <arg line="-name yourpc"/>
+        -->
+        
+        <!-- 
+            If your DNS settings will change often, otherwise do not use
+            <jvmarg value="-Dsun.net.inetaddr.ttl5"/>
+         -->
+         
+         </java>
+    </target>
+
+  <target name="doc" depends="lib" description="generate javadoc documentation">
+    <javadoc destdir="${doc}/api" classpathref="classpath.j2se" author="true" windowtitle="MTP Http for JADE and CASCOM Agent Platforms" sourcepath="${src-j2se}" packagenames="cascom.*, jade.*"/>
+  </target>
+    
+  <!-- delete ${build} and ${lib} directories -->
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} directory tree -->
+    <delete includeEmptyDirs="true" failOnError="false">
+      <fileset dir="${classes}">
+         <include name="**"/>
+      </fileset>
+      <fileset dir="${work}"/>
+    </delete>
+  </target>
+</project>

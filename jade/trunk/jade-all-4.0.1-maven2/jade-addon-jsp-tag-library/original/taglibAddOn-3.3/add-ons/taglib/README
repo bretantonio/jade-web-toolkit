@@ -1,0 +1,5 @@
+This add-on implements a simple library of tags for using JADE within
+JSP pages.
+
+The JADE documentation includes a tutorial with a detailed description
+of how to install and use this tag library.

@@ -1,0 +1,4 @@
+MIDlet-Name: BETest
+MIDlet-Description: Test for BE envelope codecs
+MIDlet-Version: 2.0
+MIDlet-Vendor: Sonera

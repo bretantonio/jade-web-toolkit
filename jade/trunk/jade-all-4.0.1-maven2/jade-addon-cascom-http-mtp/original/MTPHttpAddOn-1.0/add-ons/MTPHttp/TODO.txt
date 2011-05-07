@@ -1,0 +1,2 @@
+- Add support for https secure -connections. Sources already in the original JADE MTP and should be quite easy for MIDP, however interaction between MIDP and J2SE may need some work.
+- Create the envelope codec for String representation so that also JADEs with old MTPs could be contacted. However, that is not very efficient for MIDP

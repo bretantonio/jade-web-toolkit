@@ -1,0 +1,66 @@
+<project name="RDFCodec" default="compile" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="src" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="lib" value="lib"/>
+  <property name="dist" value="../.."/>
+  <property name="libJADEDir" value="../../lib"/>
+  
+  <!-- ===============================================
+  	CLASSPATH: 
+  	If you are using a JDK earlier than JDK1.4, add the SAX API and 
+  	a SAX Parser to the classpath below
+  ================================================ -->
+  <property name="classpath" value="${libJADEDir}/jade.jar;${libJADEDir}/Base64.jar"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the directories structure used to store files -->
+    <mkdir dir="${classes}"/>
+    <mkdir dir="${lib}"/>
+  </target>
+
+  <!-- Compile the java code from ${src} into ${classes} -->
+  <target name="compile" depends="init">
+    <javac srcdir="${src}" destdir="${classes}" classpath="${classpath}" nowarn="off" optimize="on" deprecation="on" />
+  </target>
+
+  <!-- Compile the examples code from ${src} into ${classes} -->
+  <target name="examples" depends="init">
+    <javac srcdir="examples" destdir="${classes}" classpath="${classpath}" nowarn="off" optimize="on" deprecation="on"/>
+  </target>
+
+  <!-- Create the jar file ${lib} -->
+  <target name="lib" depends="compile">
+    <jar jarfile="${lib}/RDFCodec.jar">
+      <fileset dir="${classes}" includes="**/jade/**"/>
+    </jar>
+  </target>
+
+  <!-- Clean class files and jar files -->
+  <target name="clean" description="clean up">
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${classes}"/>
+      <fileset dir="${lib}" includes="RDFCodec.jar"/>
+    </delete>
+  </target>
+
+  <target name="all" depends="clean, lib, examples"/>
+
+  <!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="all">
+    <jar jarfile="${dist}/RDFCodecAddOn.zip">
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/${src}/**"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/examples/**"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/${lib}/**"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/LICENSE"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/COPYING"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/README"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/build.xml"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/RDFCodec.html"/>
+      <fileset dir="${dist}" includes="add-ons/RDFCodec2/runExamples.bat"/>
+    </jar>
+  </target>
+
+</project>

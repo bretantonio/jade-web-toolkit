@@ -1,0 +1,18 @@
+[05-Dec-07] Version 1.0  [Modified from JADE 3.3 HTTP MTP]
+-- Better error messages and logging.
+-- Code made MIDP-compatible, HTTPServer and other classes will now 
+   use cascom.net -package 
+-- Hard coding of XML envelope encoding changed. MTP can now use any EnvelopeCodec 
+   (cascom.fipa.envelope.EnvelopeCodec -interface) available.
+-- MTP parses the requests and responses now to FipaHttpObjects
+-- HTTPS-connections disabled for the time being.
+-- Real close requests will now be sent instead of raw closing of connection
+-- HTTPIO.parseRequest will now parse both requests and responses.
+-- Architecture changed: jade.mtp.http2.ConnectionManager will now be base class to offer basic 
+   persistent HTTP connection behaviour. It can be extended later with other implementations
+   (other kind of underlying sockets, duplex sockets etc.)
+-- Fixed bug in HTTP-server: if JVM has short timeout for ServerSocket.accept(), 
+   it would have closed the whole server (can happen in some MIDP JVMs).
+-- Fixed possible bug: the whole deliver-method in jade.mtp.http.MessageTransportProtocol was 
+   synchronized. If some destination host was not listening, the MTP could propably not send messages
+   to other destinations while waiting for Socket time-out (FIXED in JADE 3.5).

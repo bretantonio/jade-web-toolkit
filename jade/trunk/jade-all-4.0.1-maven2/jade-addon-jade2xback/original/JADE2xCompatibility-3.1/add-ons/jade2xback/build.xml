@@ -1,0 +1,72 @@
+<project name="jade2xback" default="compile" basedir=".">
+  <!-- set global properties for this build -->
+  <property environment="env"/>
+  <property name="src" value="src"/>
+  <property name="build" value="classes"/>
+  <property name="doc" value="doc"/>
+  <property name="lib" value="lib"/>
+  <property name="dist" value="../.."/>
+  <property name="libJADEDir" value="../../lib"/>
+  <property name="classpath" value="../..;${libJADEDir}/jade.jar;"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the directories structure used to store files -->
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${lib}"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${doc}"/>
+    <condition property="javacc.home.is.set">
+      <not>
+        <equals arg1="${env.JAVACC_HOME}" arg2="$${env.JAVACC_HOME}"/>
+      </not>
+    </condition>
+  </target>
+  
+  <target name="check_javacc" unless="javacc.home.is.set">
+    <echo>javacc task is being skipped and the pre-built parsers will be used. If you want to rebuild the parsers, set the environment variable JAVACC_HOME to the home directory where your javacc program has been installed.</echo>
+  </target>
+
+  <!-- Compile the javadoc code from ${src} into ${doc} -->
+  <target name="doc" depends="init" description="generate javadoc documentation">
+    <javadoc destdir="${doc}/api" author="true" windowtitle="jade2xback" sourcepath="${src}" packagenames="jade/**"/>
+  </target>
+ 
+  <!-- Compile the java code from ${src} into ${build} -->
+  <target name="compile" depends="init, MakeSL0Parser">
+    <javac srcdir="${src}" destdir="${build}" classpath="${classpath}" nowarn="off" optimize="on" deprecation="on" includes="jade/**"/>
+  </target>
+
+  <target name="MakeSL0Parser" depends="check_javacc">
+    <javacc javacchome="${env.JAVACC_HOME}" outputdirectory="src/jade/lang/sl" target="src/jade/lang/sl/SL0Parser.jj"/>
+  </target>
+ 
+  <!-- Make jars file and put in ${lib} -->
+  <target name="lib" depends="compile">
+    <jar jarfile="${lib}/jade2xback.jar">
+      <fileset dir="${build}" includes="**/jade/**"/>
+    </jar>
+  </target>
+ 
+  <!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="init, compile, lib">
+    <jar jarfile="${dist}/JADE2xCompatibility.zip">
+      <fileset dir="${dist}" includes="add-ons/jade2xback/${src}/**"/>
+      <fileset dir="${dist}" includes="add-ons/jade2xback/*"/>
+      <fileset dir="${dist}" includes="add-ons/jade2xback/lib/**"/>
+    </jar>
+  </target>
+ 
+  <target name="all" depends="init, doc, compile, lib, dist"/>
+ 
+  <!-- delete ${build} and ${lib} directories -->
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} directory tree -->
+    <delete includeEmptyDirs="true">
+      <fileset dir="${build}"/>
+      <fileset dir="${lib}"/>
+    </delete>
+  </target>
+
+</project>
