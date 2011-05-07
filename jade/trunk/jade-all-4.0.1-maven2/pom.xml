@@ -23,6 +23,17 @@
 		<module>jade-addon-jadesharp</module>
 		<module>jade-addon-orbacus-mtp</module>
 		<module>jade-addon-xml-codec</module>
+		<module>jade-addon-fipa-xml-aclcodec</module>
+		<module>jade-addon-fipa-bit-efficient-aclcodec</module>
+		<module>jade-addon-fipa-bit-efficient-envelope-codec</module>
+		<module>jade-addon-cascom-http-mtp</module>
+		<module>jade-addon-rdf-codec</module>
+		<module>jade-addon-test-suite-framework</module>
+		<module>jade-addon-bechmark</module>
+		<module>jade-addon-jadeapplets</module>
+		<module>jade-addon-jsp-tag-library</module>
+		<module>jade-addon-jade2xback</module>
+		<module>jade-leap</module>
 	</modules>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
