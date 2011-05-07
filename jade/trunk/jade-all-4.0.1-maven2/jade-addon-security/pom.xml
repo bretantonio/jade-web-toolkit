@@ -14,7 +14,14 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jade-addon-test-suite-framework</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+</dependencies>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
 		<jdkversion>1.6</jdkversion>
