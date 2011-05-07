@@ -22,7 +22,7 @@
 		<module>jade-addon-ontology-beangenerator</module>
 		<module>jade-addon-jadesharp</module>
 		<module>jade-addon-orbacus-mtp</module>
-		<module>jade-addon-fipa-xml-aclcodec</module>
+		<module>jade-addon-xml-codec</module>
 	</modules>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
