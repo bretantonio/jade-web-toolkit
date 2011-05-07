@@ -1,0 +1,64 @@
+<project name="ORBacus" default="compile" basedir=".">
+  <property name="EXECidlj" value="false"/>
+  <!--  <property name="EXECidlj" value="true"/> -->
+  <!-- by default idlj is not executed, set to true the value for the
+       previous property if you want to execute idlj -->
+  <!-- set global properties for this build -->
+  <property name="src" value="src"/>
+  <property name="build" value="classes"/>
+  <property name="lib" value="lib"/>
+  <property name="dist" value="../.."/>
+  <property name="libJADEDir" value="../../lib"/>
+  <property name="classpath" value="${libJADEDir}/jade.jar;${libJADEDir}/OB.jar;${libJADEDir}/OBNaming.jar;"/>
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <condition property="EXECidlj.is.set">
+      <equals arg1="${EXECidlj}" arg2="true"/>
+    </condition>
+    <mkdir dir="${build}" />
+    <mkdir dir="${lib}" />
+  </target>
+  
+  <target name="check_execIdlj" unless="EXECidlj.is.set">
+    <echo>DefaultBehaviour: JIDL task is being skipped.</echo>
+  </target>
+  
+  <!--     _______________________________________________
+                                idlj
+          _______________________________________________ -->
+  <target name="idlj" depends="init,check_execIdlj" if="EXECidlj.is.set">
+    <exec dir="${src}" executable="jidl.exe">
+      <arg line="fipa.idl"/>
+    </exec>
+  </target>
+
+  <!-- Compile the java code from ${src} into ${build} -->
+  <target name="compile" depends="init,idlj">
+    <javac srcdir="${src}" destdir="${build}" classpath="${classpath}" nowarn="off" optimize="on" deprecation="on"/>
+  </target>
+  <!-- Make jars file and put in ${lib} -->
+  <target name="lib" depends="init, compile">
+    <jar jarfile="${lib}/iiopOB.jar" >
+      <fileset dir="${build}" includes="**/orbacus/**"/>
+      <fileset dir="${build}" includes="**/FIPA/*"/>
+    </jar>
+  </target>
+  <!-- Make distribution zip file and put in ${dist} -->
+  <target name="dist" depends="init, lib">
+    <jar jarfile="${dist}/ORBacusMTPAddOn.zip">
+      <fileset dir="${dist}" includes="add-ons/ORBacusMTP/${src}/**"/>
+      <fileset dir="${dist}" includes="add-ons/ORBacusMTP/*"/>
+      <fileset dir="${dist}" includes="add-ons/ORBacusMTP/${lib}/*"/>
+    </jar>
+  </target>
+  <target name="all" depends="compile, lib, dist"/>
+  <!-- delete ${build} and ${lib} directories -->
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} directory tree -->
+    <delete includeEmptyDirs="true" file="${lib}/iiopOB.jar">
+      <fileset dir="${build}/FIPA"/>
+      <fileset dir="${build}/orbacus"/>
+    </delete>
+  </target>
+</project>

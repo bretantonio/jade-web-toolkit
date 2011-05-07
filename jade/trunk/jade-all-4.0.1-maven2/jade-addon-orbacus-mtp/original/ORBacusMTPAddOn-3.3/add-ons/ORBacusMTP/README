@@ -1,0 +1,204 @@
+README file for ORBacus based IIOP MTP for JADE, Version $Name: JADE-3_3 $
+
+INTRODUCTION
+============
+
+This file contains a FIPA 2000 compliant IIOP MTP for JADE, based on
+the CORBA ORB named ORBacus, available at http://www.ooc.com (free for
+non-commercial use).
+
+
+LICENSE
+=======
+See file COPYING
+
+
+SYSTEM REQUIREMENTS
+===================
+
+This MTP requires JADE 2.1, and was tested with ORBacus for Java
+4.0.3, but it should work also with later versions of both.
+
+
+INSTALLATION
+============
+
+This MTP is contained into a separate JAR file, named iiopOB.jar; in
+order to be used, the iiopOB.jar file must be added to the CLASSPATH
+environment variable. Moreover, since it is not possible to use both
+ORBacus and the standard JDK ORB together in the same JVM (there are
+class name incompatibilities), the iiop.jar file *must not* be
+included in the CLASSPATH.
+
+Installing from the binary distribution of JADE
+-----------------------------------------------
+
+In the binary distribution, JADE is contained into three JAR files:
+
+  - jade.jar (Basic JADE runtime system)
+  - jadeTools.jar (JADE graphical tools)
+  - iiop.jar (Basic IIOP MTP, using Sun JDK ORB)
+
+If you want to use the ORBacus based MTP, you have to include in your
+CLASSPATH the following files:
+
+  - jade.jar (Basic JADE runtime system)
+  - iiopOB.jar (ORBacus based IIOP MTP)
+  - OB.jar (Basic ORBacus runtime system, available from http://www.ooc.com)
+
+If you want to use 'corbaname:' addresses, you also have to include in
+your CLASSPATH the file:
+  - OBNaming.jar (ORBacus COS Naming Service, available from http://www.ooc.com)
+
+Moreover, you *must not* include iiop.jar in your CLASSPATH. You can
+include jadeTools.jar or not, depending on whether you need the tools
+or not.
+
+Installing from the source distribution of JADE
+-----------------------------------------------
+
+If you compile JADE yourself with the 'make all' or 'makejade'
+command, you obtain all the classes in the 'classes' directory of the
+JADE source tree. Then, you have two choices:
+
+  1) Use the 'make lib' or 'makelib' command to build the JAR files
+     and proceed as in the previous section.
+  2) Remove the classes implementing the basic IIOP MTP (they are in
+     the 'classes/jade/mtp/iiop' directory). Then add to your
+     CLASSPATH the following items:
+       - jade/classes (directory with the compiled classes)
+       - iiopOB.jar (ORBacus based IIOP MTP)
+       - OB.jar (Basic ORBacus runtime system, available from http://www.ooc.com)
+
+
+USING THE NEW MTP
+=================
+
+There are two ways to activate an IIOP endpoint that uses an
+ORBacus-based IIOP MTP:
+
+1) From the command line when you start a JADE container.
+
+2) From the GUI of the RMA as specified later in this README.
+
+In both cases the IIOP address the platform must listen to incoming FIPA
+messages can be specified. This has the big advantage that the address
+of the platform can be selected by the user and, eventually, might be
+published on your business card. In other words, there is no more any
+need to publish the IOR of the agent platform. If no transport address
+is specified, an IOR address is generated with the port and the object
+key chosen by the ORB.
+
+Supported MTP address kinds
+---------------------------
+
+The ORBacus based IIOP MTP supports three kinds of addresses,
+corresponding to three different ways to describe a CORBA Object
+Reference in String form.
+
+  1) 'IOR:' addresses
+
+  These addresses have the form:
+    IOR:<Hex digits>
+  where the hexadecimal digits are simply a string representation of
+  the memory dump of a CORBA data structure, containing all the
+  information needed to find and contact a CORBA object. This address
+  kind is the most widely supported, and it's the most complete one
+  (it can contain multiple transport profiles, character set
+  informations, and so on). Its only disadvantage is not being human
+  readable: in particular, in a TCP/IP environment, special utilities
+  need to be used to extract the host name and port number from an IOR
+  (which could be useful for network configuration purposes).
+
+  2) 'corbaloc:' addresses
+
+  These addresses have the form:
+    corbaloc:<proto>:<hostname>:<port>/<objectID>
+  and try to represent a CORBA Object Reference just like an HTTP
+  URL. They can be easily read, but they lose a lot of information
+  with respect to IOR form, and they make only sense in a TCP/IP
+  environment. The <proto> part denotes the transport protocol to be
+  used, and it's optional, defaulting to 'iiop'; the <hostname> and
+  <port> parts define the IP host and the TCP port where a suitable
+  IIOP message must be sent in order to contact the CORBA object. The
+  <objectID> part identifies a specific CORBA object (usually,
+  selecting the host and the port will at most select an object
+  adapter). Supporting this kind of addresses breaks the server-side
+  source code portability that wasthe ultimate goal of the POA
+  specification, because there is no concept of 'port' in the POA, to
+  keep transport protocol independence: so, this ORBacus based MTP
+  uses ORBacus-specific extensions to select the TCP port when
+  requested, and creates a different POA for each TCP port.
+
+  3) 'corbaname' addresses
+
+  These addresses have the form:
+    corbaname::<NShostname>:<NSport>/<NSName>#<objBinding>
+  and use the CORBA COS Naming Service as an indirection level, to
+  reach a CORBA object that was previously bound into a COSNaming
+  Server. The <NShostname> and <NSport> parts define the IP host and
+  TCP port where an implementation of the COSNaming::NamingContext IDL
+  interface is listening. The <NSName> identifies the specific
+  implementation (it defaults to 'NameService'). The <objBinding>
+  part, then, describes the binding in the NamingContext object, from
+  where the actual CORBA object implementing the FIPA::MTS interface
+  can be retrieved. Following the CORBA Interoperable Naming Service
+  specification, the <objBinding> string can contain '.' and '/', to
+  specify the 'id' and 'kind' fields of a COSNaming::NameComponent,
+  and to describe paths of COSNaming::NameComponent objects.
+  When activating a 'corbaname:' address, this MTP implementation
+  creates a new FIPA::MTS object and binds it into the given Naming
+  Server. Likewise, when deactivating the 'corbaname:' address, the
+  binding is removed from the Naming Server.
+
+
+Configuring MTPs from the command line
+--------------------------------------
+
+In this case the following parameter must be specified on the command line.
+For a default 'IOR:' address, write:
+  -mtp orbacus.MessageTransportProtocol
+For a 'corbaloc:' address, write:
+  -mtp orbacus.MessageTransportProtocol(corbaloc:iiop:<hostname>:<port>/<name>)
+For a 'corbaname:' address, write:
+  -mtp orbacus.MessageTransportProtocol(corbaname::<NShostname>:<NSport>/<NSname>#<objBinding>)
+When activating a 'corbaname:' address, take care that a COSNaming
+Service implementation is actually running at the
+<NSHostname>:<NSport> address, with the <NSname> Object ID, or the MTP
+activation will fail.
+
+When a container starts, it prints on the standard output all the
+activated MTP addresses, separated by a carriage return. Moreover, it
+writes the same addresses in a file, named: MTPs-<Container Name>.txt.
+
+Using the -mtp command line option, a transport endpoint lives as long
+as its container is up; when a container is shut down, all its MTPs
+are deactivated and the AMS information is updated accordingly. The
+JADE RMA console enables a more flexible management of the MTPs,
+allowing to activate and deactivate transport protocols during normal
+platform operations.
+
+Configuring MTPs from the graphical management console 
+------------------------------------------------------
+
+Select a container from the GUI, click the right button of the mouse
+and a popup menu appears. Choose the Install a new MTP option and a
+dialog will be shown. Here the following information can be set: the
+container to install the new MTP on (if different from the selected
+one), the fully qualified name of the class implementing the
+jade.mtp.MTP interface, and (if it is supported by the chosen
+protocol) the transport address that will be used to contact the new
+MTP.
+
+In order to install a new IIOP endpoint by using the default JDK 1.2
+ORB, one should write:
+  jade.mtp.iiop.MessageTransportProtocol as the class name and nothing as the address.
+
+In order to install a new IIOP endpoint using the ORBacus based
+implementation, one should write:
+  orbacus.MessageTransportProtocol as the class name and corbaloc:iiop:sharon.cselt.it:1234/jade as the transport address
+(if the endpoint had to be deployed at host sharon.cselt.it on the TCP port 1234 with an object ID jade)
+
+Choosing Uninstall an MTP shows a dialog where the user can select
+from a list one of the currently installed MTPs and remove it from the
+platform.

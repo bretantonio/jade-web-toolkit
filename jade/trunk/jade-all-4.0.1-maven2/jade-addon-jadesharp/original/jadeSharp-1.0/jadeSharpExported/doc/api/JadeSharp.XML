@@ -1,0 +1,585 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JadeSharp</name>
+    </assembly>
+    <members>
+        <member name="T:JadeSharp.ACLMessage">
+            <summary>
+            Summary description for ACLMessage.
+            </summary>
+        </member>
+        <member name="F:JadeSharp.ACLMessage.ACCEPT_PROPOSAL">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.AGREE">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.CANCEL">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.CFP">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.CONFIRM">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.DISCONFIRM">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.FAILURE">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.INFORM">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.INFORM_IF">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.INFORM_REF">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.NOT_UNDERSTOOD">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.PROPOSE">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.QUERY_IF">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.QUERY_REF">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.REFUSE">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.REJECT_PROPOSAL">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.REQUEST">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.REQUEST_WHEN">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.REQUEST_WHENEVER">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.SUBSCRIBE">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.PROXY">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.PROPAGATE">
+            constant identifying the FIPA performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.UNKNOWN">
+            constant identifying an unknown performative *
+        </member>
+        <member name="F:JadeSharp.ACLMessage.IGNORE_FAILURE">
+            User defined parameter key specifying, when set to "true", that if the delivery of a 
+            message fails, no FAILURE notification has to be sent back to the sender.
+        </member>
+        <member name="M:JadeSharp.ACLMessage.CreateReply(System.Int32)">
+            create a new ACLMessage that is a reply to this message.
+            In particular, it sets the following parameters of the new message:
+            receiver, language, ontology, protocol, conversation-id,
+            in-reply-to, reply-with.
+            The programmer needs to set the communicative-act and the content.
+            Of course, if he wishes to do that, he can reset any of the fields.
+        </member>
+        <member name="M:JadeSharp.ACLMessage.WriteTo(JadeSharp.DataStream)">
+            <summary>
+            Write ACLMessage byte array in specified network stream
+            </summary>
+            <param name="stream">Available network stream</param>
+        </member>
+        <member name="M:JadeSharp.ACLMessage.ReadFrom(JadeSharp.DataStream)">
+            <summary>
+            Read an ACLMessage form network stream
+            </summary>
+            <param name="stream">Available Network Stream</param>
+        </member>
+        <member name="M:JadeSharp.ACLMessage.DeserializeAID(JadeSharp.DataStream)">
+            <summary>
+            Get AID of Sender/Receiver if current ACLMessage from Network Stream
+            </summary>
+            <param name="stream">Available Network Stream</param>
+            <returns>String representation of AID extracted</returns>
+        </member>
+        <member name="M:JadeSharp.ACLMessage.ConvertData(System.Byte[])">
+            <summary>
+            Convert byte array into string
+            </summary>
+            <param name="asciiBytes">Data to be converted</param>
+            <returns>String representation of input byte array</returns>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Performatives">
+            <summary>
+            Get all the performatives defined for ACL Messages
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.PerformativeAsString">
+            <summary>
+            Get all the performatives defined for ACL Messages returned as a string
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.StringEncoding">
+            <summary>
+            Get or set the String Encoding field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Ontology">
+            <summary>
+             Get or set the Ontology field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Language">
+            <summary>
+             Get or set the Language field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Protocol">
+            <summary>
+             Get or set the Protocol field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.ConversationID">
+            <summary>
+             Get or set the ConversationID field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.InReplyTo">
+            <summary>
+             Get or set the InReplyTo field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.ReplyWith">
+            <summary>
+             Get or set the ReplyWith field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Sender">
+            <summary>
+             Get or set the Sender field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Receiver">
+            <summary>
+             Get or set the Receiver field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Performative">
+            <summary>
+             Get or set the Performative field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.Content">
+            <summary>
+             Get or set the Content field of ACL Message
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.HasByteSequenceCOntent">
+            <summary>
+            This method allows to check if the content of this ACLMessage is a byteSequence or a String
+            </summary>
+        </member>
+        <member name="P:JadeSharp.ACLMessage.ContentAsString">
+            <summary>
+            Get or set content as a string
+            </summary>
+        </member>
+        <member name="T:JadeSharp.Consts">
+            <summary>
+            Constants useful for some uses
+            </summary>
+        </member>
+        <member name="T:JadeSharp.DataStream">
+            <summary>
+            This class is the C# equivalent of the Java's DataInputStream 
+            and DataOutputStream to implement serialization of most basic 
+            types and interoperate with Java.
+            </summary>
+        </member>
+        <member name="M:JadeSharp.DataStream.ReadUTF">
+            <summary>
+            Reads from the
+            stream <code>in</code> a representation
+            of a Unicode  character string encoded in
+            <a href="DataInput.html#modified-utf-8">modified UTF-8</a> format;
+            this string of characters is then returned as a <code>String</code>.
+            The details of the modified UTF-8 representation
+            are  exactly the same as for the <code>readUTF</code>
+            method of <code>DataInput</code>.
+            </summary>
+            <returns>Result string</returns>
+            <remarks>These method is copied from DataInputStream Java Class</remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:JadeSharp.DataStream.WriteUTF(System.String)" -->
+        <member name="T:JadeSharp.EventHelper">
+            <summary>
+            An helper class to manage P/Invoke calls to native functions useful in handling 
+            events in Windows Mobile.
+            </summary>
+        </member>
+        <member name="T:JadeSharp.FrameCodec">
+            <summary>
+            Summary description for FrameCodec.
+            </summary>
+        </member>
+        <member name="T:JadeSharp.IFrame">
+            <summary>
+            Interface used for all Frames.
+            </summary>
+        </member>
+        <member name="T:JadeSharp.JadeConnector">
+            <summary>
+            Summary description for JadeConnector.
+            </summary>
+        </member>
+        <member name="T:JadeSharp.JadeConstants">
+            <summary>
+            Constants used in JadeSharp classes
+            </summary>
+        </member>
+        <member name="T:JadeSharp.JICPConstants">
+            <summary>
+            Summary description for JICPConstants.
+            </summary>
+            
+        </member>
+        <member name="F:JadeSharp.JICPConstants.COMMAND_TYPE">
+            ID code for packets carrying IMTP commands 
+        </member>
+        <member name="F:JadeSharp.JICPConstants.RESPONSE_TYPE">
+            ID code for packets carrying IMTP responses 
+        </member>
+        <member name="F:JadeSharp.JICPConstants.KEEP_ALIVE_TYPE">
+            ID code for packets carrying keep-alive  
+        </member>
+        <member name="F:JadeSharp.JICPConstants.GET_ADDRESS_TYPE">
+            ID code for packets carrying requests to get the local address 
+        </member>
+        <member name="F:JadeSharp.JICPConstants.CREATE_MEDIATOR_TYPE">
+            ID code for packets carrying requests to create a Mediator 
+        </member>
+        <member name="F:JadeSharp.JICPConstants.CONNECT_MEDIATOR_TYPE">
+            ID code for packets carrying requests to connect to a Mediator 
+        </member>
+        <member name="F:JadeSharp.JICPConstants.DROP_DOWN_TYPE">
+            ID code for packets carrying requests to drop-down the connection with the mediator 
+        </member>
+        <member name="F:JadeSharp.JICPConstants.ERROR_TYPE">
+            ID code for packets carrying JICP protocol errors 
+        </member>
+        <member name="T:JadeSharp.JICPPacket">
+            <summary>
+            Summary description for JICPPacket.
+            </summary>
+        </member>
+        <member name="F:JadeSharp.JICPPacket._Type">
+            <summary>
+            The type of data included in the packet
+            </summary>
+        </member>
+        <member name="F:JadeSharp.JICPPacket._Info">
+            <summary>
+            Bit encoded information about the content of the packet:
+            </summary>
+        </member>
+        <member name="F:JadeSharp.JICPPacket._SessionID">
+            <summary>
+            An optional identifier for the session this packet belongs to
+            </summary>
+        </member>
+        <member name="F:JadeSharp.JICPPacket._RecipientID">
+            <summary>
+            An optional field indicating the actual recipient for this JICPPacket. 
+            - A JICPServer receiving a JICPPacket from a remote container
+            interprets this field as the ID of a local Mediator.
+            - A Mediator receiving a JICPPacket from its mediated container
+            interprets this field as the serialized transport address of 
+            final destination to forward the packet.
+            </summary>
+        </member>
+        <member name="F:JadeSharp.JICPPacket._Data">
+            <summary>
+            The payload data itself, as a byte array
+            </summary>
+        </member>
+        <member name="F:JadeSharp.JICPPacket._IsTerminated">
+            <summary>
+            An optional identifier to check packet's state
+            </summary>
+        </member>
+        <member name="M:JadeSharp.JICPPacket.WriteTo(System.IO.Stream)">
+            <summary>
+            Write JICPPacket data into network stream
+            </summary>
+            <param name="stream">Current available network stream</param>
+        </member>
+        <member name="M:JadeSharp.JICPPacket.ReadFrom(System.Net.Sockets.NetworkStream)">
+            <summary>
+            Reads from available network stream a valid JICPPacket.
+            In case of error a special Error JICPPacket (with type code 100)
+            will be returned.
+            </summary>
+            <param name="stream">Current available network stream</param>
+        </member>
+        <member name="M:JadeSharp.JICPPacket.InternalReadFrom(System.Net.Sockets.NetworkStream)">
+            <summary>
+            Reads from available network stream a valid JICPPacket.
+            </summary>
+            <param name="stream">Current available network stream</param>
+        </member>
+        <member name="M:JadeSharp.JICPPacket.GenerateErrorPacket(System.String)">
+            <summary>
+            Create a special JICPPacket to propagate error information on
+            above layers during JICPPacket reading/writing.
+            </summary>
+            <param name="error">Error message to store inside created JICPPacket</param>
+        </member>
+        <member name="M:JadeSharp.JICPPacket.ReadFully(System.IO.Stream,System.Int32,System.Int32)">
+            <summary>
+            Reads specified number of bytes form the network stream and
+            returns read data in a byte array.
+            </summary>
+            <param name="stream"></param>
+            <param name="start"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JadeSharp.JICPPacket.ConvertData(System.Byte[])">
+            <summary>
+            Convert a data byte array into a string
+            </summary>
+            <param name="asciiBytes"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.TypeCode">
+            <summary>
+            Get the type code of current JICPPacket
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.IsErrorType">
+            <summary>
+            Get Error type flag of current JICPPacket
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.IsResponseType">
+            <summary>
+            Get Response type flag of current JICPPacket
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.IsCommandType">
+            <summary>
+            Get Command type flag of current JICPPacket
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.Data">
+            <summary>
+            Get or set the internal datas byte array of current JICPPacket
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.DataAsString">
+            <summary>
+            Get or set the internal datas as string
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.SessionID">
+            <summary>
+            Get or set the sessionID of this packet and adjust the info field
+            accordingly.
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.RecipientID">
+            <summary>
+            Get or set the recipientID of this packet and adjust the info field
+            accordingly.
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.Terminated">
+            <summary>
+            Get or set the TERMINATED_INFO flag in the info field.
+            </summary>
+        </member>
+        <member name="P:JadeSharp.JICPPacket.Riconnect">
+            <summary>
+            Get the validity of RECONNECT_INFO flag
+            </summary>
+        </member>
+        <member name="T:JadeSharp.Logger">
+            <summary>
+            Generic Logger based on text file
+            </summary>
+        </member>
+        <member name="M:JadeSharp.Logger.StartLog(System.String)">
+            <summary>
+            Initialize the Logger.
+            Logger file will be stored ALWAYS on My Documents folder
+            </summary>
+            <param name="filename">File name to be stored logger entries</param>
+            <returns></returns> 
+        </member>
+        <member name="M:JadeSharp.Logger.StartLog(System.String,JadeSharp.Logger.LogLevel)">
+            <summary>
+            Initialize the Logger with specified level
+            Logger file will be stored ALWAYS on My Documents folder
+            </summary>
+            <param name="filename">File name to be stored logger entries</param>
+            <param name="l">Start level for storing inserted entries</param>
+            <returns></returns>
+        </member>
+        <member name="M:JadeSharp.Logger.LogLine(System.String)">
+            <summary>
+            Insert a new entry in the Logger
+            </summary>
+            <param name="line">Entry to insert</param>
+            <returns>Result of the insertion: 
+            if 0 the entry has been inserted, 
+            if -1 hasn't been inserted, 
+            if 1 Log level was lower than the setted one</returns>
+        </member>
+        <member name="M:JadeSharp.Logger.LogLine(System.String,JadeSharp.Logger.LogLevel)">
+            <summary>
+            Insert a new entry in the Logger with Log level specification
+            </summary>
+            <param name="line">Entry to insert</param>
+            <param name="lev">Log level to use</param>
+            <returns>Result of the insertion: 
+            if 0 the entry has been inserted, 
+            if -1 hasn't been inserted, 
+            if 1 Log level was lower than the setted one</returns>
+        </member>
+        <member name="M:JadeSharp.Logger.StopLog">
+            <summary>
+            Stop and close the Logger.
+            After the call to this method, the Logger won't be used.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:JadeSharp.Logger.Level">
+            <summary>
+            Returns Setted Log Level of the Logger
+            </summary>
+        </member>
+        <member name="T:JadeSharp.NAgent">
+            <summary>
+            Summary description for NAgent.
+            </summary>
+        </member>
+        <member name="M:JadeSharp.NAgent.Connect">
+            <summary>
+            Connect JadeConnector to the network
+            </summary>
+        </member>
+        <member name="M:JadeSharp.NAgent.Disconnect">
+            <summary>
+            Close Jade connector
+            </summary>
+        </member>
+        <member name="M:JadeSharp.NAgent.Send(JadeSharp.ACLMessage)">
+            <summary>
+            Send an ACLMessage
+            </summary>
+            <param name="msg">ACL Message to send</param>
+        </member>
+        <member name="M:JadeSharp.NAgent.NextConversationID(System.String)">
+            <summary>
+            Generates new random conversation ID
+            </summary>
+            <param name="prepend">Prefix part of conversation ID to be generated</param>
+            <returns>New conversation ID</returns>
+        </member>
+        <member name="M:JadeSharp.NAgent.SendFrameMessage(JadeSharp.IFrame)">
+            <summary>
+            Sends a new IFrame message with a random conversation ID
+            </summary>
+            <param name="frame">Content to send</param>
+        </member>
+        <member name="M:JadeSharp.NAgent.SendFrameMessage(JadeSharp.IFrame,System.String)">
+            <summary>
+            Sends a new IFrame message
+            </summary>
+            <param name="frame">Content to send</param>
+            <param name="conversationId">Conversation ID</param>
+        </member>
+        <member name="M:JadeSharp.NAgent._connector_ConnectionEvent(JadeSharp.JadeConnector,JadeSharp.ConnectionEventArgs)">
+            <summary>
+            Handler of ConnectionEvent subscripted from JadeConnector
+            </summary>
+            <param name="sender">Subscripted JadeConnector</param>
+            <param name="args">Received connection event</param>
+        </member>
+        <member name="M:JadeSharp.NAgent._connector_ReceiveEvent(JadeSharp.JadeConnector,JadeSharp.ACLMessage)">
+            <summary>
+            Handler of ReceiveEvent subscripted from JadeConnector
+            </summary>
+            <param name="sender">Subscripted JadeConnector</param>
+            <param name="message">Received receive event</param>
+        </member>
+        <member name="T:JadeSharp.OrderedFrame">
+            <summary>
+            Summary description for OrederedFrame.
+            </summary>
+        </member>
+        <member name="M:JadeSharp.OrderedFrame.#ctor">
+            <summary>
+            Create an OrderedFrame without an unknown type-name.
+            </summary>
+        </member>
+        <member name="M:JadeSharp.OrderedFrame.#ctor(System.String)">
+            <summary>
+            Create an OrderedFrame with a given type-name.
+            </summary>
+            <param name="typeName">Type-name of the OrderedFrame to be created.</param>
+        </member>
+        <member name="P:JadeSharp.OrderedFrame.TypeName">
+            <summary>
+            Retrieve the type-name of this OrderedFrame.
+            </summary>
+            <returns>Type-name of this OrderedFrame</returns>
+        </member>
+        <member name="T:JadeSharp.QualifiedFrame">
+            <summary>
+            Summary description for QualifiedFrame.
+            </summary>
+        </member>
+        <member name="M:JadeSharp.QualifiedFrame.#ctor(System.String)">
+            <summary>
+            Create a QualifiedFrame with a given type-name.
+            </summary>
+            <param name="typeName">Type-name of the QualifiedFrame to be created.</param>
+        </member>
+        <member name="P:JadeSharp.QualifiedFrame.TypeName">
+            <summary>
+            Retrieve the type-name of this QualifiedFrame.
+            </summary>
+            <returns>Type-name of this QualifiedFrame</returns>
+        </member>
+        <member name="T:JadeSharp.UnixEpoch">
+            <summary>
+            Class to emulate Unix Time System.
+            In Unix, the zero-day begin at 1st January, 1970
+            </summary>
+        </member>
+        <member name="P:JadeSharp.UnixEpoch.StartOfEpoch">
+            <summary>
+            Returns initial Date and Time of Unix Epoch (1st January, 1970) tranformed
+            in a .Net DateTime object
+            </summary>
+        </member>
+        <member name="P:JadeSharp.UnixEpoch.TimeElapsed">
+            <summary>
+            Returns Unix Epoch style of current time expressed as UTC
+            </summary>
+        </member>
+        <member name="P:JadeSharp.UnixEpoch.TicksElapsed">
+            <summary>
+            Returns current time expressed as milliseconds
+            </summary>
+        </member>
+    </members>
+</doc>

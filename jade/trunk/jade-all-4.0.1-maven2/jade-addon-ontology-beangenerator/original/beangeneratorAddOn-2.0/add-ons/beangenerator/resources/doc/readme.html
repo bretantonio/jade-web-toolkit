@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Jade Ontology Bean Generator</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<style type="text/css">
+
+body {
+    background-color: #FFF;
+    font-family: "Verdana", "Arial", sans-serif;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 50em;
+    color: #000000;
+}
+
+table {
+}
+
+#header {
+}
+
+#header .left {
+    float: left;
+    width: 75%;
+}
+
+#header .right {
+    float: right;
+}
+
+#main {
+    border-top: #000 thin solid;
+    clear: both;
+}
+
+#body {
+    font-family: "Verdana", "Arial", sans-serif;
+    float: left;
+    width: 80%;
+    padding-top: 1em;
+}
+
+.box {
+    font-family: "Verdana", "Arial", sans-serif;
+    font-size: 80%;
+    background: #EEE;
+    border: #000 thin solid;
+    padding-left: .5em;
+    margin-bottom: 1em;
+}
+
+tt, pre {
+    font-size: 90%;
+}
+
+div.indent {
+    margin-left: 3em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a.nid {
+    font-family: Verdana, Trebuchet, Arial, Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: x-small;
+    text-decoration: none;
+    color: #C8A8FF;  /* light purple */
+}
+
+a.extlink {
+    border-width: thin;
+    border-style: none none dotted none;
+}
+
+a.create {
+    border-width: thin;
+    border-style: none none dashed none;
+}
+
+#monofont {
+    font-family: "Courier new", Courier, mono;
+    font-style: normal;
+    text-decoration: none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="header">
+<div class='left'>
+<h1>Jade Ontology Bean Generator</h1>
+</div>
+<div class='right'>
+<!-- img tag would go here if you have a logo -->
+<img src="ProtegeLogo.gif"/>
+</div>
+</div>
+
+<div id="main">
+<div id="body">
+
+
+<p>
+
+The ontology bean generator plugin is a <a href="http://protege.stanford.edu/" class="extlink">Prot&eacute;g&eacute;</a> Tab widget which generates java files representing an ontology that can be used with the 
+<a href="http://jade.tilab.com/" class="extlink">JADE</a>
+ environment. With the beangenerator tool you can generate FIPA/JADE compliant ontologies from RDF(S), XML and Prot&eacute;g&eacute; projects.
+</p>
+<p>
+<b> This plugin works with both Prot&eacute;g&eacute; frames and Prot&eacute;g&eacute; OWL ontologies. </b>
+</p>
+<h3>
+Installation
+</h3>
+<ul>
+<li>
+Download the add-on zip file and unzip it
+</li>
+</ul>
+<ul>
+<li>
+<p>Extract the content of file &nbsp; <span id="monofont">plugin/beangenerator-plugin.zip</span> &nbsp; into Prot&eacute;g&eacute; installation directory.</p>
+The operation creates the directories:
+<ul>
+<li>
+<span id="monofont"><i>protege_install_dir</i>/plugins/nl.uva.psy.swi.beangenerator</span> &nbsp; with the plugin files
+</li>
+<li>
+<span id="monofont"><i>protege_install_dir</i>/plugins/nl.uva.psy.swi.beangenerator/ontologies</span> &nbsp; with the basic JADE ontologies
+</li>
+<li>
+<span id="monofont"><i>protege_install_dir</i>/examples/jade-beangenerator</span> &nbsp; with some Prot&eacute;g&eacute; sample projects
+</li>
+</ul>
+</li>
+</ul>
+<h3>
+How to use the plugin
+</h3>
+<ul>
+<li>
+Open a new or existing Prot&eacute;g&eacute; project
+</li>
+</ul>
+<ul>
+<li>
+Include/import JADE Abstract Ontology from &nbsp; <span id="monofont"><i>protege_install_dir</i>/plugins/nl.uva.psy.swi.beangenerator/ontologies</span>
+<ul>
+<li>
+For Frames ontologies, include the <b>SimpleJADEAbstractOntology.pprj</b> into your project.
+</li>
+<li>
+For OWL ontologies, import the <b>OWLSimpleJADEAbstractOntology.owl</b> into your project.
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+Fill the ontology:
+<ul>
+<li>
+Create concepts by making subclasses of the class <tt> Concept </tt>, e.g. CD, Items.
+</li>
+<li>
+Create agentactions by making subclasses of the class <tt>  AgentAction  </tt>, e.g. <tt> Sell, Buy </tt> .
+</li>
+<li>
+create agents by making subclasses of the class <tt> AID </tt>, e.g. <tt> Seller, Buyer </tt>
+</li>
+<li>
+Create predicates by making subclasses of the class <tt> Predicate </tt>, e.g. <tt> Owns, Contains </tt>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+Go to menu of Prot&eacute;g&eacute;: Project-&gt;Configure... and select the OntologyBeanGeneratorTab checkbox
+</li>
+</ul>
+<ul>
+<li>
+Export the Java files
+<ul>
+<li>
+Select the OntologyBeanGenerator tab
+</li>
+<li>
+Specify (or select from the combobox) a package name, e.g. <tt> mypackage.onto </tt>
+</li>
+<li>
+Specify (or select from the combobox or from the [...] button) a location where the java files are to be created (make sure the directory exists) e.g. &nbsp; <span id="monofont">.../projects/mypackage/src/mypackage/onto</span>
+</li>
+<li>
+Specify (or select from the combobox) a ontology name: e.g. Newspaper
+</li>
+<li>
+Press the generate button (old generated files will be overwritten)
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+Use the exported Java files
+<ul>
+<li>
+Import the the ontology files into your agent project
+</li>
+<li>
+Register the ontology in the agent
+</li>
+<li>
+You (the agents) are ready to go!
+</li>
+</ul>
+</li>
+</ul>
+<h3>
+
+Limitations
+</h3>
+<ul>
+<li>
+
+The plugin has be initially developed for Frames ontologies and later adapted for OWL. There are features that have not been tested with OWL ontologies. In case you find bugs, please report them on Prot&eacute;g&eacute; discussion lists. We will fix them as time permits.
+</li>
+</ul>
+<ul>
+<li>
+
+For OWL ontologies, datatype properties should be declared as functional.
+</li>
+</ul>
+<h3>
+
+Screenshot from  MusicShopOntology example
+</h3>
+<p>
+
+<img alt="Bean generator screenshot" src="beangenerator_screenshot.jpg" />
+</p>
+<h3>
+
+Related links
+</h3>
+<ul>
+<li>
+
+<a href="http://protege.stanford.edu/" class="extlink">Prot&eacute;g&eacute;</a>
+
+</li>
+<li>
+
+Jade tutorial with examples on how to use the bean generator plugin: 
+<a href="http://jade.tilab.com/doc/CLOntoSupport.pdf" class="extlink">http://jade.tilab.com/doc/CLOntoSupport.pdf</a>
+
+</li>
+</ul>
+<p>
+
+<b> Author: </b> C.J. van Aart
+</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>
