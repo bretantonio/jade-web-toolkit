@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+  <!-- The root node: a message queue for a frozen JADE agent -->
+  <class name="jade.core.persistence.FrozenMessageQueue">
+
+    <id column="id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <!-- The (possibly remote) link to the frozen agent owning this message queue -->
+    <property name="agentFK"/>
+
+    <many-to-one name="agentIdentifier" cascade="all"/>
+
+    <!-- We use lazy fetching for the buffered messages list -->
+    <list name="bufferedMessages" lazy="true" cascade="all-delete-orphan">
+      <key column="owner"/>
+      <index column="idx"/>
+      <many-to-many column="elem" class="jade.lang.acl.ACLMessage"/>
+    </list>
+
+  </class>
+
+
+
+</hibernate-mapping>
