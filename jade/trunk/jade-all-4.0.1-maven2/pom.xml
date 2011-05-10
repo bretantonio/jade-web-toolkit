@@ -4,7 +4,7 @@
 	<groupId>jade-4.0.1-all-project</groupId>
 	<artifactId>jade-4.0.1-all-project</artifactId>
 	<name>JADE Web Toolkit (JWT)</name>
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.0.1-M1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>jade-core</module>
