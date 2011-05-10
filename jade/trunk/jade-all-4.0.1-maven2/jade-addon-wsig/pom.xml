@@ -64,13 +64,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.custardsource.parfait</groupId>
-			<artifactId>parfait-jmx</artifactId>
-			<version>0.2.7</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>soap</groupId>
 			<artifactId>soap</artifactId>
 			<version>2.3.1</version>
@@ -81,6 +74,20 @@
 			<groupId>org.eclipse</groupId>
 			<artifactId>xsd</artifactId>
 			<version>2.3.0-v200706262000</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>jmxtools</groupId>
+			<artifactId>jmxtools</artifactId>
+			<version>1.2.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>jmxri</groupId>
+			<artifactId>jmxri</artifactId>
+			<version>1.2.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
