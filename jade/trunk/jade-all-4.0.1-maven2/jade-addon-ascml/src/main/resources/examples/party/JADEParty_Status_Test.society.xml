@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	name="PartySociety Reloaded" package="examples.party"
+	description="This is a modification of the JADE-Party that ships with the JADE distribution. It was originally designed as a 'stress-test' and serves now as an example for the ASCML. The party starts when a minimum number of guests have arrived. The host selects one guest at random, and tells them a rumour. Then two other guests are selected at random and introduced to each other. Guests taking part in an introduction are afterwards repeatedly introduced to other guests. Guests knowing about the host's rumour tell it to other guests during an introduction. When a guest hears the rumour for the first time, it notifies the host. When all the guests have heard the rumour, the party ends and the guests leave.">
+	<imports>
+		<import>examples.party</import>
+	</imports>
+	
+	<agenttypes>
+		<agenttype name="examples.party.PartyGuest"/>
+		<agenttype name="examples.party.PartyHost"/>
+	</agenttypes>
+	
+	<societyinstances default="ToolTime-Party">
+
+		<societyinstance name="ToolTime-Party" description="The small party consists of one host and 1 referenced society-instance (the guest-pool).">
+			<agentinstances>
+				<agentinstance name="Tim Taylor" type="PartyHost">
+					<parametervalue name="guestsToWaitFor"> 10 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+			<societyinstanceref name="ref. Male Guestpool" societytype="PartySociety Reloaded" societyinstance="Male Guestpool"/>
+
+			<functional>
+				<dependency>
+					<agentinstance name="examples.party.PartySociety.Ally McBeal-Party.Ally McBeal"/>
+				</dependency>
+				<dependency>
+					<agenttype name="PartyGuest" quantity="9"/>
+				</dependency>
+				<invariant>Test-Variant</invariant>
+			</functional>
+		</societyinstance>
+
+		<societyinstance name="Male Guestpool" description="This pool consists of male-agent-guests">
+			<agentinstances>
+				<agentinstance name="Guest" type="PartyGuest" quantity="10" namingscheme="%N"/>
+			</agentinstances>
+			</societyinstance>
+	</societyinstances>
+</society>

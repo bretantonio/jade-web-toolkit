@@ -1,0 +1,61 @@
+<!--
+	<H3>The Environment observer agent allows to watch the environment.</H3>
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="EnvironmentObserver"
+	package="jadex.examples.cleanerworld.multi.environment">
+
+	<imports>
+		<import>jadex.examples.cleanerworld.multi.*</import>
+		<import>jadex.examples.cleanerworld.multi.ontology.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jade.core.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="dfcap" file="DF"/>
+	</capabilities>
+
+	<beliefs>
+		<belief name="environment" class="IEnvironment">
+ 			<fact>new Environment()</fact>
+		</belief>
+		<belief name="environmentagent" class="AID" />
+		<belief name="df" class="AID">
+<!--			<fact>
+				SUtil.createAID("df@vsisstaff3:1099/JADE",
+					"http://vsisstaff3:7778/acc")
+			</fact>
+-->		</belief>
+	</beliefs>
+
+	<goals>
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+		<achievegoalref name="goal_request">
+			<concrete ref="dfcap.goal_request"/>
+		</achievegoalref>
+	</goals>
+
+	<plans>
+		<plan name="updateenvironment" initial="true">
+			<body>new UpdateEnvironmentPlan()</body>
+		</plan>
+
+		<!-- Display the environment gui. -->
+		<plan name="gui" initial="true">
+			<body>new GUIPlan()</body>
+		</plan>
+	</plans>
+
+	<ontologies>
+		<ontology>CleanerOntology.getInstance()</ontology>
+	</ontologies>
+
+</agent>
+

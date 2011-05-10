@@ -1,0 +1,37 @@
+<!--
+	<H3>The manager agent for starting the application.</H3>
+
+	Can be used to start the cleaner world example with two
+	cleaner agents and one environement agent. The environmemnt
+	agent displays the current state of the cleaner world
+	whereas the cleaner show their own perception of the
+	world in a gui reflecting the actual beliefs.
+-->
+
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Manager"
+	package="jadex.examples.cleanerworld.multi.manager">
+
+	<imports>
+		<import>jadex.*</import>
+		<import>jadex.planlib.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="startcap" file="jadex.planlib.StartAgents"/>
+	</capabilities>
+
+	<goals>
+		<performgoalref name="start_agents">
+			<concrete ref="startcap.start_agents"/>
+		</performgoalref>
+		<initialgoal ref="start_agents">
+			<parameterset name="agentinfos">
+				<value>new StartAgentInfo("jadex.examples.cleanerworld.multi.environment.Environment", "Environment_%n", 2000, null)</value>
+				<value>new StartAgentInfo("jadex.examples.cleanerworld.multi.cleaner.Cleaner", "Cleaner_%n", 0, null)</value>
+				<value>new StartAgentInfo("jadex.examples.cleanerworld.multi.cleaner.Cleaner", "Cleaner_%n", 0, null)</value>
+			</parameterset>
+		</initialgoal>
+	</goals>
+</agent>

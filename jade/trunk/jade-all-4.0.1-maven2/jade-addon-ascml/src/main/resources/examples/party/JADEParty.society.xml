@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<society xmlns="http://intensivstation.informatik.rwth-aachen.de:8080/schema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema
+	                    http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="JADEPartySociety" package="examples.party"
+	description="This is a modification of the JADE-Party that ships with the JADE distribution. It was originally designed as a 'stress-test' and serves now as an example for the ASCML. The party starts when a minimum number of guests have arrived. The host selects one guest at random, and tells them a rumour. Then two other guests are selected at random and introduced to each other. Guests taking part in an introduction are afterwards repeatedly introduced to other guests. Guests knowing about the host's rumour tell it to other guests during an introduction. When a guest hears the rumour for the first time, it notifies the host. When all the guests have heard the rumour, the party ends and the guests leave.">
+-->
+<society name="JADEPartySociety" package="examples.party"
+	description="This is a modification of the JADE-Party that ships with the JADE distribution. It was originally designed as a 'stress-test' and serves now as an example for the ASCML. The party starts when a minimum number of guests have arrived. The host selects one guest at random, and tells them a rumour. Then two other guests are selected at random and introduced to each other. Guests taking part in an introduction are afterwards repeatedly introduced to other guests. Guests knowing about the host's rumour tell it to other guests during an introduction. When a guest hears the rumour for the first time, it notifies the host. When all the guests have heard the rumour, the party ends and the guests leave.">
+
+	<agenttypes>
+		<agenttype name="examples.party.JADEPartyGuest"/>
+		<agenttype name="examples.party.JADEPartyHost"/>
+	</agenttypes>
+	
+	<societyinstances default="ToolTime-Party">
+
+		<societyinstance name="ToolTime-Party" description="The small party consists of one host and 1 referenced society-instance (the guest-pool).">
+			<agentinstances>
+				<agentinstance name="Tim Taylor" type="JADEPartyHost">
+					<parameter name="guestsToWaitFor">
+ 						<value> 10 </value>
+					</parameter>
+				</agentinstance>
+			</agentinstances>
+			<!--
+			<societyinstancerefs>
+				<societyinstanceref name="ref. Male Guestpool" societytype="JADEPartySociety" societyinstance="Male Guestpool">
+					<dependencies>
+						<-
+							this dependency means an agent with agentType 'PartyHost' has to be started first,
+							then the referenced-societyinstance.
+							<agenttype name="PartyHost" quantity="1"></agenttype>
+						>
+						<agenttypedependency name="JADEPartyHost" quantity="1"/>
+					</dependencies>
+				</societyinstanceref>
+			</societyinstancerefs>
+			-->
+		</societyinstance>
+
+		<!--
+		<societyinstance name="Remote-Party" description="This party starts a local Party-Host und 2 remote society-instances.">
+
+			<agentinstances>
+				<agentinstance name="Paracelsus" type="PartyHost">
+					<parametervalue name="guestsToWaitFor"> 20 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+
+			<societyinstanceref name="female Guestpool" societytype="PartySociety" societyinstance="Female Guestpool">
+				<launcher name="ascml@algorithma.de:1099/JADE">
+					<address> http://algorithma.de:7778/acc </address>
+				</launcher>
+			</societyinstanceref>
+			
+			<societyinstanceref name="male Guestpool" societytype="PartySociety" societyinstance="Male Guestpool">
+				<launcher name="ascml@algorithma.de:1099/JADE">
+					<address> http://algorithma.de:7778/acc </address> <- remote computer -
+				</launcher>
+			</societyinstanceref>
+			
+		</societyinstance>
+		-->
+
+		<societyinstance name="Male Guestpool" description="This pool consists of male-agent-guests">
+			<agentinstances>
+				<agentinstance name="Heinz" type="JADEPartyGuest"/>
+				<agentinstance name="Franz" type="JADEPartyGuest"/>
+				<agentinstance name="Klaus" type="JADEPartyGuest"/>
+				<agentinstance name="Guenter" type="JADEPartyGuest"/>
+				<agentinstance name="Werner" type="JADEPartyGuest"/>
+				<agentinstance name="Norbert" type="JADEPartyGuest"/>
+				<agentinstance name="Heinrich" type="JADEPartyGuest"/>
+				<agentinstance name="Alfred" type="JADEPartyGuest"/>
+				<agentinstance name="Dietrich" type="JADEPartyGuest"/>
+				<agentinstance name="Hubert" type="JADEPartyGuest"/>
+			</agentinstances>
+
+			<!--
+			<societyinstanceref name="some other pool" societytype="PartySociety" societyinstance="Default">
+				<launcher name="ascml2@x31:6000/JADE">
+					<address> http://192.168.0.170:6010/acc </address>
+				</launcher>
+			</societyinstanceref>
+	        -->
+		</societyinstance>
+		
+		<!--<societyinstance name="Female Guestpool" description="This pool consists of female-agent-guests">
+			<agentinstances>
+				<agentinstance name="Sabine" type="JADEPartyGuest"/>
+				<agentinstance name="Ingrid" type="JADEPartyGuest"/>
+				<agentinstance name="Ilse" type="JADEPartyGuest"/>
+				<agentinstance name="Annegret" type="JADEPartyGuest"/>
+				<agentinstance name="Gretel" type="JADEPartyGuest"/>
+				<agentinstance name="Monika" type="JADEPartyGuest"/>
+				<agentinstance name="Theresa" type="JADEPartyGuest"/>
+				<agentinstance name="Hilde" type="JADEPartyGuest"/>
+				<agentinstance name="Margarete" type="JADEPartyGuest"/>
+				<agentinstance name="Gesine" type="JADEPartyGuest"/>
+			</agentinstances>
+		</societyinstance>
+		-->
+	</societyinstances>
+</society>

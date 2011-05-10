@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="Jadex-Cleanerworld-Cleaner" package="jadex.runtime.impl" type="jadex" icon=".\\examples\\jadex\\cleanerworld\\images\\cleanerworld20x20.png" class="JadeWrapperAgent" description="The agent mainly has 3 top-level goals: 1.Searching for waste (perform lookforwaste). 2.Cleaning up waste (achieve cleanup). 3.Keep the battery loaded (maintain battery loaded). To achieve this goals it uses various subgoals for decomposition of the overall tasks.">
+       
+	<parameters>
+		<parameter name="descriptionFile" type="String" optional="false" description="Jadex' agent-description file">
+			<value>.\examples\jadex\cleanerworld\multi\cleaner\Cleaner.agent.xml</value>
+		</parameter>
+	</parameters>
+
+</agent>

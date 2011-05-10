@@ -1,0 +1,182 @@
+<!--
+	<H3>The clever prey coordinates eating and fleeing.</H3>
+
+	The clever prey uses three goal types:<br>
+	- Running away from hunters (maintain keep alone).<br>
+	- Eating food if discovered (achieve eat_food).<br>
+	- Searching for food (perform wander around).
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="CleverPrey"
+	package="jadex.examples.hunterprey.creature">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.examples.hunterprey.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="actsensecap" file="jadex/examples/hunterprey/creature/actsense/Creature.capability.xml"/>
+	</capabilities>
+
+	<beliefs>
+
+		<!-- The creature -->
+		<belief name="my_self" class="Creature">
+			<assignto ref="actsensecap.my_self"/>
+			<fact>new Prey($agent.jadeAgent.getLocalName(),
+ 					$agent.jadeAgent.getAID(), new Location(10,10))</fact>
+		</belief>
+
+		<!-- The current vision. -->
+		<beliefref name="vision">
+			<concrete ref="actsensecap.vision"/>
+		</beliefref>
+
+		<!-- Is the prey in danger. -->
+		<belief name="is_indanger" class="boolean">
+			<fact evaluationmode="dynamic">
+				$beliefbase.vision!=null &amp;&amp;
+				(select $object
+ 				from $beliefbase.vision.getObjects()
+				where $object instanceof Hunter).size()>0
+			</fact>
+		</belief>
+
+		<!-- Vorbidden food. -->
+		<beliefset name="forbidden_food" class="Food" />
+
+		<!-- The known hunters. -->
+		<beliefsetref name="hunters">
+			<concrete ref="actsensecap.hunters" />
+		</beliefsetref>
+
+		<!-- The know obstacles. -->
+		<beliefsetref name="obstacles">
+			<concrete ref="actsensecap.obstacles"/>
+		</beliefsetref>
+		
+		<!-- The know food. -->
+		<beliefsetref name="food">
+			<concrete ref="actsensecap.food"/>
+		</beliefsetref>
+		
+	</beliefs>
+
+	<goals>
+
+		<maintaingoal name="keep_alone" exclude="never">
+			<deliberation>
+				<inhibits ref="eat_food" inhibit="when_in_process" />
+				<inhibits ref="wander_around" inhibit="when_in_process" />
+			</deliberation>
+			<maintaincondition>
+				!$beliefbase.is_indanger
+			</maintaincondition>
+		</maintaingoal>
+
+		<achievegoal name="eat_food">
+			<parameter name="food" class="Food">
+				<value>$food</value>
+			</parameter>
+			<unique/>
+			<bindings>
+				<binding name="food">
+					$beliefbase.food
+				</binding>
+			</bindings>
+			<creationcondition>
+				<!--$goalbase.getGoals("eat_food").length==0
+				&amp;&amp;--> $beliefbase.food.length>0
+				&amp;&amp; !$beliefbase.getBeliefSet("forbidden_food").containsFact($food)
+			</creationcondition>
+			<deliberation>
+				<inhibits ref="wander_around"/>
+				<inhibits ref="eat_food">
+					$beliefbase.my_self.getDistance($goal.food)
+					&lt; $beliefbase.my_self.getDistance($ref.food)
+				</inhibits>
+			</deliberation>
+		</achievegoal>
+
+		<performgoal name="wander_around" retry="true" exclude="never">
+		</performgoal>
+
+		<achievegoal name="goto_location">
+			<parameter name="location" class="Location"/>
+		</achievegoal>
+
+		<achievegoalref name="move">
+			<concrete ref="actsensecap.move"/>
+		</achievegoalref>
+
+		<achievegoalref name="eat">
+			<concrete ref="actsensecap.eat"/>
+		</achievegoalref>
+
+		<initialgoal name="wandergoal" ref="wander_around"/>
+		<initialgoal name="escapegoal" ref="keep_alone"/>
+	</goals>
+
+	<!-- The plans. -->
+	<plans>
+		
+		<!-- Wander around plan. -->
+		<plan name="gotoloc">
+			<body>new GotoLocationPlan()</body>
+			<trigger>
+				<goal ref="goto_location"/>
+			</trigger>
+		</plan>
+		
+		<!-- Wander around plan. -->
+		<plan name="wander">
+			<body>new WanderAroundPlan()</body>
+			<trigger>
+				<goal ref="wander_around"/>
+			</trigger>
+		</plan>
+
+		<!-- Dumb move plan. -->
+		<plan name="escape">
+			<body>new EscapePreyPlan()</body>
+			<trigger>
+				<goal ref="keep_alone"/>
+			</trigger>
+		</plan>
+		
+		<!-- Dumb move plan. -->
+		<plan name="eatfood">
+			<body>new EatFoodPlan()</body>
+			<trigger>
+				<goal ref="eat_food"></goal>
+			</trigger>
+		</plan>
+		
+		<plan name="removeforbiddenfood">
+ 			<body>new RemoveForbiddenFoodPlan()</body>
+			<trigger>
+				<condition>
+					true
+					<affected eventtype="SystemEvent.FACT_CHANGED" beliefref="vision"/>
+				</condition>
+			</trigger>
+		</plan>
+
+	</plans>
+
+	<expressions>
+		<conditionref name="has_vision">
+			<concrete ref="actsensecap.has_vision"/>
+		</conditionref>
+	</expressions>
+
+	<properties>
+		<!--<property name="logging.level">Level.FINE</property>-->
+		<property name="debugging">false</property>
+	</properties>
+
+
+</agent>
+

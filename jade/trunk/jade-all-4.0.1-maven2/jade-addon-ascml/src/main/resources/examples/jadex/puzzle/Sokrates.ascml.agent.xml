@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="Jadex-Puzzle-Sokrates" package="jadex.runtime.impl" class="JadeWrapperAgent" type="jadex" icon=".\\examples\\jadex\\puzzle\\images\\red_piece.png" description="This agent that plays a board game for one player. This example is a Jadex adaption of the original JACK(TM) puzzle example and was used for performance comparisons between both platforms (cf. readme.txt). This version shows how the puzzle works with a graphical board and uses a delay between the moves. Measurements were done with the Benchmark.agent in this package.">
+       
+	<parameters>
+		<parameter name="descriptionFile" type="String" optional="false" description="Jadex' agent-description file">
+			<value>.\examples\jadex\puzzle\Sokrates.agent.xml</value>
+		</parameter>
+	</parameters>
+
+</agent>
