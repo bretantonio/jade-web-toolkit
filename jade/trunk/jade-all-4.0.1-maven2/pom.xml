@@ -34,6 +34,7 @@
 		<module>jade-addon-jsp-tag-library</module>
 		<module>jade-addon-jade2xback</module>
 		<module>jade-leap</module>
+		<module>jade-addon-trusted-agents</module>
 	</modules>
 	<properties>
 		<encodingtype>utf-8</encodingtype>
