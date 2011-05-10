@@ -3,7 +3,7 @@
   <parent>
     <artifactId>jade-4.0.1-all-project</artifactId>
     <groupId>jade-4.0.1-all-project</groupId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.1-M1-SNAPSHOT</version>
   </parent>
   <artifactId>jade-addon-jadesharp</artifactId>
 <dependencies>
