@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="MathFunctions" targetNamespace="urn:tests.webservice.test" xmlns:impl="urn:tests.webservice.test" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:documentation>MathFunctions webservice documentation</wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:tests.webservice.test">
+      <xsd:annotation/>
+      <xsd:complexType name="complex">
+        <xsd:sequence>
+          <xsd:element name="real" type="xsd:float"/>
+          <xsd:element name="imaginary" type="xsd:float"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="sumComplex">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="firstComplexElement" type="impl:complex"/>
+            <xsd:element name="secondComplexElement" type="impl:complex"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sumComplexResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sumComplexReturn" type="impl:complex"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sum">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="firstElement" type="xsd:float">
+							<xsd:annotation>
+            		<xsd:documentation>Input parameter firstElement documentation</xsd:documentation>
+            	</xsd:annotation>
+          	</xsd:element>                
+            <xsd:element name="secondElement" type="xsd:float">
+							<xsd:annotation>
+            		<xsd:documentation>Input parameter secondElement documentation</xsd:documentation>
+            	</xsd:annotation>
+          	</xsd:element>                
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sumResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sumReturn" type="xsd:float">
+							<xsd:annotation>
+            		<xsd:documentation>Return parameter sumReturn documentation</xsd:documentation>
+            	</xsd:annotation>
+          	</xsd:element>                
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="sumResponse">
+    <wsdl:part name="parameters" element="impl:sumResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sumRequest">
+    <wsdl:part name="parameters" element="impl:sum"/>
+  </wsdl:message>
+  <wsdl:message name="sumComplexRequest">
+    <wsdl:part name="parameters" element="impl:sumComplex"/>
+  </wsdl:message>
+  <wsdl:message name="sumComplexResponse">
+    <wsdl:part name="parameters" element="impl:sumComplexResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="MathFunctionsPort">
+    <wsdl:operation name="sumComplex">
+    	<wsdl:documentation>Operation sumComplex documentation</wsdl:documentation>
+      <wsdl:input message="impl:sumComplexRequest"/>
+      <wsdl:output message="impl:sumComplexResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sum">
+      <wsdl:input message="impl:sumRequest"/>
+      <wsdl:output message="impl:sumResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MathFunctionsBinding" type="impl:MathFunctionsPort">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="sumComplex">
+      <wsdlsoap:operation soapAction="urn:tests.webservice.testAction"/>
+      <wsdl:input>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sum">
+    	<wsdl:documentation>Operation sum documentation</wsdl:documentation>
+      <wsdlsoap:operation soapAction="urn:tests.webservice.testAction"/>
+      <wsdl:input>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MathFunctionsService">
+  	<wsdl:documentation>MathFunctions service documentation</wsdl:documentation>
+    <wsdl:port name="MathFunctionsPort" binding="impl:MathFunctionsBinding">
+    	<wsdl:documentation>MathFunctions port documentation</wsdl:documentation>
+      <wsdlsoap:address location="http://localhost:2000/axis/services/MathFunctionsPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,42 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MathFunctionsService WSDL service -->
+
+  <service name="MathFunctionsPort" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="urn:tests.webservice.test"/>
+      <parameter name="wsdlServiceElement" value="MathFunctionsService"/>
+      <parameter name="schemaUnqualified" value="urn:tests.webservice.test"/>
+      <parameter name="wsdlServicePort" value="MathFunctionsPort"/>
+      <parameter name="className" value="webservice.math.MathFunctionsBindingImpl"/>
+      <parameter name="wsdlPortType" value="MathFunctionsPort"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="sumComplex" qname="operNS:sumComplex" xmlns:operNS="urn:tests.webservice.test" returnQName="sumComplexReturn" returnType="rtns:complex" xmlns:rtns="urn:tests.webservice.test" soapAction="urn:tests.webservice.testAction" >
+        <parameter qname="firstComplexElement" type="tns:complex" xmlns:tns="urn:tests.webservice.test"/>
+        <parameter qname="secondComplexElement" type="tns:complex" xmlns:tns="urn:tests.webservice.test"/>
+      </operation>
+      <operation name="sum" qname="operNS:sum" xmlns:operNS="urn:tests.webservice.test" returnQName="sumReturn" returnType="rtns:float" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="urn:tests.webservice.testAction" >
+        <parameter qname="firstElement" type="tns:float" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="secondElement" type="tns:float" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="sum sumComplex"/>
+
+      <typeMapping
+        xmlns:ns="urn:tests.webservice.test"
+        qname="ns:complex"
+        type="java:webservice.math.Complex"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
