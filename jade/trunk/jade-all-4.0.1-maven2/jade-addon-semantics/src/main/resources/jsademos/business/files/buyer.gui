@@ -1,0 +1,15 @@
+
+#message# request print # request ((action (agent-identifier :name seller@test) (PRINT :content helloWorld)) )
+
+#message# request promise # request ((action (agent-identifier :name seller@test) (PROMISE_THAT :creditor (agent-identifier :name buyer@test) :delay 7000 :institution b2b :what (fact (price phone 25)) ) ))
+
+#message# request test catalogue # request ((action (agent-identifier :name seller@test) (SEND_CATALOGUE :client (agent-identifier :name buyer@test) :contentOfCatalogue (set (costs phone 25) (costs watch 150) (costs banana 1)) ) ))
+
+message# Inform PHI # inform (PHI)
+
+image# buyer
+
+receiver# seller@test
+receiver# b2b@test
+receiver# enterpriseA@test
+

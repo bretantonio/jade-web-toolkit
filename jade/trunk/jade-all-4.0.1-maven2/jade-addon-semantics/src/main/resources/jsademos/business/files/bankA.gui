@@ -1,0 +1,15 @@
+
+
+message# Agreement # inform ((message (agent-identifier :name mediator@test) (fact (document (agent-identifier :name bankAagent@test) (agent-identifier :name mediator@test) (agreement :acceptedIndicator "accepted"))) ))
+
+#gui#message# Disagreement # inform ((message (agent-identifier :name mediator@test) (fact (document (agent-identifier :name bankAagent@test) (agent-identifier :name mediator@test) (agreement :acceptedIndicator "rejected"))) ))
+
+#gui#message# Physical payment # inform ( (done (action (agent-identifier :name bankAagent@test) (PAY_BANK :amount 299.0 :creditorAgent (agent-identifier :name seller@test) :creditorBank (agent-identifier :name bankBagent@test) :debtorAgent (agent-identifier :name buyer@test) :debtorBank (agent-identifier :name bankAagent@test) :paymentNote (paymentNote :amount 299.0 :creditorAID (agent-identifier :name seller@test) :creditorBankAID (agent-identifier :name bankBagent@test) :debtorAID (agent-identifier :name buyer@test) :debtorBankAID (agent-identifier :name bankAagent@test) :id "PAY_NOTE_0" :invoiceReference "INV_0" :issueDateTime 20080702T165055779))) true))
+
+message# Payment advice # inform ((message (agent-identifier :name intermediary@test) (fact (done (action (agent-identifier :name bankAagent@test) (SEND_PAYMENT_ADVICE :paymentAdvice (paymentAdvice :amount 299.0 :creditorAID (agent-identifier :name seller@test) :debtorAID (agent-identifier :name buyer@test) :id "PAY_ADV_0" :invoiceReference "INV_0" :issueDateTime 20080723T115702397 :paymentDateTime 20080723T115654620) :supplier (agent-identifier :name intermediary@test))) true)) ))
+
+image# bankA
+
+receiver# bankAagent@test
+#gui#receiver# bankB@test
+#gui#receiver# enterpriseA@test

@@ -1,0 +1,10 @@
+
+
+#gui#message# Physical payment note # inform ((done (action (agent-identifier :name bankB@test) (SEND_PAYMENT_NOTE :creditor (agent-identifier :name seller@test) :paymentNote (paymentNote :amount 299.0 :creditorAID (agent-identifier :name seller@test) :creditorBankAID (agent-identifier :name bankBagent@test) :debtorAID (agent-identifier :name buyer@test) :debtorBankAID (agent-identifier :name bankAagent@test) :id "PAY_NOTE_0" :invoiceReference "INV_0" :issueDateTime 20080702T165055779))) true))
+
+
+
+image# bankB
+
+#receiver# bankBagent@test
+#receiver# enterpriseB@test

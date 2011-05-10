@@ -1,0 +1,31 @@
+(holder (agent-identifier :name buyer@test) roleBuyer)
+(holder (agent-identifier :name seller@test) roleSeller)
+(holder (agent-identifier :name mediator@test) roleMediator)
+(holder (agent-identifier :name bank@test) roleBank)
+(holder (agent-identifier :name b2b@test) roleInstitution)
+(holder (agent-identifier :name customerBank@test) roleBank)
+(holder (agent-identifier :name supplierBank@test) roleBank)
+(holder (agent-identifier :name intermediary@test) roleIntermediary)
+
+# default role for agents whose role is not specified = member
+
+
+
+### POWERS
+## now expressed as institutional effects of actions, in b2b.actions
+
+
+# initial rules (countas)
+
+### COUNTAS
+# institutional prices count as an obligation for the seller to believe them
+# how to impose a precondition on a countas ?? 
+# premise =(and (D b2b holder...) (price...) ) ??
+
+(countas b2b (price ??_seller ??_buyer ??_item ??_price) (O (B ??_seller (price ??_seller ??_buyer ??_item ??_price))) )
+
+
+# what the mediator or the institution says counts as grounded at the institution
+#(countas b2b (and (holder ??_sender roleMediator) (B ??_sender ??_phi) ) (D b2b ??_phi) )
+#(countas b2b (B (agent-identifier :name b2b@test) ??_phi) (D b2b ??_phi) )
+# ???

@@ -1,0 +1,1 @@
+(receiptAdvice :customerAID (agent-identifier :name buyer@test) :id \"REC_ADV_0\" :issueDateTime 20080724T101448491 :orderReference \"PUR_ORD_0\" :receiptDateTime 20080724T101441491 :receivedItems (set) :supplierAID (agent-identifier :name seller@test))
