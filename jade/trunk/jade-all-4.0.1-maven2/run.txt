@@ -1,0 +1,4 @@
+E:\dskim\eclipse-SDK-3.6.2-win32-x86_64\eclipse\workspace\jade-all-4.0.1-maven2\target\jade-4.0.1-all-project\4.0.1-SNAPSHOT\jade-core>
+java -classpath .;jade-core-4.0.1-SNAPSHOT.jar jade.Boot -gui
+java -classpath .;jade-core-4.0.1-SNAPSHOT.jar jade.Boot -gui -nomtp -gui Tizio:demo.MeetingScheduler.MeetingSchedulerAgent;Caio:demo.MeetingScheduler.MeetingSchedulerAgent
+pause
