@@ -15,9 +15,9 @@
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
-  		<groupId>jade-4.0.1-all-project</groupId>
+  		<groupId>${project.groupId}</groupId>
   		<artifactId>jade-core</artifactId>
-  		<version>4.0.1-SNAPSHOT</version>
+  		<version>${project.version}</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
