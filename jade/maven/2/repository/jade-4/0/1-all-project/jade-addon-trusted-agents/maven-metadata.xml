@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-4.0.1-all-project</groupId>
+  <artifactId>jade-addon-trusted-agents</artifactId>
+  <versioning>
+    <versions>
+      <version>4.0.1-M1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20110511072519</lastUpdated>
+  </versioning>
+</metadata>
