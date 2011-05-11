@@ -40,9 +40,6 @@
 		<encodingtype>utf-8</encodingtype>
 		<jdkversion>1.6</jdkversion>
 	</properties>
-	<!-- <scm> <connection>scm:svn:http://jade-web-toolkit.googlecode.com/svn</connection> 
-		<developerConnection>scm:svn:https://jade-web-toolkit.googlecode.com/svn</developerConnection> 
-		<url>https://jade-web-toolkit.googlecode.com/svn</url> </scm> -->
 	<description>JADE(Java Agent DEvelopment Framework) and WADE(Workflows and Agents Development Environment) based experimental project</description>
 	<url>http://code.google.com/p/jade-web-toolkit/</url>
 	<issueManagement>
@@ -54,11 +51,8 @@
 		<url>http://www.facebook.com/abreqadhabra</url>
 	</organization>
 	<repositories>
-		<!-- <repository> <id>jade-web-toolkit-maven2-repo</id> <name>JWT Maven 
-			Repository</name> <url>dav:https://jade-web-toolkit.googlecode.com/svn/trunk/maven/2</url> 
-			</repository> -->
 		<repository>
-			<id>jwt-mvn</id>
+			<id>jade-web-toolkit-mvn</id>
 			<url>http://jade-web-toolkit.googlecode.com/svn/trunk/repo</url>
 		</repository>
 		<repository>
@@ -80,8 +74,14 @@
 				<version>1.9</version>
 			</extension>
 		</extensions>
-
-		
 	</build>
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>jade-web-toolkit-maven2-repo</id>
+			<url>svn:https://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository/</url>
+		</repository>
+	</distributionManagement>
+
 
 </project>
