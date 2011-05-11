@@ -1,0 +1,5 @@
+#surefire
+#Wed May 11 17:40:06 KST 2011
+user.dir=C\:\\dskim\\eclipse-jee-helios-SR2-win32\\workspace_mvn\\com.abreqadhabra.agent\\com.abreqadhabra.agent.jade
+localRepository=C\:\\dskim\\eclipse-jee-helios-SR2-win32\\workspace_mvn\\repository
+basedir=C\:\\dskim\\eclipse-jee-helios-SR2-win32\\workspace_mvn\\com.abreqadhabra.agent\\com.abreqadhabra.agent.jade
