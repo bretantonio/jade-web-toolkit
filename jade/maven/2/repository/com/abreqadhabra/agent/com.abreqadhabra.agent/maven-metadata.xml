@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.abreqadhabra.agent</groupId>
+  <artifactId>com.abreqadhabra.agent</artifactId>
+  <versioning>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20110511083841</lastUpdated>
+  </versioning>
+</metadata>
