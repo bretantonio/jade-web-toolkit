@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-addon-fipa-bit-efficient-aclcodec</groupId>
+  <artifactId>jade-addon-fipa-bit-efficient-aclcodec</artifactId>
+  <versioning>
+    <release>4.0.1-m1-snapshot</release>
+    <versions>
+      <version>4.0.1-m1-snapshot</version>
+    </versions>
+    <lastUpdated>20110513033936</lastUpdated>
+  </versioning>
+</metadata>
