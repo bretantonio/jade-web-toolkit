@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-addon-wsig</groupId>
+  <artifactId>jade-addon-wsig</artifactId>
+  <versioning>
+    <release>4.0.1-m1-snapshot</release>
+    <versions>
+      <version>4.0.1-m1-snapshot</version>
+    </versions>
+    <lastUpdated>20110513163539</lastUpdated>
+  </versioning>
+</metadata>
