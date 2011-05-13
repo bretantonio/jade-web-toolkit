@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.abreqadhabra.agent</groupId>
+	<artifactId>com.abreqadhabra.agent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>com.abreqadhabra.agent.jade</module>
+	</modules>
+	<properties>
+		<encodingtype>utf-8</encodingtype>
+		<jdkversion>1.6</jdkversion>
+	</properties>
+	<repositories>
+		<repository>
+			<id>jade-web-toolkit-mvn</id>
+			<url>http://jade-web-toolkit.googlecode.com/svn/trunk/repo</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+		<repository>
+			<id>hibernate</id>
+			<name>Maven Repository for hibernate </name>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.jvnet.wagon-svn</groupId>
+				<artifactId>wagon-svn</artifactId>
+				<version>1.9</version>
+			</extension>
+		</extensions>
+	</build>
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>jade-web-toolkit-maven2-repo</id>
+			<url>svn:https://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository/</url>
+		</repository>
+	</distributionManagement>
+
+
+</project>
