@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-addon-orbacus-mtp</groupId>
+  <artifactId>jade-addon-orbacus-mtp</artifactId>
+  <versioning>
+    <release>4.0.1-m1-snapshot</release>
+    <versions>
+      <version>4.0.1-m1-snapshot</version>
+    </versions>
+    <lastUpdated>20110513052121</lastUpdated>
+  </versioning>
+</metadata>
