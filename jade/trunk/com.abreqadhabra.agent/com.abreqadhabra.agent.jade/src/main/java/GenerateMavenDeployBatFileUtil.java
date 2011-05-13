@@ -12,7 +12,7 @@ public class GenerateMavenDeployBatFileUtil {
 
 	/**
 	 * Demonstrate use.
-	 * 
+	 *
 	 * @param aArgs
 	 *            - <tt>aArgs[0]</tt> is the full name of an existing directory
 	 *            that can be read.
@@ -23,7 +23,8 @@ public class GenerateMavenDeployBatFileUtil {
 		System.out.println("Current dir : " + dir1.getCanonicalPath());
 
 //		String filePath = "C:/dskim/eclipse-jee-helios-SR2-win32/workspace_mvn/jade/trunk/jade-all-4.0.1-maven2/target/jade-4.0.1-all-project/4.0.1-M1-SNAPSHOT/dist/jade-core";
-		String filePath = "C:/dskim/eclipse-jee-helios-SR2-win32/workspace_mvn/jade/trunk/jade-all-4.0.1-maven2/target/jade-4.0.1-all-project/4.0.1-M1-SNAPSHOT/dist/";
+// 		String filePath = "C:/dskim/eclipse-jee-helios-SR2-win32/workspace_mvn/jade/trunk/jade-all-4.0.1-maven2/target/jade-4.0.1-all-project/4.0.1-M1-SNAPSHOT/dist/";
+		String filePath = "E:/dskim/eclipse/workspace/jade/trunk/jade-all-4.0.1-maven2/target/jade-4.0.1-all-project/4.0.1-M1-SNAPSHOT/dist/";
 
 		File startingDirectory = new File(filePath);
 		List<File> files = GenerateMavenDeployBatFileUtil
@@ -38,7 +39,7 @@ public class GenerateMavenDeployBatFileUtil {
 
 			if ("jar".equals(fileExtension)) {
 				//System.out.print(file.getName()+"\t");
-				
+
 				//regex
 				String regx = "-[0-9]"; // substring comosed of Eng. alphabet
 
@@ -49,14 +50,14 @@ public class GenerateMavenDeployBatFileUtil {
 //				}
 				if(mat.find()){
 				int indexOfVersion=  fileNameWithoutExtension.indexOf(mat.group(0));
-				
+
 				String artifactId = fileNameWithoutExtension.substring(0, indexOfVersion);
 				String version =fileNameWithoutExtension.substring(indexOfVersion+1, fileLength);
 				//System.out.println(arifactId +"\t"+version);
 				System.out.println("mvn deploy:deploy-file -DgroupId="+artifactId+" -DartifactId="+artifactId+" -Dversion="+version+" -Dpackaging=jar -Dfile="+file.getAbsolutePath()+" -DrepositoryId=jade-web-toolkit-maven2-repo -Durl=svn:https://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository");
 				}
-				
-//				
+
+//
 //				int indexOfseperate = fileNameWithoutExtension.indexOf(".");
 //				if(indexOfseperate==-1){
 //					indexOfseperate = fileLength;
@@ -91,7 +92,7 @@ public class GenerateMavenDeployBatFileUtil {
 	/**
 	 * Recursively walk a directory tree and return a List of all Files found;
 	 * the List is sorted using File.compareTo().
-	 * 
+	 *
 	 * @param aStartingDir
 	 *            is a valid directory, which can be read.
 	 */
