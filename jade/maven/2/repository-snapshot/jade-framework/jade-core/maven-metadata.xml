@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-framework</groupId>
+  <artifactId>jade-core</artifactId>
+  <versioning>
+    <versions>
+      <version>0.0.1-M1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20110514111000</lastUpdated>
+  </versioning>
+</metadata>
