@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- The Basics -->
+	<groupId>jade-framework</groupId>
+	<artifactId>jade-framework</artifactId>
+	<version>4.0.1-M1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<dependencies />
+	<!-- <parent/> -->
+	<dependencyManagement />
+	<modules>
+		<!-- JADE -->
+		<module>jade-core</module>
+		<!-- JADE Add-ons -->
+
+	</modules>
+	<properties>
+		<encodingtype>utf-8</encodingtype>
+		<jdkversion>1.6</jdkversion>
+	</properties>
+
+	<!-- Build Settings -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.maven-svn-wagon</groupId>
+						<artifactId>maven-svn-wagon</artifactId>
+						<version>1.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+	<reporting />
+
+	<!-- More Project Information -->
+	<name>JADE Web Toolkit (JWT)</name>
+	<description>JADE(Java Agent DEvelopment Framework) and WADE(Workflows and Agents Development Environment) based experimental project</description>
+	<url>http://code.google.com/p/jade-web-toolkit/</url>
+	<inceptionYear />
+	<licenses />
+	<organization>
+		<name>Kim, Dong-Sup</name>
+		<url>http://www.facebook.com/abreqadhabra</url>
+	</organization>
+	<developers />
+	<contributors />
+
+	<!-- Environment Settings -->
+	<issueManagement>
+		<system>JWT By Google Code</system>
+		<url>http://code.google.com/p/jade-web-toolkit/issues/list</url>
+	</issueManagement>
+	<ciManagement />
+	<mailingLists />
+	<scm />
+	<prerequisites />
+	<repositories>
+		<repository>
+			<id>jade-web-toolkit</id>
+			<url>http://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository</url>
+		</repository>
+		<repository>
+			<id>jade-web-toolkit-snapshot</id>
+			<url>http://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository-snapshot</url>
+		</repository>
+	</repositories>
+	<pluginRepositories />
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>release-jade-web-toolkit-maven2-repository</id>
+			<url>svn:https://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot-jade-web-toolkit-maven2-repository</id>
+			<url>svn:https://jade-web-toolkit.googlecode.com/svn/jade/maven/2/repository-snapshot</url>
+			<uniqueVersion>true</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+	<profiles />
+</project>
