@@ -20,6 +20,12 @@
         <value>0.0.1-M1-20110514.110733-1</value>
         <updated>20110514110733</updated>
       </snapshotVersion>
+      <snapshotVersion>
+        <classifier>lib</classifier>
+        <extension>jar</extension>
+        <value>0.0.1-M1-20110514.110733-1</value>
+        <updated>20110514110733</updated>
+      </snapshotVersion>
     </snapshotVersions>
   </versioning>
 </metadata>
