@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>jade-framework</groupId>
+  <artifactId>jade-addon-ontology-beangenerator</artifactId>
+  <version>4.0.1-M1-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20110515.052226</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20110515052226</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>4.0.1-M1-20110515.052226-1</value>
+        <updated>20110515052226</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>4.0.1-M1-20110515.052226-1</value>
+        <updated>20110515052226</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
