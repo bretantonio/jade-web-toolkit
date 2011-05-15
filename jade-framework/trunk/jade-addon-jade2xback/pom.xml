@@ -3,7 +3,7 @@
   <parent>
     <artifactId>jade-framework</artifactId>
     <groupId>jade-framework</groupId>
-    <version>4.0.1-M1-SNAPSHOT</version>
+    <version>4.0.1-M1-RELEASE</version>
   </parent>
   <artifactId>jade-addon-jade2xback</artifactId>
     	<packaging>jar</packaging>
