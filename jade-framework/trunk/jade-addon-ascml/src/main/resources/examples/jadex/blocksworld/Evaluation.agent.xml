@@ -1,0 +1,50 @@
+<!--
+	<H3>The blocksword evaluation agent.</H3>
+
+	Uses the blocksworld scenario to evaluate Jadex performance.
+	Results are written to .csv file.
+-->
+
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Evaluation"
+	package="jadex.examples.blocksworld">
+
+	<goals>
+		<achievegoal name="stack_delib">
+			<parameter name="block" class="Block" />
+			<parameter name="target" class="Block" />
+			<deliberation cardinality="1">
+				<!-- This is always false, as there is only one goal per block -->
+				<inhibits ref="stack_delib">$goal.block==$ref.block</inhibits>
+			</deliberation>
+			<targetcondition>
+ 				$goal.block.lower==$goal.target
+ 			</targetcondition>
+		</achievegoal>
+
+		<achievegoal name="stack">
+			<parameter name="block" class="Block" />
+			<parameter name="target" class="Block" />
+			<deliberation cardinality="1" />
+			<targetcondition>
+ 				$goal.block.lower==$goal.target
+ 			</targetcondition>
+		</achievegoal>
+	</goals>
+
+	<plans>
+		<plan name="stack">
+			<body>new EvaluationStackPlan($event.goal.block, $event.goal.target)</body>
+			<trigger>
+				<goal ref="stack_delib"/>
+				<goal ref="stack"/>
+			</trigger>
+		</plan>
+		<plan name="evaluation" initial="true">
+			<body>new EvaluationPlan()</body>
+		</plan>
+	</plans>
+
+</agent>
+

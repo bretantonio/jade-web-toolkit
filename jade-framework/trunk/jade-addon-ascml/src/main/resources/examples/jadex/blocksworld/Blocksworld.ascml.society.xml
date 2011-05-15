@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="Jadex-Blocksworld-Society" package="jadex.examples.blocksworld" icon=".\\examples\\jadex\\blocksworld\\blocksworld20x20.png"
+	description="In the blocksworld coloured blocks are stacked on a table. This example only consists of a single agent (Blocksworld.agent.xml), which has an internal representation of the blocksworld. When the agent is started, a window is opened that shows the current state of the blocksworld, and another panel where you can construct a desired target configuration. When the 'create goal' button is clicked, the agent tries to achieve the target configuration by restacking blocks on the table.">
+
+	<agenttypes>
+		<agenttype name="jadex.runtime.impl.Jadex-Blocksworld-BlocksworldAgent"/>
+		<agenttype name="jadex.runtime.impl.Jadex-Blocksworld-EvaluationAgent"/>
+		<agenttype name="jadex.runtime.impl.Jadex-Blocksworld-BenchmarkAgent"/>
+	</agenttypes>
+
+	<societyinstances default="BlocksWorld">
+
+		<societyinstance name="BlocksWorld">
+			<agentinstances>
+				<agentinstance name="Blocksworld-Agent" type="Jadex-Blocksworld-BlocksworldAgent"/>
+			</agentinstances>
+		</societyinstance>
+
+		<societyinstance name="BlocksWorld-Bencher">
+			<agentinstances>
+				<agentinstance name="Blocksworld-Agent" type="Jadex-Blocksworld-BlocksworldAgent"/>
+				<agentinstance name="Benchmark-Agent" type="Jadex-Blocksworld-BenchmarkAgent"/>
+				<agentinstance name="Evaluation-Agent" type="Jadex-Blocksworld-EvaluationAgent"/>
+			</agentinstances>
+		</societyinstance>
+
+	</societyinstances>
+
+</society>

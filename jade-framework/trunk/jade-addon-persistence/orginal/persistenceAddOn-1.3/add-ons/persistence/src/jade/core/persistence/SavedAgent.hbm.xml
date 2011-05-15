@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+  <!-- The root node: a saved JADE agent -->
+
+  <!--
+
+  We use a proxy for this class because we don't want to load the
+  (potentially big) serialized agent data unless requested to do so
+  -->
+  <class name="jade.core.persistence.SavedAgent" proxy="jade.core.persistence.SavedAgent">
+
+    <id column="id" name="persistentID">
+      <generator class="hilo"/>
+    </id>
+
+    <property name="agentData" length="257"/>
+    <property name="name"/>
+    <property name="owned"/>
+
+    <list name="pendingMessages" cascade="all-delete-orphan">
+      <key column="owner"/>
+      <index column="idx"/>
+      <many-to-many column="elem" class="jade.lang.acl.ACLMessage"/>
+    </list>
+
+  </class>
+
+</hibernate-mapping>

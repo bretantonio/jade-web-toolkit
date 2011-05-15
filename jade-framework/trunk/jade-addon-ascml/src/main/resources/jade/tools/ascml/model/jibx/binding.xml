@@ -1,0 +1,286 @@
+<binding>
+  <mapping name="agent" class="jade.tools.ascml.model.jibx.AgentType">
+    <structure name="parameters" usage="optional">
+		<collection field="parameterList">
+			<structure map-as="jade.tools.ascml.model.jibx.Parameter"></structure>
+		</collection>
+		<collection field="parameterSetList">
+			<structure map-as="jade.tools.ascml.model.jibx.ParameterSet"></structure>
+		</collection>
+    </structure>
+	<structure name="servicedescriptions" usage="optional">
+		<collection field="serviceDescriptionList">
+			<structure map-as="jade.tools.ascml.model.jibx.ServiceDescription"></structure>
+		</collection>
+	</structure>
+	<structure name="agentdescriptions" usage="optional">
+		<collection field="agentDescriptionList">
+			<structure map-as="jade.tools.ascml.model.jibx.AgentDescription"></structure>
+		</collection>
+	</structure>
+    <value name="name" field="name" usage="required" style="attribute"/>
+    <value name="package" field="packageName" usage="optional" style="attribute"/>
+    <value name="class" field="className" usage="required" style="attribute"/>
+    <value name="type" field="platformType" usage="required" style="attribute"/>
+    <value name="description" field="description" usage="optional" style="attribute"/>
+    <value name="icon" field="iconName" usage="optional" style="attribute"/>
+  </mapping>
+
+  <!--
+    The xml-code belonging to this description looks like this:
+	<parameter name="guestsToWaitFor_b" type="String" optional="false" description="Number of guests">
+      <value> Test </value>
+	  <constraint name="Constraint 1">Test-Contraint 1</constraint>
+	  <constraint name="Constraint 2">Test-Contraint 2</constraint>
+ 	</parameter>
+  -->
+  <mapping name="parameter" class="jade.tools.ascml.model.jibx.Parameter">
+	<value name="name" field="name" usage="required" style="attribute"/>
+	<value name="type" field="type" usage="optional" style="attribute"/>
+	<value name="description" field="optional" usage="optional" style="attribute"/>
+	<value name="optional" field="optional" usage="optional" style="attribute"/>
+	<value name="value" field="value" usage="optional"/>
+	<collection field="constraintList">
+        <structure map-as="jade.tools.ascml.model.jibx.Constraint"></structure>
+    </collection>
+  </mapping>
+
+  <mapping name="parameterset" class="jade.tools.ascml.model.jibx.ParameterSet">
+	<value name="name" field="name" usage="required" style="attribute"/>
+	<value name="type" field="type" usage="optional" style="attribute"/>
+	<value name="description" field="description" usage="optional" style="attribute"/>
+	<value name="optional" field="optional" usage="optional" style="attribute"/>
+	<collection field="valueList">
+        <value name="value" type="java.lang.String"/>
+    </collection>
+	<collection field="constraintList">
+        <structure map-as="jade.tools.ascml.model.jibx.Constraint"></structure>
+    </collection>
+  </mapping>
+
+  <mapping name="constraint" class="jade.tools.ascml.model.jibx.Constraint">
+	  <value name="name" field="name" usage="required" style="attribute"/>
+      <value field="constraint" usage="required" style="text"/>
+  </mapping>
+
+  <mapping name="invariant" class="jade.tools.ascml.model.jibx.Invariant">
+      <value field="invariant" usage="required" style="text"/>
+  </mapping>
+
+  <mapping name="servicedescription" class="jade.tools.ascml.model.jibx.ServiceDescription">
+		<collection field="protocolList">
+		  <value name="protocol" type="java.lang.String"/>
+		</collection>
+		<collection field="ontologyList">
+		  <value name="ontology" type="java.lang.String"/>
+		</collection>
+		<collection field="languageList">
+		  <value name="language" type="java.lang.String"/>
+		</collection>
+		<collection field="propertyList">
+			<structure map-as="jade.tools.ascml.model.jibx.Property"></structure>
+		</collection>
+		<value name="name" field="name" usage="required" style="attribute"/>
+		<value name="type" field="type" usage="required" style="attribute"/>
+		<value name="ownership" field="ownership" usage="required" style="attribute"/>
+  </mapping>
+
+  <mapping name="property" class="jade.tools.ascml.model.jibx.Property">
+		<value name="name" field="name" usage="required" style="attribute"/>
+		<value field="property" usage="required" style="text"/>
+  </mapping>
+
+  <mapping name="agentdescription" class="jade.tools.ascml.model.jibx.AgentDescription">
+    <structure name="name" usage="required">
+		<value name="name" field="name" usage="required" style="attribute"/>
+		<collection field="addressList">
+		  <value name="address" type="java.lang.String"/>
+		</collection>
+    </structure>
+    <collection field="serviceList">
+      <value name="service" type="java.lang.String"/>
+    </collection>
+    <collection field="protocolList">
+      <value name="protocol" type="java.lang.String"/>
+    </collection>
+    <collection field="ontologyList">
+      <value name="ontology" type="java.lang.String"/>
+    </collection>
+    <collection field="languageList">
+      <value name="language" type="java.lang.String"/>
+    </collection>
+  </mapping>
+
+<!-- SocietyType -->
+
+ <mapping name="society" class="jade.tools.ascml.model.jibx.SocietyType">
+    <structure name="imports" usage="optional">
+		<collection field="importList">
+			<value name="import" type="java.lang.String"/>
+		</collection>
+	</structure>
+	<structure name="agenttypes" usage="optional">
+		<collection field="agentTypeNameList">
+			<structure name="agenttype" usage="required">
+				<value name="name" type="java.lang.String" usage="required" style="attribute"/>
+			</structure>
+		</collection>
+	</structure>
+	<structure name="societytypes" usage="optional">
+		<collection field="societyTypeNameList">
+			<structure name="societytype" usage="required">
+				<value name="name" type="java.lang.String" usage="required" style="attribute"/>
+			</structure>
+		</collection>
+	</structure>
+	<structure name="societyinstances" usage="optional">
+		<collection field="societyInstanceList">
+			<structure map-as="jade.tools.ascml.model.jibx.SocietyInstance"></structure>
+		</collection>
+		<value name="default" field="defaultSocietyInstance" usage="optional" style="attribute"/>
+	</structure>
+    <value name="name" field="name" usage="required" style="attribute"/>
+    <value name="package" field="packageName" usage="optional" style="attribute"/>
+    <value name="description" field="description" usage="optional" style="attribute"/>
+    <value name="icon" field="iconName" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="societyinstance" class="jade.tools.ascml.model.jibx.SocietyInstance">
+	  <structure name="agentinstances" usage="optional">
+		<collection field="agentInstanceList">
+			<structure map-as="jade.tools.ascml.model.jibx.AgentInstance"></structure>
+		</collection>
+	  </structure>
+	  <structure name="societyinstancerefs" usage="optional">
+		<collection field="societyInstanceReferenceList">
+			<structure map-as="jade.tools.ascml.model.jibx.SocietyInstanceReference"></structure>
+		</collection>
+	  </structure>
+	  <structure field="functional" map-as="jade.tools.ascml.model.jibx.Functional" usage="optional"/>
+	  <value name="name" field="name" usage="required" style="attribute"/>
+	  <value name="description" field="description" usage="optional" style="attribute"/>
+	  <value name="quantity" field="quantity" usage="optional" style="attribute"/>
+	  <value name="namingscheme" field="namingScheme" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="societyinstanceref" class="jade.tools.ascml.model.jibx.SocietyInstanceReference">
+	  <structure field="launcher" usage="optional" map-as="jade.tools.ascml.model.jibx.Launcher"/>
+	  <structure name="dependencies" usage="optional">
+		<collection field="dependencyList">
+            <structure map-as="jade.tools.ascml.model.jibx.dependency.AgentInstanceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.AgentTypeDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.SocietyInstanceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.SocietyTypeDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.ServiceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.DelayDependency"></structure>
+		</collection>
+	  </structure>
+	  <value name="name" field="name" usage="required" style="attribute"/>
+	  <value name="societytype" field="typeName" usage="optional" style="attribute"/>
+	  <value name="societyinstance" field="instanceName" usage="required" style="attribute"/>
+	  <value name="quantity" field="quantity" usage="optional" style="attribute"/>
+	  <value name="namingscheme" field="namingScheme" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="launcher" class="jade.tools.ascml.model.jibx.Launcher">
+	  <collection field="addressList">
+		<value name="address" type="java.lang.String"/>
+	  </collection>
+	  <value name="name" field="name" usage="required" style="attribute"/>
+	  <value name="reference" field="reference" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="provider" class="jade.tools.ascml.model.jibx.Provider">
+	  <collection field="addressList">
+		<value name="address" type="java.lang.String"/>
+	  </collection>
+	  <value name="name" field="name" usage="required" style="attribute"/>
+	  <value name="reference" field="reference" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="agentinstance" class="jade.tools.ascml.model.jibx.AgentInstance">
+      <collection field="parameterList">
+			<structure map-as="jade.tools.ascml.model.jibx.Parameter"></structure>
+	  </collection>
+      <collection field="parameterSetList">
+			<structure map-as="jade.tools.ascml.model.jibx.ParameterSet"></structure>
+	  </collection>
+	  <collection field="toolOptionList">
+			<structure map-as="jade.tools.ascml.model.jibx.ToolOption"></structure>
+	  </collection>
+	  <structure name="dependencies" usage="optional">
+		<collection field="dependencyList">
+            <structure map-as="jade.tools.ascml.model.jibx.dependency.AgentInstanceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.AgentTypeDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.SocietyInstanceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.SocietyTypeDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.ServiceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.DelayDependency"></structure>
+		</collection>
+	  </structure>
+	  <value name="name" field="name" usage="required" style="attribute"/>
+	  <value name="type" field="typeName" usage="optional" style="attribute"/>
+	  <value name="quantity" field="quantity" usage="optional" style="attribute"/>
+	  <value name="namingscheme" field="namingScheme" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="tooloption" class="jade.tools.ascml.model.jibx.ToolOption">
+	<collection field="propertyList">
+        <structure map-as="jade.tools.ascml.model.jibx.Property"></structure>
+    </collection>
+	<value name="type" field="type" usage="required" style="attribute"/>
+	<value name="enabled" field="enabled" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="functional" class="jade.tools.ascml.model.jibx.Functional">
+      <structure name="dependencies" usage="optional">
+		<collection field="dependencyList">
+            <structure map-as="jade.tools.ascml.model.jibx.dependency.AgentInstanceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.AgentTypeDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.SocietyInstanceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.SocietyTypeDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.ServiceDependency"></structure>
+			<structure map-as="jade.tools.ascml.model.jibx.dependency.DelayDependency"></structure>
+		</collection>
+	  </structure>
+	  <collection field="invariantList">
+        <structure usage="optional" map-as="jade.tools.ascml.model.jibx.Invariant"></structure>
+      </collection>
+  </mapping>
+
+  <mapping name="agentinstancedependency" class="jade.tools.ascml.model.jibx.dependency.AgentInstanceDependency">
+	<value name="name" field="name" usage="required" style="attribute"/>
+	<value name="status" field="status" set-method="setStatus" usage="optional" style="attribute"/>
+	<structure field="provider" usage="optional" map-as="jade.tools.ascml.model.jibx.Provider"/>
+  </mapping>
+
+  <mapping name="agenttypedependency" class="jade.tools.ascml.model.jibx.dependency.AgentTypeDependency">
+	<value name="active" field="active" usage="optional" style="attribute"/>
+	<value name="name" field="name" usage="required" style="attribute"/>
+	<value name="quantity" field="quantity" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="societyinstancedependency" class="jade.tools.ascml.model.jibx.dependency.SocietyInstanceDependency">
+	<value name="active" field="active" usage="optional" style="attribute"/>
+	<value name="societytype" field="societyType" usage="required" style="attribute"/>
+	<value name="societyinstance" field="societyInstance" usage="required" style="attribute"/>
+	<value name="status" field="status" set-method="setStatus" usage="optional" style="attribute"/>
+	<structure field="provider" usage="optional" map-as="jade.tools.ascml.model.jibx.Provider"/>
+  </mapping>
+
+  <mapping name="societytypedependency" class="jade.tools.ascml.model.jibx.dependency.SocietyTypeDependency">
+	<value name="active" field="active" usage="optional" style="attribute"/>
+	<value name="name" field="name" usage="required" style="attribute"/>
+	<value name="quantity" field="quantity" usage="optional" style="attribute"/>
+  </mapping>
+
+  <mapping name="servicedependency" class="jade.tools.ascml.model.jibx.dependency.ServiceDependency">
+	<value name="active" field="active" usage="optional" style="attribute"/>
+	<structure field="serviceDescription" usage="required" map-as="jade.tools.ascml.model.jibx.ServiceDescription"/>
+	<structure field="provider" usage="optional" map-as="jade.tools.ascml.model.jibx.Provider"/>
+  </mapping>
+
+  <mapping name="delaydependency" class="jade.tools.ascml.model.jibx.dependency.DelayDependency">
+	<value name="quantity" field="quantity" usage="required" style="attribute"/>
+  </mapping>
+</binding>

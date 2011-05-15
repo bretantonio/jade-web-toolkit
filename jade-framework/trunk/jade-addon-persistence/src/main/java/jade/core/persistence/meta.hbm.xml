@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : meta.hbm.xml
+    Created on : 14 gennaio 2004, 16.36
+    Author     : rimassa
+    Description:
+        Hibernate mapping for the meta-database of the JADE Persistence Service
+-->
+
+<!DOCTYPE hibernate-mapping PUBLIC '-//Hibernate/Hibernate Mapping DTD//EN' 'http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+
+    <!-- The description of a JADE Repository -->
+    <class name="jade.core.persistence.Repository">
+
+        <id column="ID" name="persistentID">
+            <generator class="hilo"/>
+        </id>
+
+        <property name="name"/>
+
+        <list name="mappings" cascade="all" lazy="false">
+            <key column="owner"/>
+            <index column="idx"/>
+            <element column="elem" type="string"/>
+        </list>
+
+        <many-to-one name="properties" cascade="all" lazy="false"/>
+
+    </class>
+
+    <!-- Configuration properties for a repository -->
+    <class name="jade.core.persistence.Repository$Properties" table="repository_props">
+
+        <id column="ID" name="persistentID">
+            <generator class="hilo"/>
+        </id>
+
+        <discriminator column="properties_class"/>
+
+        <!-- Key-value pairs, directly stored within the DB -->
+        <subclass name="jade.core.persistence.Repository$StoredProperties">
+
+            <map name="values" table="storedproperties_data" cascade="all" lazy="false">
+                <key column="owner"/>
+                <index column="prop_name" type="string"/>
+                <element column="prop_value" type="string"/>
+            </map>
+
+        </subclass>
+
+        <!-- Externally stored properties (e.g. within a Java property file) -->
+        <subclass name="jade.core.persistence.Repository$ExternalProperties">
+
+            <property name="URL"/>
+
+        </subclass>
+        
+    </class>
+
+</hibernate-mapping>

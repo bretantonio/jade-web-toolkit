@@ -1,0 +1,165 @@
+### pattern = (institutional-action ??inst ??pattern ??observers (fact ??precond) (fact ??_effect))
+## institutional effects were specified in institution.specif as countas or powers -> NEW they are now here
+## in institutional preconditions the author is designed by the specific variable ??_actor
+
+# hypothesis: once the institutional precondition is valid, the actor has right to perform the action, AND this action has the specified institutional effect
+# if there is no particular effect use "(fact true)"
+
+# WARNING: if effect forgotten, the action does not match the pattern of ActionDeclaration SIP so it is directly asserted in all kbases
+
+############# ACTIONS #############
+
+### REQUEST CATALOGUE
+(institutional-action b2b 
+	(REQUEST_CATALOGUE :supplier ??_supplier :requestCatalogue ??_requestCatalogue) 
+	(set ??_supplier) 
+	(fact (D b2b (holder ??_actor roleBuyer)))
+	(fact true)
+)
+
+### SEND CATALOGUE actor = seller
+(institutional-action b2b 
+	# pattern
+	(SEND_CATALOGUE :customer ??_customer :catalogue ??_catalogue) 
+	# observing agents
+	(set ??_customer) 
+	# institutional precondition
+	(fact (and 
+		(D b2b (holder ??_actor roleSeller)) 
+		(D b2b (holder ??_customer roleBuyer))
+	))
+	# new: institutional effect (power)
+	(fact (until (fact (is_institutional b2b ??_customer ??_actor ??_catalogue)) (fact false)))
+)
+
+
+### SEND PURCHASE ORDER
+(institutional-action b2b 
+	(SEND_PURCHASE_ORDER :supplier ??_supplier :purchaseOrder ??_purchaseOrder) 
+	(set ??_supplier) 
+	(fact true)
+	(fact true)
+)
+
+### SEND RESPONSE  actor = seller
+(institutional-action b2b 
+	(SEND_RESPONSE :customer ??_receiverOfResponse :response ??_response) 
+	(set ??_receiverOfResponse) 
+	(fact (and 
+		(D b2b (holder ??_actor roleSeller)) 
+		(D b2b (holder ??_receiverOfResponse roleBuyer))
+		(document (purchaseOrder :id ??_orderReference :totalLine (totalLine :totalPrice ??_price) :orderLines ??_orderLines)) 
+	)) 
+	(fact (power ??_receiverOfResponse b2b 
+		(fact (and 
+			# todo condition sur les aid des agents a comparer avec celles dans les documents
+			(document (response :id ??_responseReference :orderReference ??_orderReference))
+			(buildPackage ??_orderLines ??_package)
+		)) 
+		(ACCEPT_RESPONSE :responseReference ??_responseReference :receiver ??_receiverOfAccept)
+		(fact (and 
+			(O (done (action ??_actor (DELIVER_PACKAGE :buyer ??_receiverOfResponse :package ??_package :price ??_price :ref ??_orderReference)) true)) 
+			(O (done (action ??_receiverOfResponse (PAY_PACKAGE :package ??_package :price ??_price :ref ??_orderReference :seller ??_actor)) true)) 
+		))
+	)) 
+)
+
+
+## minimal definition of subsequent actions to trigger the needed inform acts
+  
+### SEND INVOICE
+(institutional-action b2b (SEND_INVOICE :customer ??_customer :invoice ??_invoice) (set ??_customer) (fact true) (fact true))
+
+### SEND PAYMENT ADVICE (bank to customer, customer to supplier)
+(institutional-action b2b (SEND_PAYMENT_ADVICE :supplier ??_supplier :paymentAdvice ??_paymentAdvice) (set ??_supplier) (fact true) (fact true))
+
+### SEND PAYMENT ORDER (customer to his bank)
+(institutional-action b2b (SEND_PAYMENT_ORDER :bank ??_bank :paymentOrder ??_paymentOrder) (set ??_bank) (fact true) (fact true))
+
+### SEND RECEIPT ADVICE (customer to supplier)
+(institutional-action b2b (SEND_RECEIPT_ADVICE :supplier ??_supplier :receiptAdvice ??_receiptAdvice) (set ??_supplier) (fact true) (fact true))
+
+### SEND DISPATCH ADVICE (supplier to customer)
+(institutional-action b2b (SEND_DISPATCH_ADVICE :customer ??_customer :dispatchAdvice ??_dispatchAdvice) (set ??_customer) (fact true) (fact true))
+
+### SIGNAL PROBLEM TO MEDIATOR
+(institutional-action b2b (SIGNAL_PROBLEM :mediator ??_mediator :rejectedPurchaseOrder ??_rejectedPurchaseOrder :rejectionReason ??_rejectionReason) (set ??_mediator) (fact true) (fact true))
+
+### DELIVER (NEW)
+(institutional-action b2b (DELIVER_PACKAGE :customer ??_customer :deliveryNote ??_deliveryNote :orderReference ??_orderReference) (set ??_customer) (fact true) (fact true))
+
+### PHYSICAL PAYMENT
+(institutional-action b2b (PAY_BANK :amount ??_amount :debtorAgent ??_debtorAgent :debtorBank ??_debtorBank :creditorAgent ??_creditorAgent :creditorBank ??_creditorBank :paymentNote ??_paymentNote) (set ??_creditorBank) (fact true) (fact true))
+
+### SEND PAYMENT NOTE
+(institutional-action b2b (SEND_PAYMENT_NOTE :creditor ??_creditor :paymentNote ??_paymentNote) (set ??_creditor) (fact true) (fact true))
+
+### DELEGATE POWER TO PURCHASE VIA A LOANING BANK
+(institutional-action b2b (DELEGATE_PURCHASE :intermediary ??_intermediary :purchaseOrder ??_purchaseOrder :loaningBank ??_loaningBank) (set ??_intermediary) (fact true) (fact true))
+
+### QUERY AGREEMENT FOR A LOAN TO A THIRD PARTY BANK
+(institutional-action b2b (QUERY_AGREEMENT :bank ??_bank :queryAgreement ??_queryAgreement) (set ??_bank) (fact true) (fact true))
+
+############
+## ACTIONS from OLD ontology
+############
+
+
+### DELIVER PACKAGE
+(institutional-action b2b 
+	(DELIVER_PACKAGE :buyer ??_buyer :package ??_package :price ??_price :ref ??ref) 
+	(set ??_buyer) 
+	(fact true)
+	(fact true)
+)
+
+### PAY PACKAGE
+(institutional-action b2b 
+	(PAY_PACKAGE :package ??_package :price ??_price :ref ??ref :seller ??_seller) 
+	(set ??_seller) 
+	(fact true)
+	(fact true)
+)
+
+# LOAN MONEY  actor = bank
+(institutional-action b2b 
+	(LOAN_MONEY :buyer ??_buyer :package ??_package :price ??_price :ref ??ref :seller ??_seller) 
+	(set ??_seller) 
+	(fact (and 
+		(D b2b (holder ??_actor roleBank)) 
+		(D b2b (holder ??_buyer roleBuyer)) 
+		(D b2b (holder ??_seller roleSeller))
+	))
+	(fact (power ??_buyer b2b
+		(fact true)
+		(PAY_PACKAGE :package ??_package :price ??_price :ref ??ref :seller ??_seller)
+		(fact (O (done (action ??_seller (PAYBACK_MONEY :amount ??_price :bank ??_actor :ref ??ref)) true)))
+	))
+)
+
+### PAYBACK MONEY
+(institutional-action b2b 
+	(PAYBACK_MONEY :amount ??_amount :bank ??_bank :ref ??ref) 
+	(set ??_bank) 
+	(fact true)
+	(fact true)
+)
+
+
+# PAY PENALTY AS A SANCTION FOR VIOLATION OF OBLIGATIONS
+# include the obligation violated, to be checked by the sanctioned agent ?
+(institutional-action b2b 
+	(PAY :amount ??_amount :receiver ??_receiver :reference ??_reference) 
+	(set ??_receiver) 
+	(fact true)
+	(fact true)
+)
+
+
+### TEST ACTIONS
+(institutional-action b2b (PROC :dest ??_dest :param ??_param) (set ??_dest) (fact true) (fact true))
+(institutional-action b2b (PROC :dest ??_dest :param ??_param) (set ??_dest) (fact phip) (fact true))
+(institutional-action b2b (PRINT :content ??_content) (set ) (fact true) (fact true))
+(institutional-action b2b (RETURN :past ??_past) (set ) (fact true) (fact true))
+(institutional-action b2b (TESTCOND :cond ??_cond) (set ) (fact true) (fact true))
+

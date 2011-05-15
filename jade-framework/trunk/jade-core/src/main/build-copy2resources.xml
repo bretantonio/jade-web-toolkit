@@ -1,0 +1,22 @@
+<project name="COPY2RESOURCES" default="copy2resources" basedir=".">
+	<target name="clean" >
+		<delete includeemptydirs="true">
+			<fileset dir="resources" />
+		</delete>
+	</target>
+	<target name="copy" depends="clean">
+		<copy todir="resources" includeemptydirs="false">
+			<fileset dir="java" excludes="**/*.java" />
+		</copy>
+	</target>
+	<target name="copy2resources"  depends="copy">
+		<delete includeemptydirs="true">
+			<fileset dir="resources" >
+		    <and>
+		      <size value="0"/>
+		      <type type="dir"/>
+		     </and>
+		  </fileset>
+		</delete>
+	</target>
+</project>

@@ -1,0 +1,15 @@
+1) If this action consists in sending a document, create this document class in BusinessFunctionalTerms.java
+     - if needed add the accessor to its pattern in the BFT class
+     
+   In the Document class
+	- add the document type to the typeOfDoc enumeration type
+     	- modify the convert method
+	- add the corresponding case in the buildDocument method
+
+2) create the action pattern in the BusinessActionPatterns class
+
+3) add the corresponding action to the action table in the BusinessAgent class (if this action is common to all BusinessAgents, or in the adapted subclass if it is a more specific action)
+
+4) modify b2b.actions to specify the features of this institutional actions (at least the concerned agents who will be informed of its performance)
+
+5) modify the GUI file of agents having to use this action

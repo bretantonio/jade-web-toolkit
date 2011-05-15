@@ -1,0 +1,224 @@
+<!--
+	<H3>Sentry agent for finding ore..</H3>
+
+	This agent move to positons to check for minerals.
+	Then calls the Production Agent to produce the ore.
+	After all locations have been visited the Agent moves home.
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Sentry"
+	package="jadex.examples.marsworld.sentry">
+
+	<imports>
+		<import>jadex.examples.marsworld.*</import>
+		<import>jadex.examples.marsworld.ontology.*</import>
+		<import>jadex.examples.marsworld.movement.*</import>
+		<import>jadex.util.jade.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jade.lang.acl.*</import>
+		<import>java.util.logging.*</import>
+		<import>jade.content.lang.sl.*</import>
+	</imports>
+
+	<capabilities>
+		<!-- Include the df capability as dfcap for finding other agents
+			and registering the sentry service. -->
+		<capability name="dfcap" file="DF"/>
+		<!-- Include the move capability as move for basic movement. -->
+		<capability name="move" file="Movement" />
+	</capabilities>
+
+	<beliefs>
+		<!-- The environment as singleton object. -->
+		<belief name="environment" class="Environment">
+			<assignto ref="move.environment"/>
+			<fact>Environment.getInstance()</fact>
+	  	</belief>
+
+		<!-- The home location. -->
+		<belief name="my_home" class="Location">
+			<assignto ref="move.my_home"/>
+			<fact>$beliefbase.environment.getHomebase().getLocation()</fact>
+		</belief>
+
+		<!-- The current location. -->
+	    <belief name="my_location" class="Location">
+			<assignto ref="move.my_location"/>
+			<fact>$beliefbase.my_home</fact>
+		</belief>
+
+		<!-- The agent type (carry, producer or sentry) -->
+		<belief name="my_type" class="String">
+			<assignto ref="move.my_type"/>
+			<fact>Environment.SENTRY_AGENT</fact>
+	  	</belief>
+
+		<!-- The speed. -->
+		<belief name="my_speed" class="double">
+			<assignto ref="move.my_speed"/>
+			<fact>5</fact>
+		</belief>
+
+		<!-- The sight radius. -->
+		<belief name="my_vision" class="double">
+			<assignto ref="move.my_vision"/>
+			<fact>0.1</fact>
+		</belief>
+
+		<!-- Is the mission finished? -->
+		<beliefref name="missionend">
+			<concrete ref="move.missionend"/>
+		</beliefref>
+
+		<!-- The seen targets. -->
+		<beliefset name="my_targets" class="Target"/>
+
+		<!-- The seen targets. -->
+		<beliefset name="analysed_targets" class="Target"/>
+
+	</beliefs>
+
+  	<goals>
+		<!-- Look for targets. -->
+		<achievegoal name="find_targets">
+ 			<dropcondition>
+				$beliefbase.missionend
+			</dropcondition>
+		</achievegoal>
+
+		<!-- Analyse a target.-->
+		<achievegoal name="analyse_target" retry="false">
+			<parameter name="target" class="Target">
+				<value>$target</value>
+			</parameter>
+			<unique/>
+			<!-- The parameter target is bound to one
+				of the facts in the belief my_targets. -->
+			<bindings>
+				<binding name="target">
+ 					select $target from $beliefbase.my_targets
+					where !$beliefbase.getBeliefSet("analysed_targets").containsFact($target)
+	 			</binding>
+			</bindings>
+			<!-- Create a new goal when a target was added
+				and the mission is going on. -->
+			<creationcondition>
+				!$beliefbase.missionend
+				<affected beliefref="my_targets" eventtype="SystemEvent.BSFACT_ADDED" />
+			</creationcondition>
+			<!-- Suspend the goal when some other target is nearer to the agent.-->
+			<contextcondition>
+				(select any $target from $beliefbase.my_targets
+				order by $beliefbase.my_location.getDistance($target.getLocation()))
+				== $goal.target
+			</contextcondition>
+			<!-- Drop the goal on mission end. -->
+			<dropcondition>
+				$beliefbase.missionend
+			</dropcondition>
+
+			<deliberation>
+				<inhibits ref="walk_around"/>
+			</deliberation>
+			<!-- The goal is reached when the target is analysed. -->
+			<targetcondition>
+ 				$beliefbase.getBeliefSet("analysed_targets").containsFact($goal.target)
+ 			</targetcondition>
+		</achievegoal>
+
+		<!-- Just walk around without a target. -->
+		<performgoalref name="walk_around">
+			<concrete ref="move.walk_around"/>
+		</performgoalref>
+		<!-- Move to some destination. -->
+		<achievegoalref name="move_dest">
+			<concrete ref="move.move_dest"/>
+		</achievegoalref>
+
+		<!-- Keeping the agent description registered at the df. -->
+		<maintaingoalref name="df_keep_registered">
+			<concrete ref="dfcap.df_keep_registered"/>
+		</maintaingoalref>
+		<!-- Usable for searching other agents. -->
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+
+		<!-- Create initial goals. -->
+		<initialgoal ref="df_keep_registered">
+			<parameter name="description"><value>"services"</value></parameter>
+			<parameter name="leasetime"><value>200000</value></parameter>
+		</initialgoal>
+		<!-- Create a goal for walking around. -->
+		<initialgoal ref="walk_around"/>
+		<!-- Create a goal for finding targets. -->
+		<initialgoal ref="find_targets"/>
+	</goals>
+
+	<plans>
+		<!-- Find targets and add them to the targets belief. -->
+		<plan name="do_find">
+			<body>new FindTargetsPlan()</body>
+			<trigger>
+				<goal ref="find_targets"/>
+			</trigger>
+		</plan>
+
+		<!-- Analyse a target. -->
+		<plan name="do_analyse">
+			<body>new AnalyseTargetPlan()</body>
+			<trigger>
+				<goal ref="analyse_target"/>
+			</trigger>
+		</plan>
+
+		<!-- Add a new target when new info available. -->
+		<plan name="add_target">
+			<body>new AddTargetPlan()</body>
+			<trigger>
+				<messageevent ref="target_inform"/>
+			</trigger>
+		</plan>
+	</plans>
+
+	<events>
+		<!-- Other agents inform the sentries about discovered
+			potential ore resources. -->
+		<messageevent name="target_inform">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="action-class" class="Class">
+				<value>InformTarget.class</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+	<languages>
+		<language>new SLCodec(0)</language>
+	</languages>
+	<ontologies>
+		<ontology>MarsOntology.getInstance()</ontology>
+	</ontologies>
+
+<!--	<properties>
+		<property name="logging.level">Level.WARNING</property>
+		<property name="logging.useParentHandlers">true</property>
+	</properties>-->
+
+	<servicedescriptions>
+		<!-- The agent offers the service to analyse targets. -->
+		<servicedescription name="service_sentry"
+			type='"service_sentry"'
+			ownership="University of Hamburg"/>
+	</servicedescriptions>
+
+	<agentdescriptions>
+		<agentdescription name="services">
+			<service>service_sentry</service>
+		</agentdescription>
+	</agentdescriptions>
+
+</agent>

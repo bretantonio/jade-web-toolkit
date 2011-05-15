@@ -1,0 +1,178 @@
+<!--
+	<H3>The blackjack player agent.</H3>
+
+	Player agents are supplied with a game
+	strategy and will play with an initial
+	amount of money (100).
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Player"
+	package="jadex.examples.blackjack.player">
+
+	<imports>
+		<import>jadex.examples.blackjack.*</import>
+		<import>jadex.examples.blackjack.player.strategies.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.util.jade.*</import>
+		<import>jade.core.AID</import>
+		<import>jade.lang.acl.*</import>
+		<import>java.util.logging.*</import>
+	</imports>
+
+	<capabilities>
+		<!-- this capability provides easy access to "out-of-the-box"-plans
+			 allowing - for example - to register at the DF. -->
+		<capability name="dfcap" file="DF"/>
+	</capabilities>
+
+	<beliefs>
+		<!-- The cards held by the player. -->
+		<beliefset name="ownCards"  class="String" />
+		<!-- The cards held by the dealer. -->
+		<belief name="dealerCards"  class="String" />
+		<!-- The AID of the dealer. -->
+		<belief name="dealer"  class="AID" />
+		<!-- The account (money) of the player. -->
+		<belief name="account"  class="int">
+			<fact>$arg0</fact>
+		</belief>
+		<!--
+			set the color of the lines in the statistic-graph and the class
+			in which the players drawing- and betting-behaviour is implemented.
+		-->
+		<belief name="color"  class="String">
+			<fact>$arg1</fact>
+		</belief>
+		<!-- The strategy used by the player. -->
+		<belief name="strategy"  class="StrategyInterface">
+			<fact>$arg2</fact>
+		</belief>
+		<!-- 
+		     This belief indicates, that the player has changed the dealer during a game.
+		     When the dealer doesn't respond for some time, the player stops playing and
+		     starts looking for another dealer. If the 'old' dealer then sends 'old' game-messages
+		     the not-initial plans PlayerPlayingPlan und PlayerFinishPlan are instantiated.
+		     These plans only execute, if this 'gameTimedOut' flag is set to false !!!
+		-->
+		<belief name="gameTimedOut"  class="Boolean">
+			<fact>false</fact>
+		</belief>		
+	</beliefs>
+
+	<goals>
+		<!-- Used to search for the dealer. -->
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+	</goals>
+
+	<plans>
+		<!-- Main player plan to search for dealer and join games. -->
+		<plan name="init" initial="true">
+			<body>new PlayerInitPlan()</body>
+		</plan>
+		<!-- Once the dealer send a gameStart-message this plan is executed.
+			 Depending on the account-status and the strategy the player calculate his
+			 bet and sends it to the dealer. -->
+		<plan name="start">
+			<body>new PlayerStartPlan()</body>
+			<trigger>
+				<messageevent ref="query_bet"/>
+			</trigger>
+		</plan>
+		<!-- The PlayerPlayingPlan checks if the player should draw one more card
+			 and if so sends the dealer a card-request. -->
+		<plan name="play">
+			<body>new PlayerPlayingPlan()</body>
+			<trigger>
+				<messageevent ref="inform_cardPlayer"/>
+				<messageevent ref="inform_cardDealer"/>
+			</trigger>
+		</plan>
+		<!-- The PlayerFinishPlan listens to result-messages and - in case the player
+			 won the game - adds the winning-amount to the player's accountBelief. -->
+		<plan name="finish">
+			<body>new PlayerFinishPlan()</body>
+			<trigger>
+				<messageevent ref="inform_result"/>
+			</trigger>
+		</plan>
+	</plans>
+
+	<events>
+		<!-- dealer messages -->
+		<!-- Dealer agrees to game join request.
+			 Hack??? be more specififc? -->
+		<messageevent name="agree">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.AGREE</value>
+			</parameter>
+		</messageevent>
+		<!-- Dealer refuses game join request.
+			 Hack??? be more specififc? -->
+		<messageevent name="refuse">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.REFUSE</value>
+			</parameter>
+		</messageevent>
+		<!-- Dealer queries for players bet. -->
+		<messageevent name="query_bet">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.QUERY_REF</value>
+			</parameter>
+			<parameter name="content" class="String">
+				<value>"bet"</value>
+			</parameter>
+		</messageevent>
+		<!-- Dealer informs about new card being drawn for player. -->
+		<messageevent name="inform_cardPlayer">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"cardPlayer"</value>
+			</parameter>
+		</messageevent>
+		<!-- Dealer informs about new card being drawn for dealer -->
+		<messageevent name="inform_cardDealer">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"cardDealer"</value>
+			</parameter>
+		</messageevent>
+		<!-- Dealer invites player to join the (next) game. -->
+		<messageevent name="inform_invitation">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"invitation"</value>
+			</parameter>
+		</messageevent>
+		<!-- Dealer informs about result of the game (e.g. amount of money won). -->
+		<messageevent name="inform_result">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.INFORM</value>
+			</parameter>
+			<parameter name="content-start" class="String">
+				<value>"result"</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+	<!-- 
+	     logging-properties, needed to debug the application.
+	     Start the Jadex-Logging-Agent to see whats going on behind
+	     the scenes
+	 -->
+<!--	<properties>
+		<property name="logging.level">Level.WARNING</property>
+	</properties>
+-->	
+</agent>
+

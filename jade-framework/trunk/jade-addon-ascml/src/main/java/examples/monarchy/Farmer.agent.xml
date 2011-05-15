@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"        xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"       name="Farmer" package="examples.monarchy" type="jade" class="Farmer" icon="" description="Seed, wait, harvest"></agent>

@@ -1,0 +1,1 @@
+(dispatchAdvice :customerAID (agent-identifier :name buyer@test) :dispatchDateTime 20080724T095938470 :dispatchedItems (set) :expectedDeliveryDateTime 20080724T100235470 :id \"RESP_0\" :issueDateTime 20080724T095945470 :orderReference \"PUR_ORD_0\" :supplierAID (agent-identifier :name seller@test))

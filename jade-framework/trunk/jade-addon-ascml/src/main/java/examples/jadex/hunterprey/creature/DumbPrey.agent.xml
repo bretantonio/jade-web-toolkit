@@ -1,0 +1,60 @@
+<!--
+	<H3>The dumb prey.</H3>
+
+	Exhibits very basic behaviour for searching and
+	eating food. Does not flee explicitly from hunters.
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="DumbPrey"
+	package="jadex.examples.hunterprey.creature">
+
+	<imports>
+		<import>jadex.examples.hunterprey.*</import>
+		<import>jade.lang.acl.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="actsensecap" file="jadex/examples/hunterprey/creature/actsense/Creature.capability.xml"/>
+	</capabilities>
+
+	<beliefs>
+
+		<!-- The creature -->
+		<belief name="my_self" class="Creature">
+			<assignto ref="actsensecap.my_self"/>
+			<fact>new Prey($agent.jadeAgent.getLocalName(),
+ 					$agent.jadeAgent.getAID(), new Location(10,10))</fact>
+		</belief>
+
+		<!-- The current vision. -->
+		<beliefref name="vision">
+			<concrete ref="actsensecap.vision"/>
+		</beliefref>
+	</beliefs>
+
+	<goals>
+		<achievegoalref name="move">
+			<concrete ref="actsensecap.move"/>
+		</achievegoalref>
+		
+		<achievegoalref name="eat">
+			<concrete ref="actsensecap.eat"/>
+		</achievegoalref>
+	</goals>
+
+	<plans>
+		<!-- Dumb move plan. -->
+		<plan name="dumbmove" initial="true">
+			<body>new DumbPreyPlan()</body>
+		</plan>
+	</plans>
+
+	<expressions>
+		<conditionref name="has_vision">
+			<concrete ref="actsensecap.has_vision"/>
+		</conditionref>
+	</expressions>
+
+</agent>
+

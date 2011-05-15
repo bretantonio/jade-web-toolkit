@@ -1,0 +1,12 @@
+(holder (agent-identifier :name buyer@test) roleBuyer)
+
+# initial rules (countas)
+
+#bug: (D bbb (B (agent-identifier :name seller@test (not zeta)))
+
+# seller has the power to declare institutional prices (by sending his catalogue)
+#(power ??_seller bbb (fact true) (SEND_CATALOGUE :client ??_client :contentOfCatalogue ??_contentOfCatalogue :endOfValidity (fact ??_endOfValidity)) (fact (until (fact (is_institutional bbb ??_client ??_seller ??_contentOfCatalogue)) (fact ??_endOfValidity))))
+
+
+# institutional prices count as an obligation for the seller to believe them
+(countas bbb (price ??_seller ??_buyer ??_item ??_price) (O (B ??_seller (price ??_seller ??_buyer ??_item ??_price))) )

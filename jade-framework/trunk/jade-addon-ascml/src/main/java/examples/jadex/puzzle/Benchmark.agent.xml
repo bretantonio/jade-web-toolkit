@@ -1,0 +1,94 @@
+<!--
+  <H3>Puzzling benchmark agent.</H3>
+  
+  This agent that plays a board game for one player.
+  This example is a Jadex adaption of the original JACK(TM)
+  puzzle example and was used for performance comparisons
+  between both platforms (cf. readme.txt).
+  This version has no gui and was used for the
+  performance measurements.
+-->
+
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Benchmark"
+	package="jadex.examples.puzzle">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>java.util.*</import>
+	</imports>
+
+	<beliefs>
+		<!-- The game board offers possibilities to make moves,
+			take back moves and keep track of the game history. -->
+		<belief name="board" class="IBoard">
+			<fact>new JackBoard()</fact>
+ 		</belief>
+		<!-- The number of moves already tried. -->
+		<belief name="triescnt" class="int">
+			<fact>0</fact>
+		</belief>
+		<!-- The delay in milliseconds between two moves. -->
+		<belief name="move_delay" class="long">
+			<fact>0</fact>
+		</belief>
+		<!-- The meta-level strategy for choosing moves
+ 			(none=choose the first applicable, long=prefer jump moves,
+			same_long=prefer long moves of same color, alter_long=prefer
+			long move of alternate color. -->
+		<belief name="ml" class="String">
+			<fact>"alter_long"</fact>
+		</belief>
+	</beliefs>
+
+	<goals>
+		<!-- The goal to make a move on the board that is the solution. -->
+		<achievegoal name="makemove">
+			<parameter name="depth" class="int" />
+ 		</achievegoal>
+
+		<!-- The meta-level goal for choosing between plans for the makemove goal. -->
+		<metagoal name="choosemove">
+			<parameter name="event" class="IEvent"/>
+			<parameter name="applicables" class="List"/>
+			<parameter name="result" class="List" direction="out"/>
+			<trigger>
+				<goal ref="makemove"/>
+			</trigger>
+		</metagoal>
+	</goals>
+
+	<plans>
+		<!-- Start puzzling on the board and measure the needed time. -->
+		<plan name="play_game_plan" initial="true">
+			<body>new PlayGamePlan()</body>
+		</plan>
+
+		<!-- Make a move on the board and create a subgoal for the next move. -->
+		<plan name="move_plan">
+			<bindings>
+				<binding name="move">$beliefbase.board.getPossibleMoves()</binding>
+			</bindings>
+			<body>new BenchmarkMovePlan($move)</body>
+			<trigger>
+				<goal ref="makemove"/>
+			</trigger>
+		</plan>
+
+		<!-- Meta-level plan used to choose among the possible move plans. -->
+		<plan name="choose_move_plan">
+			<body>new ChooseMovePlan()</body>
+			<trigger>
+				<goal ref="choosemove"/>
+			</trigger>
+		</plan>
+	</plans>
+
+	<properties>
+		<property name="debugging">false</property>
+    </properties>
+
+</agent>

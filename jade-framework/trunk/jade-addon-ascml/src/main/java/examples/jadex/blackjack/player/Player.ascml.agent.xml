@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="Jadex-Blackjack-Player" package="jadex.runtime.impl" type="jadex" icon=".\\examples\\jadex\\blackjack\\cards.gif" class="JadeWrapperAgent" description="Player agents are supplied with a game strategy and will play with an initial amount of money (100).">
+       
+	<parameters>
+		<parameter name="descriptionFile" type="String" optional="false" description="Jadex' agent-description file">
+			<value>.\examples\jadex\blackjack\player\Player.agent.xml</value>
+		</parameter>
+	</parameters>
+
+</agent>

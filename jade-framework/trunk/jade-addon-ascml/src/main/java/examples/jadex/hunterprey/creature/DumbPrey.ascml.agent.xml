@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="Jadex-HunterPrey-DumbPrey" package="jadex.runtime.impl" class="JadeWrapperAgent" type="jadex" icon=".\\examples\\jadex\\hunterprey\\images\\prey.png" description="The prey tries to find something to eat, while it is always it's guard not to be eaten by the hunter.">
+       
+	<parameters>
+		<parameter name="descriptionFile" type="String" optional="false" description="Jadex' agent-description file">
+			<value>.\examples\jadex\hunterprey\creature\DumbPrey.agent.xml</value>
+		</parameter>
+	</parameters>
+
+</agent>

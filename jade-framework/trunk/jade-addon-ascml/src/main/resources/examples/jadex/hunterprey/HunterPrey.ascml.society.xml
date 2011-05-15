@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="Jadex-HunterPrey-Society" package="jadex.examples.hunterprey" icon=".\\examples\\jadex\\hunterprey\\images\\hunterprey20x20.png"
+	description="Two kinds of creatures live on a grid world.Hunters try to catch the prey, while prey moves around looking for food.">
+
+	<agenttypes>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-CleverHunter"/>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-CleverPrey"/>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-DumbHunter"/>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-DumbPrey"/>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-LazyPrey"/>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-Environment"/>
+		<agenttype name="jadex.runtime.impl.Jadex-HunterPrey-Observer"/>
+
+	</agenttypes>
+
+	<societyinstances default="Crowded Scenario">
+
+		<societyinstance name="Crowded Scenario">
+			<agentinstances>
+				<agentinstance name="CleverPrey" type="Jadex-HunterPrey-CleverPrey" quantity="2" />
+				<agentinstance name="CleverHunter" type="Jadex-HunterPrey-CleverHunter" quantity="2" />
+				<agentinstance name="DumbPrey" type="Jadex-HunterPrey-DumbPrey" quantity="4"/>
+				<agentinstance name="DumbHunter" type="Jadex-HunterPrey-DumbHunter" quantity="2"/>
+				<agentinstance name="LazyPrey" type="Jadex-HunterPrey-LazyPrey" quantity="4"/>
+			</agentinstances>
+			<societyinstanceref name="Environment" societytype="jadex.examples.hunterprey.Jadex-HunterPrey-Society" societyinstance="Environment and Observer"/>
+		</societyinstance>
+
+		<societyinstance name="Clever vs Smart">
+			<agentinstances>
+				<agentinstance name="CleverPrey" type="Jadex-HunterPrey-CleverPrey" quantity="4" />
+				<agentinstance name="CleverHunter" type="Jadex-HunterPrey-CleverHunter" quantity="4" />
+			</agentinstances>
+			<societyinstanceref name="Environment" societytype="jadex.examples.hunterprey.Jadex-HunterPrey-Society" societyinstance="Environment and Observer"/>
+		</societyinstance>
+
+		<societyinstance name="Chivvy">
+			<agentinstances>
+				<agentinstance name="DumbPrey" type="Jadex-HunterPrey-CleverPrey" quantity="1" />
+				<agentinstance name="CleverHunter" type="Jadex-HunterPrey-CleverHunter" quantity="4" />
+			</agentinstances>
+			<societyinstanceref name="Environment" societytype="jadex.examples.hunterprey.Jadex-HunterPrey-Society" societyinstance="Environment and Observer"/>
+		</societyinstance>
+
+		<societyinstance name="Environment and Observer">
+			<agentinstances>
+				<agentinstance name="EnvironmentAgent" type="Jadex-HunterPrey-Environment"/>
+				<!--<agentinstance name="ObserverAgent" type="Jadex-HunterPrey-Observer"/>-->
+			</agentinstances>
+		</societyinstance>
+	</societyinstances>
+
+</society>

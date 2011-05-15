@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="Jadex-CleanerWorld-Society" package="jadex.examples.cleanerworld" icon=".\\examples\\jadex\\cleanerworld\\images\\cleanerworld20x20.png"
+	description="The single agent version can be started by directly launching the Cleaner.agent.xml in the single subdirectory. To start the multi agent example application launch the manager agent in the multi directory. The multi version of the cleanerworld scenario allows to use an arbitrary number of cleaners in one environment. Additionally the system can be easily distributed over different hosts. Note that 3 different kinds of agents exist is the multi version: The environment agent manages an environment object. A cleaner agent uses also an environment object (a local proxy) to enact in it. An environment proxy agent forwards the actions made by the cleaner to the environment agent. The communication between proxy and environment agents is based on a cleanerworld ontology. Overall task: In a simulated environment cleaner agents are used to perform several tasks. 1. They have explore their environment to gain info about charging stations, waste bin and waste pieces. 2. They have to clean-up waste pieces and bring them to a waste bin nearby. 3. They have to guard the environment at night time by doing patrols.">
+
+	<agenttypes>
+		<agenttype name="jadex.runtime.impl.Jadex-Cleanerworld-Cleaner"/>
+		<agenttype name="jadex.runtime.impl.Jadex-Cleanerworld-Environment"/>
+		<agenttype name="jadex.runtime.impl.Jadex-Cleanerworld-EnvironmentObserver"/>
+	</agenttypes>
+
+	<societyinstances default="CleanerWorld">
+
+		<societyinstance name="CleanerWorld">
+			<agentinstances>
+				<agentinstance name="Cleany_1" type="Jadex-Cleanerworld-Cleaner"/>
+				<agentinstance name="Cleany_2" type="Jadex-Cleanerworld-Cleaner"/>
+				<agentinstance name="Cleaner_Environment" type="Jadex-Cleanerworld-Environment"/>
+				<agentinstance name="EnvironmentObserver" type="Jadex-Cleanerworld-EnvironmentObserver"/>
+			</agentinstances>
+		</societyinstance>
+
+		<societyinstance name="CleanerWorld (really clean)">
+			<agentinstances>
+				<agentinstance name="Cleany" type="Jadex-Cleanerworld-Cleaner" quantity="10" namingscheme="%n"/>
+				<agentinstance name="Cleaner_Environment" type="Jadex-Cleanerworld-Environment"/>
+				<agentinstance name="EnvironmentObserver" type="Jadex-Cleanerworld-EnvironmentObserver"/>
+			</agentinstances>
+		</societyinstance>
+	</societyinstances>
+
+</society>

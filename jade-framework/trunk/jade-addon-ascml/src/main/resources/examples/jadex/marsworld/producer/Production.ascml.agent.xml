@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/agent.xsd"
+       name="Jadex-MarsWorld-Production" package="jadex.runtime.impl" class="JadeWrapperAgent" type="jadex" icon=".\\examples\\jadex\\marsworld\\images\\productionagent.png" description="Production agent for producing ore. This Agent is called to move to an Location to produce ore there. Therefore it is registering it's production-servivce at the DF.">
+       
+	<parameters>
+		<parameter name="descriptionFile" type="String" optional="false" description="Jadex' agent-description file">
+			<value>.\examples\jadex\marsworld\producer\Production.agent.xml</value>
+		</parameter>
+	</parameters>
+
+</agent>

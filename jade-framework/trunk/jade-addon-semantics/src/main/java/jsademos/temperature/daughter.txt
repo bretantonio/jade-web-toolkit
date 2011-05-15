@@ -1,0 +1,19 @@
+message# Is the temperature greater than ...? # query-if ((temperature_gt XXX))
+message# What is the temperature? # query-ref ((any ?X (temperature ?X)))
+
+message# Hey! Temperature is ...! # inform ((temperature XXX))
+message# Put on your ...! # request (( action (agent-identifier :name son@test) (PUT-ON :clothing XXX)))
+message# I want you to put on your ...! # inform ((I (agent-identifier :name daughter@test) (done (action (agent-identifier :name son@test) (PUT-ON :clothing XXX)) true)))
+message# Mum would like you put on your ... # inform ((I (agent-identifier :name mother@test) (done (action (agent-identifier :name son@test) (PUT-ON :clothing XXX)) true)))
+message# Take off your ...! # request (( action (agent-identifier :name son@test) (TAKE-OFF :clothing XXX)))
+message# Look at the thermometer! # request ((action (agent-identifier :name son@test) (QUERY-REF :sender (agent-identifier :name son@test) :receiver (set (agent-identifier :name display@test)) :content "((any ?T (temperature ?T)))")))
+message# What's your dressing? # query-ref ((all ?C (wearing (agent-identifier :name son@test) ?C)))
+message# You want to wear your ... (to the son) # inform ((I (agent-identifier :name son@test) (wearing (agent-identifier :name son@test) XXX)))
+#message# Mum would like I know your dressing # inform ((I (agent-identifier :name mother@test) (exists ?X (B (agent-identifier :name daughter@test) (= (all ?C (wearing (agent-identifier :name son@test) ?C)) ?X)))))
+message# TEST # inform ((wearing (agent-identifier :name daughter@test) cap))
+
+image# daughter
+
+receiver# sensor@test
+receiver# display@test
+receiver# son@test

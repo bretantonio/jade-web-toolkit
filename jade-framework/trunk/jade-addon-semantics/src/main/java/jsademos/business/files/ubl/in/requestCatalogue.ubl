@@ -1,0 +1,1 @@
+(requestCatalogue :customerAID (agent-identifier :name buyer@test) :supplierAID (agent-identifier :name seller@test) :delayInDays 7)

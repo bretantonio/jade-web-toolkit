@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="JiBXTest" icon="..\\src\\examples\\party\\PartySociety.gif" package="examples.party"
+	description="This is a modification of the JADE-Party that ships with the JADE distribution. It was originally designed as a 'stress-test' and serves now as an example for the ASCML. The party starts when a minimum number of guests have arrived. The host selects one guest at random, and tells them a rumour. Then two other guests are selected at random and introduced to each other. Guests taking part in an introduction are afterwards repeatedly introduced to other guests. Guests knowing about the host's rumour tell it to other guests during an introduction. When a guest hears the rumour for the first time, it notifies the host. When all the guests have heard the rumour, the party ends and the guests leave.">
+                  
+	<imports>
+		<import>Test-Import 1</import>
+		<import>Test-Import 2</import>
+	</imports>
+
+	<agenttypes>
+		<agenttype name="examples.party.JADEPartyGuest"/>
+		<agenttype name="examples.party.JADEPartyHost"/>
+	</agenttypes>
+
+	<societytypes>
+		<societytype name="examples.party.BirthdayParty"/>
+	</societytypes>
+
+	<societyinstances default="SmallParty 2">
+		<societyinstance name="SmallParty 2" description="Description" quantity="5" namingscheme="%T">
+
+			<agentinstances>
+				<agentinstance name="BirthdayChild" type="JADEPartyHost" quantity="5" namingscheme="%T">
+
+					<parameter name="guestsToWaitFor" reference="Test-Reference">
+						<value>10</value>
+					</parameter>
+					<parameterset name="guestsToWaitFor_Set" reference="Test-Reference">
+						<value>Test Value 1</value>
+						<value>Test Value 2</value>
+					</parameterset>
+
+					<tooloption type="benchmark" enabled="false">
+						<property name="AID">myAID</property>
+					</tooloption>
+
+					<dependencies>
+						<agentinstancedependency name="AgentInstanceName_fq" status="FUNCTIONAL">
+							<provider name="Test-Name" reference="Test-Reference">
+								<address>127.0.0.1</address>
+								<address>127.0.0.2</address>
+							</provider>
+						</agentinstancedependency>
+						<agenttypedependency active="true" name="AgentTypeName_fq" quantity="3"/>
+                        <societyinstancedependency active="true" societyinstance="TestSocInstanceDependency" societytype="TestSocTypeDependency" status="NON_FUNCTIONAL">
+							<provider name="Test-Name" reference="Test-Reference">
+								<address>127.0.0.1</address>
+								<address>127.0.0.2</address>
+							</provider>
+						</societyinstancedependency>
+						<societytypedependency active="false" name="SocietyTypeName_fq" quantity="4"/>
+						<servicedependency active="false">
+							<servicedescription name="Name 2" type="Type 2" ownership="ownership 2">
+								<protocol>Protokoll-Test 1</protocol>
+								<protocol>Protokoll-Test 2</protocol>
+								<ontology>Ontology-Test 1</ontology>
+								<ontology>Ontology-Test 2</ontology>
+								<language>Language-Test 1</language>
+								<language>Language-Test 2</language>
+								<property name="prop 1">Property-Test 2</property>
+								<property name="prop 2">Property-Test 2</property>
+							</servicedescription>
+							<provider name="Test-Name" reference="Test-Reference">
+								<address>127.0.0.1</address>
+								<address>127.0.0.2</address>
+							</provider>
+						</servicedependency>
+						<delaydependency quantity="10000"/>
+
+					</dependencies>
+
+		    	</agentinstance>
+			</agentinstances>
+
+			<societyinstancerefs>
+				<societyinstanceref name="Guests" quantity="1" namingscheme="%T ms" societytype="BirthdayParty" societyinstance="SmallGuestpool">
+					<!-- // remote reference
+					<launcher name="Test-Name" reference="Test-Reference">
+						<address>127.0.0.1</address>
+						<address>127.0.0.2</address>
+					</launcher>
+					-->
+					<dependencies>
+						<delaydependency quantity="10000"/>
+					</dependencies>
+				</societyinstanceref>
+			</societyinstancerefs>
+
+			<functional>
+				<dependencies>
+					<agentinstancedependency name="AgentInstanceName_fq" status="FUNCTIONAL"/>
+				</dependencies>
+				<invariant>Test-Invariant</invariant>
+			</functional>
+		</societyinstance>
+	</societyinstances>
+</society>

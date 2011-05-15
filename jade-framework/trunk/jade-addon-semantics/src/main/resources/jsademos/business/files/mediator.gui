@@ -1,0 +1,14 @@
+
+message# inform PHI # inform (PHI)
+message# request ACTION to AGENT # request ((action (agent-identifier :name AGENT@test) (ACTION :param PARAM)))
+#message# query-if buyer intend to pay # query-if ((I (agent-identifier :name buyer@test) (done (action (agent-identifier :name buyer@test) (PAY :amount 5001 :receiver (agent-identifier :name seller@test) :reference 777)) true) ))
+#message# query-if buyer has payed # query-if ((done (action (agent-identifier :name buyer@test) (PAY :amount 5001 :receiver (agent-identifier :name seller@test) :reference 777)) true))
+
+#message# manual query agreement # inform ((done (action (agent-identifier :name mediator@test) (QUERY_AGREEMENT :bank (agent-identifier :name bankAagent@test) :queryAgreement (agree-to-loan))) true))
+
+image# mediator
+
+receiver# buyer@test
+receiver# seller@test
+receiver# bankAagent@test
+receiver# b2b@test

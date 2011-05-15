@@ -1,0 +1,24 @@
+# TODO: devraient faire partie de la specif des actions dans inst.actions
+
+# sanctions for each type of violation
+# (sanction agent role action reason formula)
+# reason among : {interblocking, istrying, notintend}
+# special variables: ??_reference is specified in the institution agent's MediationFailed SIP: 
+# ==> DO NOT CHANGE THEIR NAMES
+# special variable ??punisher is instantiated in the file scanning method, do not change its name either
+
+# platform is unknown: ??_institution is not given
+# pb: same amount whatever the action for now ...
+
+#(sanction ??_agent ??_role ??_action istrying (fact (O (done (action ??_agent (PAY :amount 100 :receiver ??_institution :reference ??_reference)) true))))
+(sanction ??_agent ??_role ??_action istrying (fact (I ??punisher (done (action ??punisher (GIVE_FINE_TO :condemned ??_agent :amount 100 :institution b2b :reason (fact (and (D b2b (O (done (action ??_agent ??_action) true))) (not (done (action ??_agent ??_action))) )) :delay (fact (time 3000)) :reference ??_reference)) true) )))
+#(sanction ??_agent ??_role ??_action interblocking (fact (O (done (action ??_agent (PAY :amount 100 :receiver ??_institution :reference ??_reference)) true))))
+(sanction ??_agent ??_role ??_action interblocking (fact (I ??punisher (done (action ??punisher (GIVE_FINE_TO :condemned ??_agent :amount 100 :institution b2b :reason (fact (and (D b2b (O (done (action ??_agent ??_action) true))) (not (done (action ??_agent ??_action))) )) :delay (fact (time 7000)) :reference ??_reference)) true) )))
+
+(sanction ??_agent roleBuyer ??_action notintend (fact (D b2b (not (holder ??_agent roleBuyer)))) )
+(sanction ??_agent roleSeller ??_action notintend (fact (D b2b (not (holder ??_agent roleSeller)))) )
+# attention à ne pas retirer le rôle member ... (FIXME: qu'est-ce qui se passerait ??)
+
+#old# (sanction notintend (fact (O (B ??_agent fuzz))))
+
+#old# (sanction interblocking (fact (O (B ??_agent fiuozz))))

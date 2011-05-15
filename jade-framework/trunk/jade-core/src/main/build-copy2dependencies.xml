@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-ant-tasks" xmlns:artifact="urn:maven-artifact-ant">
+
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"/>
+	<artifact:pom file="pom.xml" id="pom" />
+	<artifact:dependencies filesetId="pom.fileset" pathId="pom.classpath" pomRefId="pom" />
+
+	<target name="test-pom" >
+		<echo>Artifact ID = ${pom.artifactId}</echo>
+		<echo>Version = ${pom.version}</echo>
+		<echo>Parent Artifact ID = ${pom.parent.artifactId}</echo>
+		<echo>Parent Version = ${pom.parent.version}</echo>
+
+	</target>
+	<target name="import-dependency" description="copy dependency jar file to target/deploy">
+	  <copy todir="../target/${pom.parent.artifactId}/${pom.parent.version}/${pom.artifactId}/lib">
+	    <fileset refid="pom.fileset"/>
+	    <mapper type="flatten" />
+	  </copy>
+	</target>
+
+</project>
+
+

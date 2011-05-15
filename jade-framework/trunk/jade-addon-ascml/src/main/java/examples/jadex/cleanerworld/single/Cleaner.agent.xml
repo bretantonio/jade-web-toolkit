@@ -1,0 +1,232 @@
+<!--
+	<H3>The cleaner world as single agent version.</H3>
+
+	It has these goals:
+	a) maintain its battery state.
+	b) clean-up waste and carry it to the wastebin.
+	c) patrol at night.
+-->
+
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Cleaner"
+	package="jadex.examples.cleanerworld.single">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+	</imports>
+
+	<beliefs>
+		<!-- location of objects -->
+		<belief name="daytime"  class="boolean">
+			<fact>true</fact>
+		</belief>
+		<belief name="my_location"  class="Location">
+			<fact>new Location(0, 0)</fact>
+		</belief>
+		<belief name="wastebin_location"  class="Location">
+			<fact>new Location(0.25, 0.25)</fact>
+		</belief>
+		<belief name="chargingstation_location" class="Location">
+			<fact>new Location(0.25, 0.75)</fact>
+		</belief>
+		<beliefset name="waste_locations" class="Location"></beliefset>
+		<beliefset name="known_waste_locations" class="Location"></beliefset>
+		<!-- state info -->
+		<belief name="speed" class="double">
+			<fact>0.1</fact>            
+		</belief>
+		<belief name="vision" class="double">
+			<fact>0.1</fact>
+		</belief>
+		<belief name="chargestate" class="double">
+			<fact>0.80</fact>
+		</belief>
+		<belief name="carrieswaste" class="boolean">
+			<fact>false</fact>
+		</belief>
+		<!-- Belief only present to allow old version of cleaner to work, LoadBatteryPlan accesses -->
+		<belief name="is_loading" class="boolean" >
+			<fact>
+				false
+			</fact>
+		</belief>
+		<beliefset name="patrolpoints" class="Location">
+			<fact>new Location(0.1, 0.1)</fact>
+			<fact>new Location(0.1, 0.9)</fact>
+			<fact>new Location(0.3, 0.9)</fact>
+			<fact>new Location(0.3, 0.1)</fact>
+			<fact>new Location(0.5, 0.1)</fact>
+			<fact>new Location(0.5, 0.9)</fact>
+			<fact>new Location(0.7, 0.9)</fact>
+			<fact>new Location(0.7, 0.1)</fact>
+			<fact>new Location(0.9, 0.1)</fact>
+			<fact>new Location(0.9, 0.9)</fact>
+		</beliefset>
+	</beliefs>
+
+	<goals>
+		<maintaingoal name="maintainbatteryloaded">
+ 			<deliberation>
+				<inhibits ref="achievecleanup" inhibit="when_in_process"/>
+				<inhibits ref="performlookforwaste" inhibit="when_in_process"/>
+				<inhibits ref="performpatrol" inhibit="when_in_process"/>
+			</deliberation>
+			<maintaincondition>
+ 				$beliefbase.chargestate &gt; 0.2
+			</maintaincondition>
+ 			<targetcondition>
+ 				$beliefbase.chargestate &gt;= 1.0
+			 </targetcondition>
+		</maintaingoal>
+
+		<achievegoal name="achievecleanup" retry="true" exclude="when_failed">
+			<parameter name="waste_location" class="Location">
+				<value>
+					select any $waste from $waste in $beliefbase.known_waste_locations
+					order by $waste.getDistance($beliefbase.my_location)
+				</value>
+				<!--<bindings>$beliefbase.known_waste_locations</bindings>-->
+			</parameter>
+			<creationcondition>
+				$beliefbase.known_waste_locations.length>0
+			</creationcondition>
+			<contextcondition>
+				$beliefbase.daytime
+			</contextcondition>
+			<dropcondition>
+				!$beliefbase.carrieswaste &amp;&amp;
+				!$beliefbase.getBeliefSet("known_waste_locations").containsFact($goal.waste_location)
+			</dropcondition>
+			<deliberation cardinality="1">
+				<inhibits ref="performlookforwaste"/>
+				<inhibits ref="achievecleanup">
+ 					!$beliefbase.carrieswaste &amp;&amp;
+ 					$beliefbase.my_location.getDistance($goal.waste_location)
+					&lt; $beliefbase.my_location.getDistance($ref.waste_location)
+				</inhibits>
+			</deliberation>
+		</achievegoal>
+
+		<performgoal name="performlookforwaste" retry="true" exclude="never">
+			<contextcondition>
+				$beliefbase.daytime
+ 			</contextcondition>
+ 		</performgoal>
+
+		<performgoal name="performpatrol" retry="true" exclude="never">
+			<contextcondition>
+				!$beliefbase.daytime
+ 			</contextcondition>
+ 		</performgoal>
+
+		<achievegoal name="achievemoveto">
+			<parameter name="location" class="Location"/>
+			<targetcondition>
+ 				$beliefbase.my_location.isNear($goal.location)
+ 			</targetcondition>
+		</achievegoal>
+
+		<!-- initial goals -->
+		<initialgoal ref="performlookforwaste"/>
+		<initialgoal ref="performpatrol"/>
+ 		<initialgoal ref="maintainbatteryloaded"/>
+ 	</goals>
+
+	<plans>
+		<plan name="randomwalk">
+			<body>new RandomWalkPlan()</body>
+			<trigger>
+				<goal ref="performlookforwaste"/>
+			</trigger>
+		</plan>
+
+		<plan name="patrol">
+			<body>new PatrolPlan()</body>
+			<trigger>
+				<goal ref="performpatrol"/>
+			</trigger>
+		</plan>
+
+		<plan name="cleanup">
+			<body>new CleanUpWastePlan()</body>
+			<trigger>
+				<goal ref="achievecleanup"/>
+			</trigger>
+		</plan>
+
+		<plan name="loadbattery">
+			<body>new LoadBatteryPlan()</body>
+			<trigger>
+				<goal ref="maintainbatteryloaded"/>
+			</trigger>
+		</plan>
+
+		<plan name="moveto">
+			<body>new MoveToLocationPlan()</body>
+			<trigger>
+				<goal ref="achievemoveto"/>
+			</trigger>
+			<contextcondition>
+ 				$beliefbase.chargestate &gt; 0
+			</contextcondition>
+		</plan>
+
+		<plan name="cleanup_waste_beliefs">
+			<body>new UpdateKnownWasteBeliefsPlan()</body>
+			<trigger>
+				<condition>
+					(select any $known_waste
+					from $beliefbase.known_waste_locations
+					where
+						$known_waste.isNear($beliefbase.my_location, $beliefbase.vision)
+					&amp;&amp;
+						(select any $waste from $beliefbase.waste_locations
+						where $waste.isNear($known_waste)
+						) == null
+					) != null
+				</condition>
+			</trigger>
+		</plan>
+
+		<plan name="gui" initial="true">
+			<body>new GUIPlan()</body>
+		</plan>
+
+		<plan name="wasteseen">
+			<body>new WasteSeenPlan()</body>
+			<trigger>
+				<condition>
+					(select any $wasteloc
+					from $beliefbase.waste_locations
+					where $wasteloc.isNear($beliefbase.my_location, $beliefbase.vision) &amp;&amp;
+						!$beliefbase.getBeliefSet("known_waste_locations").containsFact($wasteloc))
+					!= null
+				</condition>
+			</trigger>
+		</plan>
+	</plans>
+
+	<expressions>
+		<expression name="query_all_vanished_wastes">
+			select $known_waste from $beliefbase.known_waste_locations
+			where $known_waste.isNear($beliefbase.my_location, $beliefbase.vision)
+			&amp;&amp; (select any $waste from $beliefbase.waste_locations
+				where $waste.isNear($known_waste)) == null
+		</expression>
+
+		<expression name="query_new_waste_location">
+			select $wasteloc from $beliefbase.waste_locations
+			where $wasteloc.isNear($beliefbase.my_location, $beliefbase.vision) &amp;&amp;
+			!$beliefbase.getBeliefSet("known_waste_locations").containsFact($wasteloc)
+		</expression>
+	</expressions>
+
+	<properties>
+		<property name="debugging">false</property>
+	</properties>
+
+</agent>
+

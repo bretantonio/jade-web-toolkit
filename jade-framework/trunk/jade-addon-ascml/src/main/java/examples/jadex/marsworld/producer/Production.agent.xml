@@ -1,0 +1,194 @@
+<!--
+	<H3>Production agent for producing ore.</H3>
+
+	This Agent is called to move to an Location to produce ore there.
+	Therefore it is registering it's production-servivce at the DF.
+-->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://jadex.sourceforge.net/jadex.xsd"
+	name="Production"
+	package="jadex.examples.marsworld.producer">
+
+	<imports>
+		<import>jadex.examples.marsworld.ontology.*</import>
+		<import>jadex.examples.marsworld.movement.*</import>
+		<import>jadex.examples.marsworld.*</import>
+		<import>jadex.util.jade.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jade.core.*</import>
+		<import>jade.lang.acl.*</import>
+		<import>jade.content.lang.sl.*</import>
+	</imports>
+
+	<capabilities>
+		<!-- Include the df capability as dfcap for finding other agents
+			and registering the production service. -->
+		<capability name="dfcap" file="DF"/>
+		<!-- Include the move capability as move for basic movement. -->
+		<capability name="move" file="Movement" />
+	</capabilities>
+
+	<beliefs>
+		<!-- The environment as singleton object. -->
+		<belief name="environment" class="Environment">
+			<assignto ref="move.environment"/>
+			<fact>Environment.getInstance()</fact>
+	  	</belief>
+
+		<!-- The home location. -->
+		<belief name="my_home" class="Location">
+			<assignto ref="move.my_home"/>
+			<fact>$beliefbase.environment.getHomebase().getLocation()</fact>
+		</belief>
+
+		<!-- The current location. -->
+	    <belief name="my_location" class="Location">
+			<assignto ref="move.my_location"/>
+			<fact>$beliefbase.my_home</fact>
+		</belief>
+
+		<!-- The agent type (carry, producer or sentry) -->
+	    <belief name="my_type" class="String">
+			<assignto ref="move.my_type"/>
+			<fact>Environment.PRODUCTION_AGENT</fact>
+	  	</belief>
+
+		<!-- The speed. -->
+		<belief name="my_speed" class="double">
+			<assignto ref="move.my_speed"/>
+			<fact>10</fact>
+		</belief>
+
+		<!-- Is the mission finished? -->
+		<beliefref name="missionend">
+			<concrete ref="move.missionend"/>
+		</beliefref>
+
+		<!-- The sight radius. -->
+		<belief name="my_vision" class="double">
+			<assignto ref="move.my_vision"/>
+			<fact>0.05</fact>
+		</belief>
+
+		<!-- The seen targets. -->
+		<beliefsetref name="my_targets">
+			<concrete ref="move.my_targets"/>
+		</beliefsetref>
+
+		<!-- The targets sent to the sentries. -->
+		<beliefset name="finished_targets" class="Target"/>
+	</beliefs>
+
+	<goals>
+		<!-- Produce ore at a target. -->
+		<achievegoal name="produce_ore">
+			<parameter name="target" class="Target"/>
+			<dropcondition>
+				$beliefbase.missionend
+			</dropcondition>
+			<deliberation>
+				<inhibits ref="walk_around"/>
+			</deliberation>
+		</achievegoal>
+
+		<!-- Just walk around without a target. -->
+		<performgoalref name="walk_around">
+			<concrete ref="move.walk_around"/>
+		</performgoalref>
+		<!-- Watch out for targets. -->
+		<performgoalref name="watch_targets">
+			<concrete ref="move.watch_targets"/>
+		</performgoalref>
+		<!-- Move to some destination. -->
+		<achievegoalref name="move_dest">
+			<concrete ref="move.move_dest"/>
+		</achievegoalref>
+
+		<!-- Keeping the agent description registered at the df. -->
+		<maintaingoalref name="df_keep_registered">
+			<concrete ref="dfcap.df_keep_registered"/>
+		</maintaingoalref>
+		<!-- Usable for searching other agents. -->
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+
+		<!-- Create a goal for registering and keeping registerd at the df. -->
+		<initialgoal ref="df_keep_registered">
+			<parameter name="description">
+ 				<value>"services"</value>
+ 			</parameter>
+			<parameter name="leasetime">
+ 				<value>200000</value>
+ 			</parameter>
+		</initialgoal>
+		<!-- Create a goal for walking around. -->
+		<initialgoal ref="walk_around"/>
+		<!-- Create a goal for watching for targets. -->
+		<initialgoal ref="watch_targets"/>
+	</goals>
+
+	<plans>
+		<!-- The main plan handling action requests. -->
+		<plan name="produce" initial="true">
+			<body>new ProductionPlan()</body>
+			<waitqueue>
+				<messageevent ref="request_production"/>
+			</waitqueue>
+		</plan>
+
+		<!-- Produce ore at a target. -->
+		<plan name="produce_ore">
+			<body>new ProduceOrePlan()</body>
+			<trigger>
+				<goal ref="produce_ore"/>
+			</trigger>
+		</plan>
+
+		<!-- Inform sentries about new targets. -->
+		<plan name="informer">
+			<body>new InformNewTargetPlan()</body>
+			<!-- Inform whenever a new fact is added to the belief set my_targets. -->
+			<trigger>
+				<condition>
+					true
+					<affected eventtype="SystemEvent.BSFACT_ADDED" beliefref="my_targets"/>
+				</condition>
+			</trigger>
+		</plan>
+	</plans>
+
+	<events>
+		<!-- Message event for produce ore task allocation. -->
+		<messageevent name="request_production">
+			<parameter name="performative" class="int">
+				<value>ACLMessage.REQUEST</value>
+			</parameter>
+			<parameter name="action-class" class="Class">
+				<value>RequestProduction.class</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+	<languages>
+		<language>new SLCodec(0)</language>
+	</languages>
+	<ontologies>
+		<ontology>MarsOntology.getInstance()</ontology>
+	</ontologies>
+
+	<servicedescriptions>
+		<!-- The agent offers the service to produce ore. -->
+		<servicedescription name="service_produce"
+			type='"service_produce"'
+			ownership="University of Hamburg"/>
+	</servicedescriptions>
+
+	<agentdescriptions>
+		<agentdescription name="services">
+			<service>service_produce</service>
+		</agentdescription>
+	</agentdescriptions>
+
+</agent>

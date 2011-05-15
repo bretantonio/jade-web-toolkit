@@ -1,0 +1,10 @@
+
+#message# I am the intermediary # inform (middleman)
+message# Inform PHI # inform (PHI)
+
+image# intermediary2
+
+receiver# buyer@test
+receiver# seller@test
+receiver# mediator@test
+receiver# b2b@test

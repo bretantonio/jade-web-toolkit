@@ -1,0 +1,1 @@
+(paymentAdvice :amount 299.0 :creditorAID (agent-identifier :name seller@test) :debtorAID (agent-identifier :name buyer@test) :id \"PAY_ADV_0\" :invoiceReference \"INV_0\" :issueDateTime 20080723T115702397 :paymentDateTime 20080723T115654620)

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="Jadex-Blackjack-Society" package="jadex.examples.blackjack" icon=".\\examples\\jadex\\blackjack\\cards.gif"
+	description="Blackjack is a card game with at most 7 players and a fix-giver (dealer),
+one plays with six 52er-decks.
+One plays against the dealer and the goal is to beat the dealer by
+achieving a higher score. The highest attainable score is 21.
+The fix-values from 2 to 10 count its fix-values accordingly .
+The pictures king, lady and jack count 10. The ace either counts 11 or 1
+according to game-situation.
+
+Each player gets two cards in the beginning, that are put frankly.
+The giver gets only one open card, he may pull more cards only, when all
+other players are finished.
+
+When the cards are distributed, the player must decide, want he wants to do.
+Therefore, he adds the values of the two cards initially
+and has to decide, whether the reached points suffice him in order to win
+against the giver or whether he should take another card.
+
+The players can take as many cards as they wish unless their score is below 21.
+Differently the giver, this must take another card, if he has 16 or fewer points.
+He may take no more card, if he has 17 or more points.
+The game is drawn when the giver and the player have the same score.
+
+The best deck in Blackjack cosists of an ace and a card with value 10.
+This combination gives the game its name and cannot been beaten..
+A Blackjack always consists of only two cards. If one achieves 21 points with
+more than 2 cards, this loses against a Blackjack. The profit by winning with
+a Blackjack is 1.5:1, therefore the one and a half-fold of the pot.
+
+Game-course
+After one got the first two cards,
+there are in principle following possibilities:
+
+* the value of the first two cards is so good that one takes no more card (stand).
+* the value of the first two cards is not suffieient, so that one takes even more cards (hit).
+d  This is only possible as long as one has a score below 21.
+
+Extra-rules
+* the value of the first two cards is same.
+  One has the possibility to grit.
+* the value of the first two cards is success-promising so,
+  that one doubles the use (doubling).
+* the value of the first card of the giver it is so good that one fears he might gets
+  a Blackjack. One can insure itself against it (insurance).">
+
+	<agenttypes>
+		<agenttype name="jadex.runtime.impl.Jadex-Blackjack-Dealer"/>
+		<agenttype name="jadex.runtime.impl.Jadex-Blackjack-Player"/>
+		<agenttype name="jadex.runtime.impl.Jadex-Blackjack-Manager"/>
+	</agenttypes>
+
+	<societyinstances default="Blackjack with 6 Players">
+
+		<societyinstance name="Blackjack with 6 Players">
+			<agentinstances>
+				<agentinstance name="Player" type="Jadex-Blackjack-Player" quantity="6" namingscheme="%n"/>
+				<agentinstance name="Dealer" type="Jadex-Blackjack-Dealer"/>
+			</agentinstances>
+		</societyinstance>
+
+		<societyinstance name="Blackjack with 4 Players">
+			<agentinstances>
+				<agentinstance name="Player" type="Jadex-Blackjack-Player" quantity="4" namingscheme="%n"/>
+				<agentinstance name="Dealer" type="Jadex-Blackjack-Dealer"/>
+			</agentinstances>
+		</societyinstance>
+
+		<societyinstance name="Managed Blackjack">
+			<agentinstances>
+				<agentinstance name="Manager" type="Jadex-Blackjack-Manager"/>
+			</agentinstances>
+		</societyinstance>
+
+	</societyinstances>
+
+</society>

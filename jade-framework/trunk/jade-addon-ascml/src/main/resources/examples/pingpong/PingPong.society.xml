@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: PingPong.society.xml,v 1.8 2005/07/11 11:57:57 medha Exp $ -->
+<society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"
+	name="PingPongSociety" icon="/examples/pingpong/PingPongSociety.gif" package="examples.pingpong"
+	description="A Ping Pong Society to test the benchmarker">
+	<agenttypes>
+		<agenttype name="examples.pingpong.PingAgent"/>
+		<agenttype name="examples.pingpong.PongAgent"/>
+	</agenttypes>
+	<societyinstances default="PingPong">
+		<societyinstance name="PingPongGUILog">
+			<agentinstances>
+				<agentinstance name="PongPong" type="PongAgent">
+					<tooloption type="benchmark" enabled="true">
+                                                <property name="handler">jade.tools.benchmarking.handler.GUI</property>
+                                                <!-- Uncomment the following to get the results written to a file
+                                                <property name="handler">jade.tools.benchmarking.handler.FileWriter</property>
+                                                -->
+                                        </tooloption>
+				</agentinstance>
+				<agentinstance name="PingPing" type="PingAgent">
+                                        <!-- Parametervalue MUST also be defined in the .agent.xml !!!!!!!!!!!-->
+                                        <parametervalue name="pingCount"> 100 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+		</societyinstance>
+                <societyinstance name="PingPongFileLog">
+			<agentinstances>
+				<agentinstance name="PongPong" type="PongAgent">
+					<tooloption type="benchmark" enabled="true">
+                                                <property name="handler">jade.tools.benchmarking.handler.FileWriter</property>
+                                        </tooloption>
+				</agentinstance>
+				<agentinstance name="PingPing" type="PingAgent">
+                                        <!-- Parametervalue MUST also be defined in the .agent.xml !!!!!!!!!!!-->
+                                        <parametervalue name="pingCount"> 400 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+		</societyinstance>
+                <societyinstance name="PingPongFileLog60-40msec">
+			<agentinstances>
+				<agentinstance name="PongPong" type="PongAgent">
+                                        <parametervalue name="delay"> 60 </parametervalue>
+					<tooloption type="benchmark" enabled="true">
+                                                <property name="handler">jade.tools.benchmarking.handler.FileWriter</property>
+                                        </tooloption>
+				</agentinstance>
+				<agentinstance name="PingPing" type="PingAgent">
+                                        <!-- Parametervalue MUST also be defined in the .agent.xml !!!!!!!!!!!-->
+                                        <parametervalue name="pingCount"> 400 </parametervalue>
+                                        <parametervalue name="delay"> 40 </parametervalue>
+                                        <parametervalue name="verbose"> 1 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+		</societyinstance>
+                <societyinstance name="PingPongGUILog60-40msec">
+			<agentinstances>
+				<agentinstance name="PongPong" type="PongAgent">
+                                        <parametervalue name="delay"> 60 </parametervalue>
+					<tooloption type="benchmark" enabled="true">
+                                                <property name="handler">jade.tools.benchmarking.handler.GUI</property>
+                                        </tooloption>
+				</agentinstance>
+				<agentinstance name="PingPing" type="PingAgent">
+                                        <!-- Parametervalue MUST also be defined in the .agent.xml !!!!!!!!!!!-->
+                                        <parametervalue name="pingCount"> 400 </parametervalue>
+                                        <parametervalue name="delay"> 40 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+		</societyinstance>
+
+                <societyinstance name="PingPongRemote">
+                        <societyinstanceref name="RemotePingPongParty" quantity="1" namingscheme="%T ms" societytype="examples.pingpong.PingPongSociety" societyinstance="PongAloneRemote">
+				<launcher name="ascml@lotho:2099/JADE">
+					<address>http://lotho:2100/acc</address>
+				</launcher>
+			</societyinstanceref>
+			<agentinstances>
+				<agentinstance name="PingPing" type="PingAgent">
+                                        <parametervalue name="pingCount"> 100 </parametervalue>
+                                        <parametervalue name="verbose"> 1 </parametervalue>
+				</agentinstance>
+			</agentinstances>
+		</societyinstance>
+
+                <societyinstance name="PongAloneRemote">
+			<agentinstances>
+				<agentinstance name="RemotePong" type="PongAgent">
+                                        <parametervalue name="df"> df@lotho:3099/JADE </parametervalue>
+                                        <parametervalue name="transport"> http://lotho:3100/acc </parametervalue>
+                                        <parametervalue name="verbose"> 1 </parametervalue>
+				</agentinstance>
+                        </agentinstances>
+		</societyinstance>
+	</societyinstances>
+</society>

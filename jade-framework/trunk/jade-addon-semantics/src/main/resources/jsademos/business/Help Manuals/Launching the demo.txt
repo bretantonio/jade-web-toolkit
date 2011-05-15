@@ -1,0 +1,83 @@
+
+******* LAUNCH THE DEMO *******
+
+To launch the demo, use the MainClass that is provided (e.g. by running the "ant business run" command in the JSA root directory).
+A window is displayed allowing you to choose between "demo mode" and "expert mode"
+  - demo mode only displays agents useful for the demo, with a simplified GUI
+  - expert mode displays all agents with full GUI, allowing to customize messages sent, to see the KBase...
+
+
+
+******* RUN THE DEMO SCENARIO *******
+
+To run the demo scenario, follow these steps (these are the manual actions you have to perform in the agents' GUIs. Some actions are automaticly performed by agents, they will be listed between your numbered manual actions):
+
+buyer = agent representing enterpriseA
+seller = agent representing enterpriseB
+
+1) ENTERPRISE A - request catalogue via buyer	
+	- buyer forwards to seller
+	- seller forwards to EnterpriseB
+
+2) ENTERPRISE B - send catalogue via seller
+	- seller forwards to buyer
+	- buyer forwards to EnterpriseA
+
+3) ENTREPRISE A - send purchase order
+	- buyer completes the order with information about EnterpriseA's business process (in particular "pays after delivery") and forwards it to seller
+	- seller refuses (in answer to buyer, because the order does not match EnterpriseB's business process, in particular "delivers after payment")
+	- buyer signals problem to mediator
+	- mediator queries agreement to the client's bank
+
+4) BANK A - agreement
+	- bankAagent forwards to mediator
+	- mediator continues his strategy by requesting buyer to delegate the purchase to the intermediary that he indicates
+	- buyer delegates to intermediary
+	- buyer informs mediator that he has obeyed his request
+	- intermediary modifies the order to match EnterpriseB's business process, and then sends it to seller
+	- seller forwards purchase order (because it matches)
+
+5) ENTREPRISE B - accept purchase order
+	- seller forwards to intermediary
+	- intermediaryforwards to buyer
+	- buyer forwards to EnterpriseA
+
+6) ENTREPRISE B - invoice
+	- seller forwards to intermediary, who retains the invoice for now (does not forward to buyer)
+	- intermediary sends payment order to the bank (who accepted the mediator's "query for agreement to advance money to EnterpriseA" before)
+
+6) BANK A - payment advice via bankAagent
+	- bankAagent forwards to intermediary
+	- intermediary forwards to seller
+	- seller forwards to EnterpriseB
+
+((7)) BANK A - physical payment, directly to bankB  (physical payment sent after payment advice to simulate payment delay) - OUT OF PLATFORM NOW
+
+((8)) BANK B - payment note directly to EnterpriseB (OUT OF PLATFORM)
+	* enterpriseB now has proofs of payment, so it delivers
+
+9) ENTERPRISE B - dispatch advice via seller (simulate the expedition of goods)
+	- seller forwards to intermediary
+	- intermediary forwards to buyer
+	- buyer forwards to EnterpriseA 
+
+((10)) ENTERPRISE B - physical delivery directly to EntrerpriseA (OUT OF PLATFORM NOW), simulating the effective arrival of goods after a transport delay
+	* EnterpriseA now has a proof of delivery so it can pay
+
+11) ENTERPRISE A - receipt advice via buyer
+	- buyer forwards to intermediary 
+	- intermediary now sends invoice to buyer (because the receipt advice makes him detect that now EnterpriseB can pay)
+	- intermediary forwards receipt advice to seller
+	- seller does not forward receipt advice to EnterpriseB because he knows that EnterpriseB's business process does not need such document (process is over for EnterpriseB once it has been paid)	- buyer forwards invoice to EnterpriseA
+
+
+((12)) ENTERPRISE A - physical payment order, directly to bankA : the reimbursement is done OUT OF PLATFORM, between the client and his bank)
+
+13) ENTREPRISE A - payment advice via buyer
+	- buyer forwards to intermediary
+	- intermediary sends a "transaction-over" message to mediator
+
+
+******* END *******
+
+	

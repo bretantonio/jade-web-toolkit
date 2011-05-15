@@ -1,0 +1,6 @@
+message# Is the temperature greater than ...? # query-if ((temperature_gt XXX))
+message# What is the temperature? # query-ref ((any ?X (temperature ?X)))
+message# I want to know the temperature # inform ((I (agent-identifier :name son@test) (exists ?T (B (agent-identifier :name son@test) (temperature ?T)))))
+
+receiver# sensor@test
+receiver# display@test

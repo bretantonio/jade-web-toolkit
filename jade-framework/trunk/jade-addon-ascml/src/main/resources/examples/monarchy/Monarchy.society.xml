@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><society xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:noNamespaceSchemaLocation="http://intensivstation.informatik.rwth-aachen.de:8080/schema/society.xsd"	name="Monarchy Example" icon="" package="examples.monarchy"	description="A simple Monarchy">
+	<imports>		<import>examples.party</import>	</imports>		<agenttypes>		<agenttype name="examples.monarchy.Farmer"/>		<agenttype name="examples.monarchy.Monk"/>		
+		<agenttype name="examples.monarchy.Aristocrat"/>	</agenttypes>		<societyinstances default="Majesty">			<societyinstance name="People" description="Every monarchy is based on the people.">			<agentinstances>				<agentinstance name="farmer1" type="Farmer">				</agentinstance>
+	
+				<agentinstance name="farmer2" type="Farmer">				</agentinstance>
+			
+				<agentinstance name="farmer3" type="Farmer">				</agentinstance>
+				
+				<agentinstance name="farmer4" type="Farmer">				</agentinstance>	
+				
+				<agentinstance name="farmer5" type="Farmer">				</agentinstance>			</agentinstances>					</societyinstance>					<societyinstance name="Clerus-Hierachy" description="Divine">			<agentinstances>				<agentinstance name="Pope" type="Monk">				</agentinstance>			</agentinstances>
+			<societyinstanceref name="Lower Clerus1" societytype="Lower Clerus" societyinstance="Lower Clerus">
+				<launcher name="ascml@rome:1099/JADE">					<address> http://127.0.0.1:80 </address>				</launcher>
+			</societyinstanceref>
+
+			<societyinstanceref name="Bishops conference" societytype="Bishops conference" societyinstance="Bishops">
+				<launcher name="ascml@europe:1099/JADE">
+					<address> http://127.0.0.1:80 </address>
+				</launcher>
+			</societyinstanceref>
+		</societyinstance>
+
+		<societyinstance name="Bishops Conference" description="Purple Reign">
+			<agentinstances>
+				<agentinstance name="Bishop Cologne" type="Monk">
+				</agentinstance>
+				<agentinstance name="Bishop Muenster" type="Monk">
+				</agentinstance>
+				<agentinstance name="Bishop Aachen" type="Monk">
+				</agentinstance>
+			</agentinstances>
+
+		</societyinstance>
+
+
+
+
+		<societyinstance name="Lower Clerus" description="Lower Clerus">
+
+			<agentinstances>
+			<agentinstance name="Monk1" type="Monk">
+			</agentinstance>
+			<agentinstance name="Monk2" type="Monk">
+			</agentinstance>
+			<agentinstance name="Monk3" type="Monk">
+			</agentinstance>
+			<agentinstance name="Monk4" type="Monk">
+			</agentinstance>
+			<agentinstance name="Monk5" type="Monk">
+			</agentinstance>
+			<agentinstance name="Monk6" type="Monk">
+			</agentinstance>
+			<agentinstance name="Monk7" type="Monk">
+			</agentinstance>
+		</agentinstances>
+		</societyinstance>
+
+
+
+
+
+
+			</societyinstances></society>
