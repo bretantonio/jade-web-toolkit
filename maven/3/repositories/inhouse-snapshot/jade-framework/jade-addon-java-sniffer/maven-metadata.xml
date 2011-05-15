@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-framework</groupId>
+  <artifactId>jade-addon-java-sniffer</artifactId>
+  <versioning>
+    <versions>
+      <version>4.0.1-M1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20110515051323</lastUpdated>
+  </versioning>
+</metadata>
