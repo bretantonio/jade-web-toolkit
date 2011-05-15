@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>protege-owl</groupId>
+  <artifactId>protege-owl</artifactId>
+  <versioning>
+    <release>3.4.6</release>
+    <versions>
+      <version>3.4.6</version>
+    </versions>
+    <lastUpdated>20110515004851</lastUpdated>
+  </versioning>
+</metadata>
