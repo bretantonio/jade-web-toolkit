@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>jade-framework</groupId>
+  <artifactId>jade-addon-persistence</artifactId>
+  <versioning>
+    <versions>
+      <version>4.0.1-M1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20110515053203</lastUpdated>
+  </versioning>
+</metadata>
