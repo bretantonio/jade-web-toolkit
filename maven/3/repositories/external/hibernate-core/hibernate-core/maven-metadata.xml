@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>hibernate-core</groupId>
+  <artifactId>hibernate-core</artifactId>
+  <versioning>
+    <release>3.6.3.final</release>
+    <versions>
+      <version>3.6.3.final</version>
+    </versions>
+    <lastUpdated>20110515005754</lastUpdated>
+  </versioning>
+</metadata>
