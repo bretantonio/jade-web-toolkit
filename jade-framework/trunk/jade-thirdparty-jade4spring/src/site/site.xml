@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="jade4spring">
+	<bannerLeft>
+		<name>jade4spring</name>
+		<src>images/jade4spring.png</src>
+		<href>http://jade4spring.sourceforge.net</href>
+	</bannerLeft>
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-stylus-skin</artifactId>
+		<version>1.0.1</version>
+	</skin>
+	<publishDate format="MMMMM dd, yyyy 'at' HH:mm" />
+	<body>
+		<links>
+			<item name="Integrasco" href="http://www.integrasco.com/" />
+			<item name="JADE" href="http://jade.tilab.com" />
+			<item name="Spring Framework"
+				href="http://www.springframework.org" />
+		</links>
+
+		<menu name="jade4spring">
+			<item name="Introduction" href="index.html" />
+			<item name="News" href="index.html#News" />
+			<item name="Tutorial" href="tutorial.html" />
+			<item name="Download" href="download.html" />
+			<item name="Project pages"
+				href="http://sourceforge.net/projects/jade4spring/" />
+		</menu>
+
+		<menu ref="reports" />
+
+	</body>
+	<poweredBy>
+		<logo name="Maven" href="http://maven.apache.org/"
+			img="http://maven.apache.org/images/logos/maven-feather.png" />
+		<logo name="Sourceforge.net" href="http://www.sourceforge.net"
+			img="http://sflogo.sourceforge.net/sflogo.php?group_id=217014&amp;type=2" />
+		<logo name="Integrasco A/S" href="http://www.integrasco.com"
+			img="images/integrasco.png" />
+	</poweredBy>
+</project>

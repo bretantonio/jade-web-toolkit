@@ -1,0 +1,48 @@
+<document>
+	<properties>
+		<author email="jaran.nilsen@integrasco.no">Jaran Nilsen</author>
+		<title>jade4spring - Welcome</title>
+	</properties>
+	<!--
+		Optional HEAD element, which is copied as is into the XHTML <head> element
+	-->
+	<head>
+
+	</head>
+	<body>
+		<!-- The body of the document contains a number of sections -->
+		<section name="Welcome to jade4spring!">
+			<p>
+				jade4spring is an open source project, released under
+				the LGPL license, which
+				provides easy integration of the
+				<a href="http://jade.tilab.com">JADE</a>
+				framework in
+				<a href="http://www.springframework.org">Spring</a>
+				application contexts.
+			</p>
+			<p style="text-align: center;">
+				<img src="images/logos-front.png" />
+			</p>
+
+			<subsection name="Background">
+				<p>
+					jade4spring was started as an in-house project for
+					easily creating JADE
+					agents and containers through
+					Spring application contexts.
+				</p>
+				<p>
+					The project was started by developers at
+					<a href="http://www.integrasco.com">
+						Integrasco A/S
+					</a>
+					and in February 2008 we decided that it was now time
+					to release it to the
+					open source community.
+				</p>
+			</subsection>
+		</section>
+
+	</body>
+</document>

@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<document>
+	<properties>
+		<title>jade4spring Changes</title>
+		<author email="sfkarbo@users.sourceforge.net">Jaran Nilsen</author>
+	</properties>
+	<body>
+        <release version="1.1.1" date="2010-12-06">
+            <action dev=kmonge type="fix">
+                Fixed a bug where getting an agent by AID would throw exception if
+                agent existed in any container but the first registered.
+           </action>
+        </release>    
+		<release version="1.1" date="2010-11-29">
+			<action dev="tarjeiromtveit" type="update">
+				Upgraded to version 4.0.1 of JADE.
+	       </action>
+			<action dev="tarjeiromtveit" type="update">
+				Refactored major parts of the JadeBean class. Increased
+				test coverage.
+	       </action>
+			<action dev="tarjeiromtveit" type="update">
+				Upgraded Spring dependency to version 3.0.5.
+	       </action>
+		</release>
+		<release version="1.0.2" date="2009-06-10">
+			<action dev="sfkarbo" type="fix">
+				Fixed issue with classpath prefixes when
+				specifying properties
+				file location.
+				Paths on classpath should now be handled
+				correctly.
+            </action>
+			<action dev="sfkarbo" type="update">
+				License changed from GPL to LGPLv3.
+            </action>
+		</release>
+		<release version="1.0.1" date="2008-11-23">
+			<action dev="sfkarbo" type="update">
+				JADE upgraded to version 3.6.1.
+	       </action>
+		</release>
+		<release version="1.0" date="2008-02-13">
+			<action dev="sfkarbo" type="update">
+				Base package now moved to
+				net.sf.jade4spring.
+	       </action>
+			<action dev="sfkarbo" type="add">
+				jade4spring is now open source!
+	       </action>
+		</release>
+	</body>
+</document>

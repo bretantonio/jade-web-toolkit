@@ -1,0 +1,107 @@
+<document>
+		<properties>
+				<author email="jaran.nilsen@integrasco.no">Jaran Nilsen</author>
+				<title>jade4spring tutorial</title>
+		</properties>
+		<!-- Optional HEAD element, which is copied as is into the XHTML <head> element -->
+		<head>
+
+		</head>
+		<body>
+				<!-- The body of the document contains a number of sections -->
+				<section name="Using Jade4spring in your application">
+
+						<p>
+								Jade4Spring is created in order to make use of
+								<a href="http://jade.tilab.com">JADE</a>
+								with
+								<a href="http://www.springframework.org">Spring Framework</a>
+								faster and easier. This section explains how you set up your application to support JADE agents.
+						</p>
+
+						<subsection name="The Application Context">
+
+								In order to access Jade4Spring in your application you need to add the following bean to your
+								<a href="http://static.springframework.org/spring/docs/2.0.x/reference/resources.html#resources-app-ctx">Application Context</a>
+								.
+
+								<source>
+										<![CDATA[
+<!--  JADE Container bean -->
+<bean id="jadeBean"
+	class="net.sf.jade4spring.JadeBean"
+	init-method="startContainer" lazy-init="false"
+	destroy-method="stopContainer">
+</bean>]]>
+								</source>
+
+								<p>
+										There are a few properties which are worth mentioning. The utilityAgents property can be set to true or false indicating whether the container should start utility agents for monitoring the platform that it is connected to. One of these agents is the J4SInfiltratorAgent which keeps track of events in the platform and which agents that are currently running.
+										This is the agent used by JadeBean to obtain platform information.
+								</p>
+								<p>
+										The utility agents are started by JadeBean by default, so if you want to disable this, then add the following element to your JadeBean configuration:
+										<source>
+												<![CDATA[
+<property name="utilityAgents">
+	<value>false</value>
+</property>]]>
+										</source>
+										
+										N.B. When setting the utilityAgents property to false, all calls to the JadeBean methods that performs Agent related action like kill, suspend and resume will not be execute correctly.									
+																				
+								</p>
+								<p>
+										Jade4Spring allows you to specify agents in the application context and have the JadeBean automatically start them when the container is running. To autostart your agents you have to specify them as beans in the application context and add them as a map to the JadeBean. This is done with the following configuration:
+										<source>
+												<![CDATA[
+<property name="autostartAgents">
+    <map>
+       <entry>
+            <key>
+                <value>TestAgent</value>
+            </key>
+            <ref bean="testAgent" />
+        </entry>
+    </map>
+</property>]]>
+										</source>
+										You may add as many agents as you want, just make sure to give them unique names or all agents except the first one will fail to start...
+								</p>
+						</subsection>
+						<subsection name="JADE configuration">
+								<p>Configuring the JADE container that is launched through jade4spring is done via a properties file. This properties file must, by default, be located on your classpath as /jade.properties. if you want this file to be located in a different location you may specify this via the following parameter on the JadeBean instance:</p>
+								<source>
+										<![CDATA[
+<property name="propertiesFile" value="/path/to/configuration/jade.properties" />
+								]]>
+								</source>
+								or
+								<source>
+										<![CDATA[
+<property name="propertiesFile" value="classpath:/path/on/classpath/jade.properties" />
+								]]>
+								</source>
+								<p>The properties available to set in the properties files are those specified in the JADE configuration. Here is an example configuration for a container:</p>
+								<source>
+								<![CDATA[
+container=true
+port=4242
+host=localhost
+container-name=MyContainer
+								]]>
+								</source>
+								<p> From version (>= 1.0.3) additional parameters must be added to the jade.properties file: </p>
+								
+								<source>
+								<![CDATA[
+local-port=42424
+local-host=127.0.0.1	
+									]]>
+								</source>
+	
+						</subsection>
+				</section>
+
+		</body>
+</document>
