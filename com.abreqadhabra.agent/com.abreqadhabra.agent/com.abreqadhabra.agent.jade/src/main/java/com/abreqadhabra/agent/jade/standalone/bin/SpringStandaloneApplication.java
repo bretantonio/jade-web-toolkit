@@ -70,7 +70,7 @@ public class SpringStandaloneApplication {
 		AgentController agentController = platformController.getAgent("ams");
 		logger.info(new XStream().toXML(agentController.getName()));
 		logger.info(new XStream().toXML(agentController.getState().getName()));
-		
+
 		new PersistenceManagerGUI().showCorrect();
 	}
 
@@ -85,11 +85,11 @@ public class SpringStandaloneApplication {
 		services.append(";");
 		services.append("jade.core.event.NotificationService");
 		services.append(";");
-		
+
 		bootPropertyList.add(services.toString());
 		bootPropertyList.add("-meta-db");
 		bootPropertyList.add("JADE_Persistence.properties");
-		
+
 		bootPropertyList.add("-agents");
 		JadeExamples jadeExample = JadeExamples.instance();
 		 bootPropertyList.add(jadeExample.getAgentsProperty(JadeExamples.EXAMPLE_BASE64));

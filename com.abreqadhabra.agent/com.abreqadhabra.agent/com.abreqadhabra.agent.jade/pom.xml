@@ -14,7 +14,6 @@
 			<artifactId>jade-core</artifactId>
 			<version>4.0.1-M1-RELEASE</version>
 			<type>jar</type>
-			<classifier>lib</classifier>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
