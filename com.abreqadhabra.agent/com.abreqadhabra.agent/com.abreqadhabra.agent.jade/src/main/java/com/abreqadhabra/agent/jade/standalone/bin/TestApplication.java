@@ -20,23 +20,23 @@ public class TestApplication {
 		JadeBootProperties bootProperties = new JadeBootProperties();
 
 		// -container
-		bootProperties.getMainOptions().isContainer(true);
+		bootProperties.isContainer(true);
 		// -host
-		bootProperties.getMainOptions().setHost("host");
+		bootProperties.setHost("host");
 		// -port
-		bootProperties.getMainOptions().setPort("port");
+		bootProperties.setPort("port");
 		// -gui
-		bootProperties.getMainOptions().isGui(true);
+		bootProperties.isGui(true);
 		// -local-host
-		bootProperties.getMainOptions().setLocalHost("local-host");
+		bootProperties.setLocalHost("local-host");
 		// -local-port
-		bootProperties.getMainOptions().setLocalPort("local-port");
+		bootProperties.setLocalPort("local-port");
 		// -platform-id
-		bootProperties.getMainOptions().setPlatformId("platform-id");
+		bootProperties.setPlatformId("platform-id");
 		// -name
-		bootProperties.getMainOptions().setName("name");
+		bootProperties.setName("name");
 		// -container-name
-		bootProperties.getMainOptions().setContainerName("container-name");
+		bootProperties.setContainerName("container-name");
 
 		//-services
 		ArrayList<String> serviceList = new ArrayList<String>();
@@ -48,38 +48,41 @@ public class TestApplication {
 		serviceList.add("jade.core.faultRecovery.FaultRecoveryService");
 		serviceList.add("jade.core.messaging.TopicManagementService");
 		serviceList.add("jade.imtp.leap.nio.BEManagementService");
-		bootProperties.getMainOptions().setServices(serviceList);
+		bootProperties.setServices(serviceList);
 
 		//-mtps
 		// mtp-specifier = [in-address:]<mtp-class>[(comma-separated args)]
 		ArrayList<String> mtpList = new ArrayList<String>();
-		bootProperties.getMainOptions().setMtps(mtpList);
+		bootProperties.setMtps(mtpList);
 		//-nomtp
-		bootProperties.getMainOptions().isNomtp(true);
+		bootProperties.isNomtp(true);
 		//-backupmain
-		bootProperties.getMainOptions().isBackupmain(true);
+		bootProperties.isBackupmain(true);
 		//-smhost
-		bootProperties.getMainOptions().isSmhost(true);
+		bootProperties.isSmhost(true);
 		//-smport
-		bootProperties.getMainOptions().isSmport(true);
+		bootProperties.isSmport(true);
 		//-smaddrs
-		bootProperties.getMainOptions().isSmaddrs(true);
+		bootProperties.isSmaddrs(true);
 		//-aclcodecs
 		ArrayList<String> aclcodecList = new ArrayList<String>();
-		bootProperties.getMainOptions().setAclcodecs(aclcodecList);
+		bootProperties.setAclcodecs(aclcodecList);
 		//-nomobility
-		bootProperties.getMainOptions().isNomobility(true);
+		bootProperties.isNomobility(true);
 		//-version
-		bootProperties.getMainOptions().isVersion(true);
+		bootProperties.isVersion(true);
 		//-help
-		bootProperties.getMainOptions().isHelp(true);
+		bootProperties.isHelp(true);
 		//-conf
-		bootProperties.getMainOptions().setConf("conf");
+		bootProperties.setConf("conf");
 		//-<property-name> <property-value>
 		HashMap<String, String> propertyMap = new HashMap<String, String>();
 		propertyMap.put("property-name1", "property-value1");
 		propertyMap.put("property-name2", "property-value2");
-		bootProperties.getMainOptions().setOtherProperties(propertyMap);
+		bootProperties.setOtherProperties(propertyMap);
+		//-agents <semicolon separated list of agent-specifiers> where agent-specifier = <agent-name>:<agent-class>[(comma separated args)]
+		ArrayList<String> agentList = new ArrayList<String>();
+		bootProperties.setAgents(agentList);
 
 		String[] bootPropertiesArray = bootProperties.getBootProperties();
 		int bootPropertiesArrayLength = bootPropertiesArray.length;
