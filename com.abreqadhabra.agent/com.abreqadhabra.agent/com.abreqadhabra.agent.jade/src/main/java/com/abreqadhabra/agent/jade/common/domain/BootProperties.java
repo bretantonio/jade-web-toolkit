@@ -12,18 +12,22 @@ import com.abreqadhabra.agent.jade.common.constants.Constant;
 /**
  * The Class JadeBootProperties.
  */
-public class JadeBootProperties {
+public class BootProperties {
+
+	public static final String OTHER_PROPERTIES = "other_properties";
+
+	public static final String AGENTS = "agent";
 
 	/** The boot properties. */
 	private String[] bootProperties = null;
-	
+
 	/** The property list. */
 	private ArrayList<String> propertyList = new ArrayList<String>();
 
 	/**
 	 * Instantiates a new jade boot properties.
 	 */
-	public JadeBootProperties() {
+	public BootProperties() {
 	}
 
 	/**
@@ -109,11 +113,8 @@ public class JadeBootProperties {
 	 *
 	 * @param localHost the new local host
 	 */
-	public void setLocalHost(String localHost) {
-		localHost = getKeyString(BootProfileImpl.LOCAL_HOST)
-				+ Constant.STRING_SPACE + localHost;
-		propertyList.add(localHost);
-
+	public void isLocalHost(boolean b) {
+		propertyList.add(getKeyString(BootProfileImpl.LOCAL_HOST));
 	}
 
 	/**
@@ -121,11 +122,8 @@ public class JadeBootProperties {
 	 *
 	 * @param localPort the new local port
 	 */
-	public void setLocalPort(String localPort) {
-		localPort = getKeyString(BootProfileImpl.LOCAL_PORT)
-				+ Constant.STRING_SPACE + localPort;
-		propertyList.add(localPort);
-
+	public void isLocalPort(boolean b) {
+		propertyList.add(getKeyString(BootProfileImpl.LOCAL_PORT));
 	}
 
 	/**
