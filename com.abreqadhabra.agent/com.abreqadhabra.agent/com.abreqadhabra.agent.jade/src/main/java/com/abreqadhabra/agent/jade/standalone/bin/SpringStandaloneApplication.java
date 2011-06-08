@@ -8,6 +8,7 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.abreqadhabra.agent.jade.common.constants.Constant;
+import com.abreqadhabra.agent.jade.common.domain.JadeBootProperties;
 import com.abreqadhabra.agent.jade.common.service.JadePlatformService;
 import com.abreqadhabra.agent.jade.examples.JadeExamples;
 import com.thoughtworks.xstream.XStream;
@@ -43,13 +45,92 @@ public class SpringStandaloneApplication {
 		SpringStandaloneApplication application = new SpringStandaloneApplication();
 		application.initController();
 		try {
-			application.startContainer();
+			//application.startContainer();
+			application.excute();
 		} catch (ControllerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	private void excute() throws ControllerException {
+		String[] bootPropertyArgs = this.getBootPropertyArgs();
+		this.jadeAgentPlatformsService.excute(bootPropertyArgs);
+	}
+
+	private String[] getBootPropertyArgs() {
+		JadeBootProperties bootProperties = new JadeBootProperties();
+		/* -container */
+		bootProperties.isContainer(true);
+		/*-host*/
+		bootProperties.setHost("host");
+		/*-port*/
+		bootProperties.setPort("port");
+		/*-gui*/
+		bootProperties.isGui(true);
+		/*-local-host*/
+		bootProperties.setLocalHost("local-host");
+		/*-local-port*/
+		bootProperties.setLocalPort("local-port");
+		/*-platform-id*/
+		bootProperties.setPlatformId("platform-id");
+		/*-name*/
+		bootProperties.setName("name");
+		/*-container-name*/
+		bootProperties.setContainerName("container-name");
+		/*-services*/
+		ArrayList<String> serviceList = new ArrayList<String>();
+		/* Inactive by default */
+		serviceList.add("jade.core.messaging.PersistentDeliveryService");
+		serviceList.add("jade.core.replication.MainReplicationService");
+		serviceList.add("jade.core.replication.AddressNotificationService");
+		serviceList.add("Jade.core.nodeMonitoring.UDPNodeMonitoringService");
+		serviceList.add("jade.core.faultRecovery.FaultRecoveryService");
+		serviceList.add("jade.core.messaging.TopicManagementService");
+		serviceList.add("jade.imtp.leap.nio.BEManagementService");
+		bootProperties.setServices(serviceList);
+		/*
+		 * -mtps mtp-specifier = [in-address:]<mtp-class>[(comma-separated
+		 * args)]
+		 */
+		ArrayList<String> mtpList = new ArrayList<String>();
+		bootProperties.setMtps(mtpList);
+		/* -nomtp */
+		bootProperties.isNomtp(true);
+		/* -backupmain */
+		bootProperties.isBackupmain(true);
+		/*-smhost*/
+		bootProperties.isSmhost(true);
+		/*-smport*/
+		bootProperties.isSmport(true);
+		/*-smaddrs*/
+		bootProperties.isSmaddrs(true);
+		/*-aclcodecs*/
+		ArrayList<String> aclcodecList = new ArrayList<String>();
+		bootProperties.setAclcodecs(aclcodecList);
+		/*-nomobility*/
+		bootProperties.isNomobility(true);
+		/*-version*/
+		bootProperties.isVersion(true);
+		/*-help*/
+		bootProperties.isHelp(true);
+		/*-conf*/
+		bootProperties.setConf("conf");
+		/*-<property-name> <property-value>*/
+		HashMap<String, String> propertyMap = new HashMap<String, String>();
+		propertyMap.put("property-name1", "property-value1");
+		propertyMap.put("property-name2", "property-value2");
+		bootProperties.setOtherProperties(propertyMap);
+		/*
+		 * -agents <semicolon separated list of agent-specifiers> where
+		 * agent-specifier = <agent-name>:<agent-class>[(comma separated args)]
+		 */
+		ArrayList<String> agentList = new ArrayList<String>();
+		bootProperties.setAgents(agentList);
+		return bootProperties.getBootProperties();
+	}
+
+	/*
 	private void startContainer() throws ControllerException {
 		ArrayList<String> bootPropertyList = getBootPropertyList();
 
@@ -70,10 +151,10 @@ public class SpringStandaloneApplication {
 		AgentController agentController = platformController.getAgent("ams");
 		logger.info(new XStream().toXML(agentController.getName()));
 		logger.info(new XStream().toXML(agentController.getState().getName()));
-
+		
 		new PersistenceManagerGUI().showCorrect();
 	}
-
+*/
 	@SuppressWarnings("static-access")
 	private static ArrayList<String> getBootPropertyList() {
 		ArrayList<String> bootPropertyList = new ArrayList<String>();
@@ -85,11 +166,11 @@ public class SpringStandaloneApplication {
 		services.append(";");
 		services.append("jade.core.event.NotificationService");
 		services.append(";");
-
+		
 		bootPropertyList.add(services.toString());
 		bootPropertyList.add("-meta-db");
 		bootPropertyList.add("JADE_Persistence.properties");
-
+		
 		bootPropertyList.add("-agents");
 		JadeExamples jadeExample = JadeExamples.instance();
 		 bootPropertyList.add(jadeExample.getAgentsProperty(JadeExamples.EXAMPLE_BASE64));
