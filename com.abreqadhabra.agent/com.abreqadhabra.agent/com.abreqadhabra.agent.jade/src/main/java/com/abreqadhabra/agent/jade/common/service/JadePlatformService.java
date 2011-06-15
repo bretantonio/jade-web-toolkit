@@ -7,10 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface JadePlatformService {
-	void startContainer(ArrayList<String> bootPropertyList) ;
+//	void startContainer(ArrayList<String> bootPropertyList);
+
 	String[] getBootPropertyArgs();
+
 	Runtime getJadeRuntime();
+
 	jade.wrapper.AgentContainer getAgentContainer();
-	HashMap<String, HashMap<String, String>> getContainerInfoMap() throws ControllerException;
+
+	HashMap<String, HashMap<String, String>> getContainerInfoMap()
+			throws ControllerException;
+
+	void excutePlatform();
+	public void setBootPropertyArgs(String[] bootPropertyArgs);
 
 }

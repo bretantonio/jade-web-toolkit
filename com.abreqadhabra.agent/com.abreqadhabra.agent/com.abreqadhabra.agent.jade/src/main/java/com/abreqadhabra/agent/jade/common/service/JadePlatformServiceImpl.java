@@ -1,23 +1,23 @@
 package com.abreqadhabra.agent.jade.common.service;
 
 import jade.Boot;
-import jade.BootProfileImpl;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.basic.Action;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
+import jade.domain.JADEAgentManagement.JADEManagementOntology;
+import jade.domain.JADEAgentManagement.ShutdownPlatform;
+import jade.lang.acl.ACLMessage;
 import jade.util.leap.Properties;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.ControllerException;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.abreqadhabra.agent.jade.common.domain.BootProperties;
-import com.abreqadhabra.agent.jade.common.util.BootPropertiesUtil;
 import com.thoughtworks.xstream.XStream;
 
 public class JadePlatformServiceImpl implements JadePlatformService {
@@ -87,7 +87,7 @@ public class JadePlatformServiceImpl implements JadePlatformService {
 	 * 
 	 * } catch (IOException e) { logger.error(e); } }
 	 */
-	public void excute() {
+	public void excutePlatform() {
 		Properties properties = Boot.parseCmdLineArgs(this.bootPropertyArgs);
 		ProfileImpl bootProfile = new ProfileImpl(properties);
 

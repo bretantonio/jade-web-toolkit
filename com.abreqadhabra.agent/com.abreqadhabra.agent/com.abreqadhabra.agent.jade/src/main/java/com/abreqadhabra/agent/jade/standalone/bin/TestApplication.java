@@ -44,7 +44,7 @@ public class TestApplication {
 			propertiesMap.put(BootProfileImpl.SERVICES, serviceList);
 		}
 		/* -mtps */
-		ArrayList<String> mtpList  = new ArrayList<String>();
+		ArrayList<String> mtpList = new ArrayList<String>();
 		if (mtpList.size() != 0) {
 			propertiesMap.put(BootProfileImpl.MTPS, mtpList);
 		}
@@ -57,9 +57,10 @@ public class TestApplication {
 		/* -smport */
 		propertiesMap.put(BootProfileImpl.SMPORT_KEY, true);
 		/* -smaddrs */
-		propertiesMap.put(BootProfileImpl.REMOTE_SERVICE_MANAGER_ADDRESSES, true);
+		propertiesMap.put(BootProfileImpl.REMOTE_SERVICE_MANAGER_ADDRESSES,
+				true);
 		/* -aclcodecs */
-		ArrayList<String> aclcodecList  = new ArrayList<String>();
+		ArrayList<String> aclcodecList = new ArrayList<String>();
 		if (aclcodecList.size() != 0) {
 			propertiesMap.put(BootProfileImpl.ACLCODEC_KEY, aclcodecList);
 		}
@@ -72,18 +73,17 @@ public class TestApplication {
 		/* -conf */
 		propertiesMap.put(BootProfileImpl.CONF_KEY, "CONF_KEY");
 		/* -<property-name><property-value> */
-		HashMap<String, String> propertyMap = new HashMap<String, String> ();
+		HashMap<String, String> propertyMap = new HashMap<String, String>();
 		if (mtpList.size() != 0) {
 			propertiesMap.put(BootProperties.OTHER_PROPERTIES, mtpList);
 		}
 		/* -agents */
-		ArrayList<String> agentList  = new ArrayList<String>();
+		ArrayList<String> agentList = new ArrayList<String>();
 		if (agentList.size() != 0) {
 			propertiesMap.put(BootProperties.AGENTS, agentList);
 		}
 
 		System.out.println(propertiesMap);
-
 
 		String[] bootPropertiesArray = t.getBootPropertyArgs(propertiesMap);
 		int bootPropertiesArrayLength = bootPropertiesArray.length;
@@ -105,12 +105,12 @@ public class TestApplication {
 		}
 		/* -host */
 		if (propertiesMap.containsKey(BootProfileImpl.MAIN_HOST)) {
-			bootProperties.setHost((String)propertiesMap
+			bootProperties.setHost((String) propertiesMap
 					.get(BootProfileImpl.MAIN_HOST));
 		}
 		/* -port */
 		if (propertiesMap.containsKey(BootProfileImpl.MAIN_PORT)) {
-			bootProperties.setPort((String)propertiesMap
+			bootProperties.setPort((String) propertiesMap
 					.get(BootProfileImpl.MAIN_PORT));
 		}
 		/* -gui */
@@ -130,91 +130,92 @@ public class TestApplication {
 		}
 		/* -platform-id */
 		if (propertiesMap.containsKey(BootProfileImpl.PLATFORM_ID)) {
-			bootProperties.setPlatformId((String)propertiesMap
+			bootProperties.setPlatformId((String) propertiesMap
 					.get(BootProfileImpl.PLATFORM_ID));
 		}
 		/* -name */
 		if (propertiesMap.containsKey(BootProfileImpl.NAME_KEY)) {
-			bootProperties.setName((String)propertiesMap
+			bootProperties.setName((String) propertiesMap
 					.get(BootProfileImpl.NAME_KEY));
 		}
 		/* -container-name */
 		if (propertiesMap.containsKey(BootProfileImpl.CONTAINER_NAME)) {
-			bootProperties.setContainerName((String)propertiesMap
+			bootProperties.setContainerName((String) propertiesMap
 					.get(BootProfileImpl.CONTAINER_NAME));
 		}
 		/* -services */
 		if (propertiesMap.containsKey(BootProfileImpl.SERVICES)) {
-			bootProperties.setServices((ArrayList<String>)propertiesMap
+			bootProperties.setServices((ArrayList<String>) propertiesMap
 					.get(BootProfileImpl.SERVICES));
 		}
 		/* -mtps */
 		if (propertiesMap.containsKey(BootProfileImpl.MTPS)) {
-			bootProperties.setMtps((ArrayList<String>)propertiesMap
+			bootProperties.setMtps((ArrayList<String>) propertiesMap
 					.get(BootProfileImpl.MTPS));
 		}
 		/* -nomtp */
 		if (propertiesMap.containsKey(BootProfileImpl.NOMTP_KEY)) {
-			bootProperties.isNomtp((Boolean)propertiesMap
+			bootProperties.isNomtp((Boolean) propertiesMap
 					.get(BootProfileImpl.NOMTP_KEY));
 		}
 		/* -backupmain */
 		if (propertiesMap.containsKey(BootProfileImpl.LOCAL_SERVICE_MANAGER)) {
-			bootProperties.isBackupmain((Boolean)propertiesMap
+			bootProperties.isBackupmain((Boolean) propertiesMap
 					.get(BootProfileImpl.LOCAL_SERVICE_MANAGER));
 		}
 		/* -smhost */
 		if (propertiesMap.containsKey(BootProfileImpl.SMHOST_KEY)) {
-			bootProperties.isSmhost((Boolean)propertiesMap
+			bootProperties.isSmhost((Boolean) propertiesMap
 					.get(BootProfileImpl.SMHOST_KEY));
 		}
 		/* -smport */
 		if (propertiesMap.containsKey(BootProfileImpl.SMPORT_KEY)) {
-			bootProperties.isSmport((Boolean)propertiesMap
+			bootProperties.isSmport((Boolean) propertiesMap
 					.get(BootProfileImpl.SMPORT_KEY));
 		}
 		/* -smaddrs */
-		if (propertiesMap.containsKey(BootProfileImpl.REMOTE_SERVICE_MANAGER_ADDRESSES)) {
-			bootProperties.isSmaddrs((Boolean)propertiesMap
+		if (propertiesMap
+				.containsKey(BootProfileImpl.REMOTE_SERVICE_MANAGER_ADDRESSES)) {
+			bootProperties.isSmaddrs((Boolean) propertiesMap
 					.get(BootProfileImpl.REMOTE_SERVICE_MANAGER_ADDRESSES));
 		}
 		/* -aclcodecs */
 		if (propertiesMap.containsKey(BootProfileImpl.ACLCODEC_KEY)) {
-			bootProperties.setAclcodecs((ArrayList<String>)propertiesMap
+			bootProperties.setAclcodecs((ArrayList<String>) propertiesMap
 					.get(BootProfileImpl.ACLCODEC_KEY));
 		}
 		/* -nomobility */
 		if (propertiesMap.containsKey(BootProfileImpl.NOMOBILITY_KEY)) {
-			bootProperties.isNomobility((Boolean)propertiesMap
+			bootProperties.isNomobility((Boolean) propertiesMap
 					.get(BootProfileImpl.NOMOBILITY_KEY));
 		}
 		/* -version */
 		if (propertiesMap.containsKey(BootProfileImpl.VERSION_KEY)) {
-			bootProperties.isVersion((Boolean)propertiesMap
+			bootProperties.isVersion((Boolean) propertiesMap
 					.get(BootProfileImpl.VERSION_KEY));
 		}
 		/* -help */
 		if (propertiesMap.containsKey(BootProfileImpl.HELP_KEY)) {
-			bootProperties.isHelp((Boolean)propertiesMap
+			bootProperties.isHelp((Boolean) propertiesMap
 					.get(BootProfileImpl.HELP_KEY));
 		}
 		/* -conf */
 		if (propertiesMap.containsKey(BootProfileImpl.CONF_KEY)) {
-			bootProperties.setHost((String)propertiesMap
+			bootProperties.setHost((String) propertiesMap
 					.get(BootProfileImpl.CONF_KEY));
 		}
 		/* -<property-name><property-value> */
 		if (propertiesMap.containsKey(BootProperties.OTHER_PROPERTIES)) {
-			bootProperties.setOtherProperties((HashMap<String, String>)propertiesMap
-					.get(BootProperties.OTHER_PROPERTIES));
+			bootProperties
+					.setOtherProperties((HashMap<String, String>) propertiesMap
+							.get(BootProperties.OTHER_PROPERTIES));
 		}
 		/* -agents */
 		if (propertiesMap.containsKey(BootProperties.AGENTS)) {
-			bootProperties.setAgents((ArrayList<String>)propertiesMap
+			bootProperties.setAgents((ArrayList<String>) propertiesMap
 					.get(BootProperties.AGENTS));
 		}
 		return bootProperties.getBootProperties();
-
 	}
 
 	/**
