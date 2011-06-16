@@ -20,5 +20,6 @@ public interface JadePlatformService {
 
 	void excutePlatform();
 	public void setBootPropertyArgs(String[] bootPropertyArgs);
+	public void shutDown() ;
 
 }

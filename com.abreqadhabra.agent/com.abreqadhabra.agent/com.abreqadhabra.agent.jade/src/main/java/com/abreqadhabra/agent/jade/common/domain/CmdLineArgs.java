@@ -293,10 +293,10 @@ public class CmdLineArgs {
 		while (iterator.hasNext()) {
 			String propertyName = (String) iterator.next();
 			String propertyValue = propertyMap.get(propertyName);
-			otherProperties.append(getKeyString(propertyName));
-			otherProperties.append(Constant.STRING_SPACE);
-			otherProperties.append(propertyValue);
-			otherProperties.append(Constant.STRING_SPACE);
+
+			cmdLineArgsVector.addElement(propertyName);
+			cmdLineArgsVector.addElement(propertyValue);
+			
 		}
 		this.otherProperties = otherProperties.toString();
 	}

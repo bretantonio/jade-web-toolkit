@@ -1,14 +1,9 @@
 package com.abreqadhabra.agent.jade.common.service;
 
 import jade.Boot;
-import jade.content.lang.sl.SLCodec;
-import jade.content.onto.basic.Action;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
-import jade.domain.JADEAgentManagement.JADEManagementOntology;
-import jade.domain.JADEAgentManagement.ShutdownPlatform;
-import jade.lang.acl.ACLMessage;
 import jade.util.leap.Properties;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.ControllerException;
@@ -40,7 +35,7 @@ public class JadePlatformServiceImpl implements JadePlatformService {
 	public AgentContainer getAgentContainer() {
 		return agentContainer;
 	}
-	
+
 	public void setBootPropertyArgs(String[] bootPropertyArgs) {
 		this.bootPropertyArgs = bootPropertyArgs;
 	}
@@ -109,5 +104,7 @@ public class JadePlatformServiceImpl implements JadePlatformService {
 		}
 	}
 
-	
+	public void shutDown() {
+		jadeRuntime = Runtime.instance();
+	}
 }

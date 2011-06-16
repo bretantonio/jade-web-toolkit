@@ -1,7 +1,6 @@
 package com.abreqadhabra.agent.jade.standalone.bin;
 
-import jade.core.Runtime;
-import jade.wrapper.AgentContainer;
+import jade.tools.persistence.PersistenceManagerGUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +31,18 @@ public class SpringStandaloneApplication {
 				.getBean(Constant.SPRING_STANDALONE_APPLICATION.JADE_PLATFORM_SERVICE_BEAN_NAME);
 		this.jadeAgentPlatformsService.setBootPropertyArgs(bootPropertyArgs);
 		this.jadeAgentPlatformsService.excutePlatform();
+		new PersistenceManagerGUI().showCorrect();
 	}
 
 	public static void main(String[] args) {
 		SpringStandaloneApplication application = new SpringStandaloneApplication();
 		application.bootPropertyArgs = application.initBootPropertiesies();
 		application.excute();
+		application.shutdown();
+	}
+
+	private void shutdown() {
+		this.jadeAgentPlatformsService.shutDown();
 	}
 
 	private String[] initBootPropertiesies() {
@@ -66,6 +71,10 @@ public class SpringStandaloneApplication {
 		serviceList.add("jade.core.faultRecovery.FaultRecoveryService");
 		serviceList.add("jade.core.messaging.TopicManagementService");
 		serviceList.add("jade.imtp.leap.nio.BEManagementService");
+		/**/
+		serviceList.add("jade.core.persistence.PersistenceService");
+		serviceList.add("jade.core.event.NotificationService");
+
 		cmdLineArgs.setServices(serviceList);
 		ArrayList<String> mtpList = new ArrayList<String>();
 		mtpList.add("jade.mtp.iiop.MessageTransportProtocol");
@@ -81,8 +90,11 @@ public class SpringStandaloneApplication {
 		// cmdLineArgs.setNomobility(true);//재확인
 		// cmdLineArgs.setVersion(true);//재확인
 		// cmdLineArgs.setHelp(true);
-		//cmdLineArgs.setConf("jade.properties");//재확인
+		// cmdLineArgs.setConf("jade.properties");//재확인
 		HashMap<String, String> propertyMap = new HashMap<String, String>();
+
+		propertyMap.put("-meta-db", "JADE_Persistence.properties");
+
 		cmdLineArgs.setOtherProperties(propertyMap);
 		ArrayList<String> agentList = new ArrayList<String>();
 		agentList.add("spa:jade.tools.SocketProxyAgent.SocketProxyAgent");
@@ -90,14 +102,14 @@ public class SpringStandaloneApplication {
 
 		String[] bootPropertiesArgs = cmdLineArgs.getBootPropertyArgs();
 
-		if (log.isDebugEnabled()) {
-			int bootPropertiesArrayLength = bootPropertiesArgs.length;
+		// if (log.isDebugEnabled()) {
+		int bootPropertiesArrayLength = bootPropertiesArgs.length;
 
-			log.debug("CmdLineArgs Length: " + bootPropertiesArrayLength);
-			for (int i = 0; i < bootPropertiesArgs.length; i++) {
-				log.debug(bootPropertiesArgs[i]);
-			}
+		System.out.println("CmdLineArgs Length: " + bootPropertiesArrayLength);
+		for (int i = 0; i < bootPropertiesArgs.length; i++) {
+			System.out.println(bootPropertiesArgs[i]);
 		}
+		// }
 
 		return bootPropertiesArgs;
 	}
