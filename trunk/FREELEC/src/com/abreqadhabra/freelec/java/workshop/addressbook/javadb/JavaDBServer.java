@@ -15,6 +15,10 @@
  * 
  * 
 
+
+일반기능
+로그를 출력합니다.
+
  1.	Derby Network Server를 시작합니다.
  2.	클라이언트용 JDBC 드라이버를 적재합니다.
  3. creates the database if not already created
@@ -41,41 +45,76 @@
 package com.abreqadhabra.freelec.java.workshop.addressbook.javadb;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
 
 public class JavaDBServer {
 
+	// 로그 출력을 위한 선언
+	Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
+
+	
+	JavaDBServerControl serverControl = null;
+	
+	// 생성자
 	public JavaDBServer() {
 
+		initLogger();
 		initJavaDBEnviroments();
+	}
+
+	// 로거 초기화
+	private void initLogger() {
+
+		Handler handler = null;
+		try {
+			handler = new FileHandler(this.getClass().getName() + ".log");
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Logger.getLogger("").addHandler(handler);
 
 	}
 
+	// DB환경 초기화
 	private void initJavaDBEnviroments() {
-		// Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.
+		logger.log(
+				Level.INFO,
+				"Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.");
 		System.setProperty("derby.drda.startNetworkServer", "true");
-		//Java DB가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.
+		logger.log(Level.INFO,
+				"Java DB가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.");
 		setJavaDBSystemDirectory();
-		//JDBC드라이버를 로드합니다.
+		logger.log(Level.INFO, "JDBC드라이버를 로드합니다.");
 		loadJDBCDriver();
 	}
-	
+
 	public void setJavaDBSystemDirectory() {
 		// decide on the db system directory
-		String userHomeDir = System.getProperty("user.home", ".");
-		String systemDir = userHomeDir + "/."
+		String userHomeDirectory = System.getProperty("user.home", ".");
+		String systemDirectory = userHomeDirectory + "/."
 				+ Constants.DERBY_DATABASE.STRING_DB_NAME;
-		System.setProperty("derby.system.home", systemDir);
+		System.setProperty("derby.system.home", systemDirectory);
 		// create the db system directory
-		File fileSystemDir = new File(systemDir);
+		File fileSystemDir = new File(systemDirectory);
 		fileSystemDir.mkdir();
+		logger.log(Level.INFO,
+				" ---------------------> derby.system.home ---------------------> "
+						+ systemDirectory);
+
 	}
 
 	public void loadJDBCDriver() {
-		// Booting derby
-
 		// load Derby driver
 		try {
 			Class.forName(
@@ -100,9 +139,18 @@ public class JavaDBServer {
 			iae.printStackTrace(System.err);
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		JavaDBServer dbServer = new JavaDBServer();
+		dbServer.start();
+	}
+
+	private void start() {
+		serverControl = new JavaDBServerControl(1621);
+		serverControl.start();	
+		serverControl.testForConnection();
+		serverControl.trace(true);
+		serverControl.shutdown();
 	}
 
 }
