@@ -1,3 +1,32 @@
+/**
+
+  자바 데이터베이스 서버 샘플 프로그램은 Derby Network Server와 상호작용 하는 간단한 JDBC 애플리케이션입니다.
+  
+ 이 프로그램은 다음과 같은 동작을 합니다.
+
+ 1.	Derby Network Server를 시작합니다.
+ 2.	클라이언트용 JDBC 드라이버를 적재합니다.
+ 3. creates the database if not already created
+ 4. checks to see if the schema is already created, and if not,
+ 5. creates the schema which includes the table SAMPLETBL and corresponding indexes.
+ 6. connects to the database
+ 7. loads the schema by inserting data
+ 8. starts client threads to perform database related operations
+ 9. has each of the clients perform DML operations (select, insert, delete, update) using JDBC calls,
+    i)	 one client opens an embedded connection to perform database operations
+         You can open an embedded connection in the same JVM that starts the Derby Network
+         Server.
+    ii)  one client opens a client connection to the Derby Network Server to perform database operations.
+ 10.waits for the client threads to finish the tasks
+ 11.shuts down the Derby Network Server at the end of the demo
+
+ <P>
+ Usage: java nserverdemo.NsSample
+ <P>
+ Please note, a file derby.log is created in the directory you run this program.
+ This file contains the logging of connections made with the derby network server
+ */
+
 package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb;
 
 import java.io.BufferedReader;
@@ -16,11 +45,11 @@ import org.apache.derby.drda.NetworkServerControl;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
 
-public class JavaDBServer {
+public class SimpleNetworkServer {
 
 	Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 
-	public JavaDBServer() {
+	public SimpleNetworkServer() {
 		Handler handler = null;
 		try {
 			handler = new FileHandler("OutFile.log");
@@ -90,7 +119,7 @@ public class JavaDBServer {
 
 	public static void main(String[] args) {
 
-		JavaDBServer dbServer = new JavaDBServer();
+		SimpleNetworkServer dbServer = new SimpleNetworkServer();
 		dbServer.start();
 
 	}

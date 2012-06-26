@@ -7,7 +7,9 @@ public class Constants {
 		public static final String STRING_FRAMEWORK = "embedded";
 		public static final String STRING_DERBY_EMBEDED_DRIVER_NAME = "org.apache.derby.jdbc.EmbeddedDriver";
 		public static final String STRING_DERBY_CLIENT_DRIVER_NAME = "org.apache.derby.jdbc.ClientDriver";
-
+		// network server control specific
+		public static final int STRING_DERBY_NETWORK_SERVER_PORT =1621;
+		
 		// Derby Connect URL
 		public static final String STRING_PROTOOL = "jdbc:derby:";
 		public static final String STRING_DB_USER = "freelec";

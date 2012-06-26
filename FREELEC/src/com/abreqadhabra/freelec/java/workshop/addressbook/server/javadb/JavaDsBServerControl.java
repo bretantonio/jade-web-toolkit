@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
 
-public class JavaDBServerControl {
+public class JavaDsBServerControl {
 
     Logger logger = Logger.getLogger(this.getClass().getCanonicalName()); 
 	private Connection dbConnection = null;
