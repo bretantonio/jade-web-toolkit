@@ -46,7 +46,6 @@ package com.abreqadhabra.freelec.java.workshop.addressbook.javadb;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -108,10 +107,6 @@ public class JavaDBServer {
 		// create the db system directory
 		File fileSystemDir = new File(systemDirectory);
 		fileSystemDir.mkdir();
-		logger.log(Level.INFO,
-				" ---------------------> derby.system.home ---------------------> "
-						+ systemDirectory);
-
 	}
 
 	public void loadJDBCDriver() {
