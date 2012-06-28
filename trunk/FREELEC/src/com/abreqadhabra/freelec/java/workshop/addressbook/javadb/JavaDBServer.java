@@ -47,13 +47,13 @@ package com.abreqadhabra.freelec.java.workshop.addressbook.javadb;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.derby.drda.NetworkServerControl;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
 import com.abreqadhabra.freelec.java.workshop.addressbook.javadb.common.JavaDBUtil;
@@ -101,6 +101,8 @@ public class JavaDBServer {
 				Level.INFO,
 				"Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.");
 		System.setProperty("derby.drda.startNetworkServer", "true");
+		System.setProperty("derby.drda.logConnections", "true");
+
 		logger.log(Level.INFO,
 				"Derby Network Server가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.");
 		setDBSystemDirectory();
@@ -125,25 +127,19 @@ public class JavaDBServer {
 		// DB프로퍼티설정
 		Properties dbProperties = getDBProperties();
 		String url = getDatabaseUrl();
-		// DriverManager API를 사용하여 데이터베이스 컨넥션 취득
-		try {
-			dbConnection =  (Connection) DriverManager.getConnection(url, dbProperties);
-			JavaDBControl.checkAndCreateSchema(dbConnection);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		
+		dbConnection = serverControl.getConnection(dbProperties);
+		serverControl.testConnection(dbConnection);
 	}
-	
+
 	private Properties getDBProperties() {
 		Properties properties = new Properties();
 		//데이터베이스 FREELEC에서 사용되는 사용자와 패스워드 설정
 		properties.put("user", Constants.DERBY_DATABASE.STRING_DB_USER);
 		properties.put("password", Constants.DERBY_DATABASE.STRING_DB_PASSWORD);
 		logger.log(Level.INFO, "dbProperties" + properties);
-
+		// providing a user name and password is optional in the embedded
+		// and derbyclient frameworks
 		return properties;
 	}
 	
@@ -159,7 +155,9 @@ public class JavaDBServer {
 			dbServer.start();
 			// 데이터베이스 환경 초기화
 			dbServer.initDatabaseEnviroments();
-			dbServer.shutdown();
+			
+			dbServer.waitForConnection();
+			//dbServer.shutdown();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -175,8 +173,58 @@ public class JavaDBServer {
 	private void start() throws Exception {
 		serverControl = new JavaDBServerControl(1621);
 		serverControl.start();
-		serverControl.testForConnection();
-		serverControl.trace(true);
+		
+		//serverControl.testForConnection();
+		//serverControl.logConnection(true);동작불능?
+		//serverControl.trace(true);
+	}
+	
+
+	
+	/**
+	 * Tries to check if the Network Server is up and running by calling ping If
+	 * successful, then it returns else tries for 50 seconds before giving up
+	 * and throwing an exception.
+	 * 
+	 * @throws Exception
+	 *             when there is a problem with testing if the Network Server is
+	 *             up and running
+	 */
+	private static void waitForConnection() throws Exception {
+
+		// Server instance for testing connection
+		NetworkServerControl server = null;
+
+		// Use NetworkServerControl.ping() to wait for
+		// NetworkServer to come up. We could have used
+		// NetworkServerControl to start the server but the property is
+		// easier.
+		server = new NetworkServerControl();
+		System.out.println(server.getSysinfo());
+		System.out.println("Testing if Network Server is up and running!");
+		int i = 0;
+		// for (int i = 0; i < 10; i++) {
+		while (true) {
+			try {
+
+				server.ping();
+				server.logConnections(true);
+				System.out.println(server.getRuntimeInfo());
+
+				Thread.currentThread().sleep(5000);
+
+				System.out.println("Derby Network Server now running");
+
+			} catch (Exception e) {
+				System.out.println("Try #" + i + " " + e.toString());
+				if (i == 9) {
+					System.out
+							.println("Giving up trying to connect to Network Server!");
+					e.printStackTrace();
+				}
+			}
+		}
+
 	}
 
 }
