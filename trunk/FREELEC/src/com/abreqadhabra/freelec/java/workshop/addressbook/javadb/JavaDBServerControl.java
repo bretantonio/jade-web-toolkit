@@ -39,51 +39,43 @@ public JavaDBServerControl(int port) {
 
 	/**
 	 * Start Derby Network server
+	 * @throws Exception 
 	 * 
 	 */
-	public void start() {
-		try {
+	public void start() throws Exception {
 			networkServerControl.start(pw);
 			logger.log(Level.INFO, networkServerControl.getSysinfo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 		logger.log(Level.INFO, "Derby Network Server 가 시작되었습니다.");
 	}
 	
     /**
      * Shutdown the NetworkServer
+     * @throws Exception 
      */
-    public void shutdown() {
-        try {
+    public void shutdown() throws Exception {
         	networkServerControl.shutdown();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
     
 	/**
 	 * trace utility of server
+	 * @throws Exception 
 	 */
-	public void trace(boolean onoff) {
-		try {
+	public void trace(boolean onoff) throws Exception {
 			networkServerControl.trace(onoff);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 	}
 
 	/**
 	 * Try to test for a connection Throws exception if unable to get a
 	 * connection
+	 * @throws Exception 
 	 */
-	public void testForConnection()  {
-		try {
+	public void testForConnection() throws Exception  {
+
 			networkServerControl.ping();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 
 }

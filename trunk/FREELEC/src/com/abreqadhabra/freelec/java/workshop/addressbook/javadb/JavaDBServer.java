@@ -52,20 +52,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
+import com.abreqadhabra.freelec.java.workshop.addressbook.javadb.common.JavaDBUtil;
 
 public class JavaDBServer {
 
 	// 로그 출력을 위한 선언
 	Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 
-	
 	JavaDBServerControl serverControl = null;
-	
+
 	// 생성자
 	public JavaDBServer() {
 
 		initLogger();
-		initJavaDBEnviroments();
+		initNetworkServerEnviroments();
+		initDatabaseEnviroments();
 	}
 
 	// 로거 초기화
@@ -85,20 +86,21 @@ public class JavaDBServer {
 
 	}
 
-	// DB환경 초기화
-	private void initJavaDBEnviroments() {
+	// 네트워크서버 환경 초기화
+	private void initNetworkServerEnviroments() {
 		logger.log(
 				Level.INFO,
 				"Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.");
 		System.setProperty("derby.drda.startNetworkServer", "true");
 		logger.log(Level.INFO,
-				"Java DB가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.");
-		setJavaDBSystemDirectory();
+				"Derby Network Server가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.");
+		setDBSystemDirectory();
 		logger.log(Level.INFO, "JDBC드라이버를 로드합니다.");
-		loadJDBCDriver();
+		JavaDBUtil.loadJDBCDriver();
 	}
 
-	public void setJavaDBSystemDirectory() {
+	// DB 시스템 디렉토리 설정
+	private void setDBSystemDirectory() {
 		// decide on the db system directory
 		String userHomeDirectory = System.getProperty("user.home", ".");
 		String systemDirectory = userHomeDirectory + "/."
@@ -109,43 +111,34 @@ public class JavaDBServer {
 		fileSystemDir.mkdir();
 	}
 
-	public void loadJDBCDriver() {
-		// load Derby driver
-		try {
-			Class.forName(
-					Constants.DERBY_DATABASE.STRING_DERBY_EMBEDED_DRIVER_NAME)
-					.newInstance();
-			// Get a connection
-		} catch (ClassNotFoundException cnfe) {
-			System.err
-					.println("\nUnable to load the JDBC driver "
-							+ Constants.DERBY_DATABASE.STRING_DERBY_EMBEDED_DRIVER_NAME);
-			System.err.println("Please check your CLASSPATH.");
-			cnfe.printStackTrace(System.err);
-		} catch (InstantiationException ie) {
-			System.err
-					.println("\nUnable to instantiate the JDBC driver "
-							+ Constants.DERBY_DATABASE.STRING_DERBY_EMBEDED_DRIVER_NAME);
-			ie.printStackTrace(System.err);
-		} catch (IllegalAccessException iae) {
-			System.err
-					.println("\nNot allowed to access the JDBC driver "
-							+ Constants.DERBY_DATABASE.STRING_DERBY_EMBEDED_DRIVER_NAME);
-			iae.printStackTrace(System.err);
-		}
+	private void initDatabaseEnviroments() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public static void main(String[] args) {
 		JavaDBServer dbServer = new JavaDBServer();
-		dbServer.start();
+		try {
+			dbServer.start();
+
+			dbServer.shutdown();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
-	private void start() {
+	private void shutdown() throws Exception {
+		serverControl.shutdown();
+	}
+
+	private void start() throws Exception {
 		serverControl = new JavaDBServerControl(1621);
-		serverControl.start();	
+		serverControl.start();
 		serverControl.testForConnection();
 		serverControl.trace(true);
-		serverControl.shutdown();
 	}
 
 }
