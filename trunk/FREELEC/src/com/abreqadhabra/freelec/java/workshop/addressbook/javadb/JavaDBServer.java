@@ -46,6 +46,10 @@ package com.abreqadhabra.freelec.java.workshop.addressbook.javadb;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -61,12 +65,17 @@ public class JavaDBServer {
 
 	JavaDBServerControl serverControl = null;
 
+			
+	Connection dbConnection =null;
+	
 	// 생성자
 	public JavaDBServer() {
 
+		// 로거 초기화
 		initLogger();
+		// 네트워크서버 환경 초기화
 		initNetworkServerEnviroments();
-		initDatabaseEnviroments();
+
 	}
 
 	// 로거 초기화
@@ -104,23 +113,52 @@ public class JavaDBServer {
 		// decide on the db system directory
 		String userHomeDirectory = System.getProperty("user.home", ".");
 		String systemDirectory = userHomeDirectory + "/."
-				+ Constants.DERBY_DATABASE.STRING_DB_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
 		System.setProperty("derby.system.home", systemDirectory);
 		// create the db system directory
 		File fileSystemDir = new File(systemDirectory);
 		fileSystemDir.mkdir();
 	}
 
+	// 데이터베이스 환경 초기화
 	private void initDatabaseEnviroments() {
-		// TODO Auto-generated method stub
+		// DB프로퍼티설정
+		Properties dbProperties = getDBProperties();
+		String url = getDatabaseUrl();
+		// DriverManager API를 사용하여 데이터베이스 컨넥션 취득
+		try {
+			dbConnection =  (Connection) DriverManager.getConnection(url, dbProperties);
+			JavaDBControl.checkAndCreateSchema(dbConnection);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
+	}
+	
+	private Properties getDBProperties() {
+		Properties properties = new Properties();
+		//데이터베이스 FREELEC에서 사용되는 사용자와 패스워드 설정
+		properties.put("user", Constants.DERBY_DATABASE.STRING_DB_USER);
+		properties.put("password", Constants.DERBY_DATABASE.STRING_DB_PASSWORD);
+		logger.log(Level.INFO, "dbProperties" + properties);
+
+		return properties;
+	}
+	
+	public String getDatabaseUrl() {
+		String dbUrl = Constants.DERBY_DATABASE.STRING_PROTOOL
+				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
+		return dbUrl;
 	}
 
 	public static void main(String[] args) {
 		JavaDBServer dbServer = new JavaDBServer();
 		try {
 			dbServer.start();
-
+			// 데이터베이스 환경 초기화
+			dbServer.initDatabaseEnviroments();
 			dbServer.shutdown();
 
 		} catch (Exception e) {

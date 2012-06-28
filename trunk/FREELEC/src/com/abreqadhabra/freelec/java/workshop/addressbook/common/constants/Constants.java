@@ -14,7 +14,7 @@ public class Constants {
 		public static final String STRING_PROTOOL = "jdbc:derby:";
 		public static final String STRING_DB_USER = "freelec";
 		public static final String STRING_DB_PASSWORD = "freelec!@#123";
-		public static final String STRING_DB_NAME = "FREELEC";
+		public static final String STRING_DB_SCHEMA_NAME = "FREELEC";
 
 	}
 

@@ -1,0 +1,528 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+
+package nserverdemo;
+
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.sql.*;
+import java.util.Properties;
+import java.util.Random;
+
+// Referenced classes of package nserverdemo:
+//            NsSample
+
+class NsSampleWork
+{
+
+    NsSampleWork(int i, String s, Properties properties1, PrintWriter printwriter)
+    {
+        select = null;
+        insert = null;
+        delete = null;
+        update = null;
+        getMaxKey = null;
+        thread_id = i;
+        dbUrl = s;
+        pw = printwriter;
+        properties = properties1;
+    }
+
+    public Connection getConnection(String s, Properties properties1)
+    {
+        Connection connection = null;
+        try
+        {
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; requests database connection, dbUrl =" + s);
+            connection = DriverManager.getConnection(s, properties1);
+        }
+        catch(Exception exception)
+        {
+            System.out.println("[NsSampleWork] Thread id - " + thread_id + "; failed to get database connection. Exception thrown:");
+            exception.printStackTrace();
+        }
+        return connection;
+    }
+
+    public void setIsolationLevel(Connection connection, int i)
+    {
+        try
+        {
+            connection.setTransactionIsolation(i);
+        }
+        catch(Exception exception)
+        {
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; setIsolationLevel failed. Exception thrown: ");
+            exception.printStackTrace();
+        }
+    }
+
+    public void closeConnection(Connection connection)
+    {
+        try
+        {
+            if(connection != null)
+                connection.close();
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; closed connection to the database.");
+        }
+        catch(Exception exception)
+        {
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; error when closing connection;" + exception);
+            exception.printStackTrace();
+        }
+    }
+
+    public void prepareStmts(Connection connection)
+    {
+        try
+        {
+            select = connection.prepareStatement("select t_int,  t_char, t_float,t_key from SAMPLETBL where t_key = ?");
+            insert = connection.prepareStatement("insert into SAMPLETBL (t_int, t_char,t_float,t_key) values (?,?,?,?)");
+            update = connection.prepareStatement(" update SAMPLETBL set t_int = ? where t_key = ?");
+            delete = connection.prepareStatement("delete from SAMPLETBL where t_key = ?");
+            getMaxKey = connection.prepareStatement("select max(t_key) from SAMPLETBL");
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public int doSelectOperation(long l)
+    {
+        int i;
+        ResultSet resultset;
+        i = 0;
+        resultset = null;
+        select.setLong(1, l);
+        int j;
+        String s;
+        float f;
+        long l1;
+        for(resultset = select.executeQuery(); resultset.next(); pw.println("[NsSampleWork] Thread id - " + thread_id + " selected " + i + " row [" + j + "," + s + "," + f + "," + l1 + "]"))
+        {
+            i++;
+            j = resultset.getInt(1);
+            s = resultset.getString(2);
+            f = resultset.getFloat(3);
+            l1 = resultset.getLong(4);
+        }
+
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_250;
+        Exception exception1;
+        exception1;
+        exception1.printStackTrace();
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+        }
+        catch(Exception exception2)
+        {
+            exception2.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_250;
+        Exception exception3;
+        exception3;
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+        }
+        catch(Exception exception4)
+        {
+            exception4.printStackTrace();
+        }
+        throw exception3;
+        return i;
+    }
+
+    public void doWork()
+    {
+        Connection connection;
+        ResultSet resultset;
+        connection = null;
+        resultset = null;
+        connection = getConnection(dbUrl, properties);
+        if(connection == null)
+            throw new Exception("Failed to obtain connection!");
+        connection.setAutoCommit(true);
+        setIsolationLevel(connection, 1);
+        prepareStmts(connection);
+        for(int i = 0; i < NsSample.ITERATIONS; i++)
+        {
+            int j = (int)(Math.random() * 100D) % 2;
+            switch(j)
+            {
+            case 0: // '\0'
+                resultset = getMaxKey.executeQuery();
+                long l = 0L;
+                if(resultset.next())
+                    l = resultset.getLong(1);
+                int k = doSelectOperation(l);
+                break;
+
+            case 1: // '\001'
+                doIUDOperation();
+                break;
+            }
+        }
+
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+            closeConnection(connection);
+            cleanup();
+        }
+        catch(Exception exception)
+        {
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; error when cleaning up connection, resultset; exception is ");
+            exception.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_387;
+        Exception exception1;
+        exception1;
+        pw.println("[NsSampleWork] Thread id - " + thread_id + "; error when performing dml operations; ");
+        exception1.printStackTrace();
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+            closeConnection(connection);
+            cleanup();
+        }
+        catch(Exception exception2)
+        {
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; error when cleaning up connection, resultset; exception is ");
+            exception2.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_387;
+        Exception exception3;
+        exception3;
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+            closeConnection(connection);
+            cleanup();
+        }
+        catch(Exception exception4)
+        {
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; error when cleaning up connection, resultset; exception is ");
+            exception4.printStackTrace();
+        }
+        throw exception3;
+    }
+
+    public void cleanup()
+    {
+        try
+        {
+            if(select != null)
+                select.close();
+            if(insert != null)
+                insert.close();
+            if(delete != null)
+                delete.close();
+            if(update != null)
+                update.close();
+            if(getMaxKey != null)
+                getMaxKey.close();
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void doIUDOperation()
+    {
+        int i;
+        ResultSet resultset;
+        i = (int)(Math.random() * 100D) % 3;
+        resultset = null;
+        switch(i)
+        {
+        case 0: // '\0'
+            int j = insertRow(insert);
+            pw.println("[NsSampleWork] Thread id - " + thread_id + "; inserted " + j + " row.");
+            break;
+
+        case 1: // '\001'
+            resultset = getMaxKey.executeQuery();
+            long l = 0L;
+            if(resultset.next())
+                l = resultset.getLong(1);
+            int k = updateRow(update, l);
+            System.out.println("[NsSampleWork] Thread id - " + thread_id + "; updated " + k + " row with t_key = " + l);
+            break;
+
+        case 2: // '\002'
+            resultset = getMaxKey.executeQuery();
+            long l1 = 0L;
+            if(resultset.next())
+                l1 = resultset.getLong(1);
+            int i1 = deleteRow(delete, l1);
+            System.out.println("[NsSampleWork] Thread id - " + thread_id + "; deleted " + i1 + " row with t_key = " + l1);
+            break;
+        }
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_344;
+        Exception exception1;
+        exception1;
+        exception1.printStackTrace();
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+        }
+        catch(Exception exception2)
+        {
+            exception2.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_344;
+        Exception exception3;
+        exception3;
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+        }
+        catch(Exception exception4)
+        {
+            exception4.printStackTrace();
+        }
+        throw exception3;
+    }
+
+    public static void checkAndCreateSchema(Connection connection, PrintWriter printwriter)
+    {
+        Statement statement;
+        ResultSet resultset;
+        statement = null;
+        resultset = null;
+        try
+        {
+            connection.setAutoCommit(true);
+        }
+        catch(SQLException sqlexception)
+        {
+            printwriter.println("[NsSampleWork] Error when setting autocommit on connection; exception thrown: ");
+            sqlexception.printStackTrace();
+        }
+        try
+        {
+            statement = connection.createStatement();
+            resultset = statement.executeQuery("select tablename from sys.systables  where tablename = 'SAMPLETBL'");
+            if(resultset.next())
+            {
+                printwriter.println("[NsSampleWork] Table 'SAMPLETBL' already exists; no need to create schema again.");
+                return;
+            }
+        }
+        catch(SQLException sqlexception1)
+        {
+            printwriter.println("[NsSampleWork] Unable to query the metadata for existence of table SAMPLETBL; exception is " + sqlexception1);
+            printwriter.println("[NsSampleWork] Exiting the application.");
+            sqlexception1.printStackTrace();
+            System.exit(1);
+        }
+        printwriter.println("[NsSampleWork] Begin creating table - SAMPLETBL and necessary indexes. ");
+        statement.execute("create table SAMPLETBL (t_int int,t_char char(15),t_float float,t_key bigint )");
+        statement.execute("create index t_char_idx on SAMPLETBL ( t_char)");
+        statement.execute("create index t_float_idx on SAMPLETBL ( t_float)");
+        statement.execute("create index t_key_idx on SAMPLETBL ( t_key )");
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+            if(statement != null)
+                statement.close();
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_290;
+        Exception exception1;
+        exception1;
+        printwriter.println("[NsSampleWork] Error when creating schema; exception is " + exception1.toString());
+        printwriter.println("[NsSampleWork] Exiting the application.");
+        exception1.printStackTrace();
+        System.exit(1);
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+            if(statement != null)
+                statement.close();
+        }
+        catch(Exception exception2)
+        {
+            exception2.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_290;
+        Exception exception3;
+        exception3;
+        try
+        {
+            if(resultset != null)
+                resultset.close();
+            if(statement != null)
+                statement.close();
+        }
+        catch(Exception exception4)
+        {
+            exception4.printStackTrace();
+        }
+        throw exception3;
+    }
+
+    public static void loadSchema(Connection connection, int i, PrintWriter printwriter)
+    {
+        int j;
+        PreparedStatement preparedstatement;
+        j = i;
+        preparedstatement = null;
+        preparedstatement = connection.prepareStatement("insert into SAMPLETBL (t_int, t_char,t_float,t_key) values (?,?,?,?)");
+        do
+        {
+            if(j-- < 0)
+                break;
+            int k = insertRow(preparedstatement);
+            if(k != 1)
+                printwriter.println("[NsSampleWork] Failed to insert row.");
+        } while(true);
+        try
+        {
+            if(preparedstatement != null)
+                preparedstatement.close();
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_152;
+        Exception exception1;
+        exception1;
+        printwriter.println("[NsSampleWork] Error when loading schema; exception is " + exception1);
+        exception1.printStackTrace();
+        try
+        {
+            if(preparedstatement != null)
+                preparedstatement.close();
+        }
+        catch(Exception exception2)
+        {
+            exception2.printStackTrace();
+        }
+        break MISSING_BLOCK_LABEL_152;
+        Exception exception3;
+        exception3;
+        try
+        {
+            if(preparedstatement != null)
+                preparedstatement.close();
+        }
+        catch(Exception exception4)
+        {
+            exception4.printStackTrace();
+        }
+        throw exception3;
+    }
+
+    public static int insertRow(PreparedStatement preparedstatement)
+    {
+        boolean flag = false;
+        try
+        {
+            Random random = new Random();
+            int j = Math.abs(random.nextInt() % 1000);
+            String s = "Derby";
+            synchronized(lock)
+            {
+                s = s + counter;
+                counter++;
+            }
+            preparedstatement.setInt(1, j);
+            preparedstatement.setString(2, s);
+            preparedstatement.setFloat(3, random.nextFloat() * (float)Math.pow(10D, Math.abs(random.nextInt() % 30)));
+            preparedstatement.setLong(4, random.nextLong() % 10000L);
+            int i = preparedstatement.executeUpdate();
+            return i;
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int updateRow(PreparedStatement preparedstatement, long l)
+    {
+        try
+        {
+            int i = 0;
+            synchronized(lock)
+            {
+                i = counter++;
+            }
+            preparedstatement.setInt(1, i);
+            preparedstatement.setLong(2, l);
+            return preparedstatement.executeUpdate();
+        }
+        catch(SQLException sqlexception)
+        {
+            sqlexception.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int deleteRow(PreparedStatement preparedstatement, long l)
+    {
+        boolean flag = false;
+        try
+        {
+            preparedstatement.setLong(1, l);
+            int i = preparedstatement.executeUpdate();
+            return i;
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return 0;
+    }
+
+    protected int thread_id;
+    protected String dbUrl;
+    protected Properties properties;
+    PrintWriter pw;
+    PreparedStatement select;
+    PreparedStatement insert;
+    PreparedStatement delete;
+    PreparedStatement update;
+    PreparedStatement getMaxKey;
+    public static int counter = 0;
+    static Integer lock = new Integer(0);
+
+}
