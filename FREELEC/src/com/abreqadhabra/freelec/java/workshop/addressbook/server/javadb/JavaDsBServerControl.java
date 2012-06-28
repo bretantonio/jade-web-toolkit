@@ -50,7 +50,7 @@ public class JavaDsBServerControl {
 	
 	private String getDatabaseLocation() {
 		String dbLocation = System.getProperty("derby.system.home") + "/"
-				+ Constants.DERBY_DATABASE.STRING_DB_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
 		return dbLocation;
 	}
 
@@ -89,7 +89,7 @@ public class JavaDsBServerControl {
 		try {
 			connection = DriverManager.getConnection(url, dbProperties);
 			logger.log(Level.INFO, "Connected to database "
-					+ Constants.DERBY_DATABASE.STRING_DB_NAME);
+					+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
 
 			// We want to control transactions manually. Autocommit is on by
 			// default in JDBC.
@@ -114,7 +114,7 @@ public class JavaDsBServerControl {
 	
 	public String getDatabaseUrl() {
 		String dbUrl = Constants.DERBY_DATABASE.STRING_PROTOOL
-				+ Constants.DERBY_DATABASE.STRING_DB_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
 		return dbUrl;
 	}
 	
@@ -128,7 +128,7 @@ public class JavaDsBServerControl {
 		try {
 			connection = DriverManager.getConnection(dbUrl, dbProperties);
 			logger.log(Level.INFO, "Connected to and created database "
-					+ Constants.DERBY_DATABASE.STRING_DB_NAME);
+					+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
 			bCreated = createTables(connection);
 			if (bCreated) {
 				insertDummyDataset(connection);
@@ -281,7 +281,7 @@ public class JavaDsBServerControl {
 				dbConnection.close();
 				DriverManager.getConnection(dbUrl, dbProperties);
 				System.out.println("Disconnected to database "
-						+ Constants.DERBY_DATABASE.STRING_DB_NAME);
+						+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
 
 			} catch (SQLException ex) {
 			}
