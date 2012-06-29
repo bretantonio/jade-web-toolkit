@@ -6,7 +6,6 @@ import com.abreqadhabra.freelec.java.workshop.addressbook.dao.AddressDAO;
 import com.abreqadhabra.freelec.java.workshop.addressbook.dao.DAOFactory;
 import com.abreqadhabra.freelec.java.workshop.addressbook.domain.Address;
 import com.abreqadhabra.freelec.java.workshop.addressbook.domain.ListEntry;
-import com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.SimpleNetworkServer;
 
 public class TestDAOFactory {
 
