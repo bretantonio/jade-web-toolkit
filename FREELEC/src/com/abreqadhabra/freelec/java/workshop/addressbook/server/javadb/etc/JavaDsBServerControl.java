@@ -1,10 +1,8 @@
-package com.abreqadhabra.freelec.java.workshop.addressbook.javadb;
+package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.etc;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,114 +12,40 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.derby.drda.NetworkServerControl;
-
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
 
-public class JavaDBServerControl {
+public class JavaDsBServerControl {
 
-	// 로그 출력을 위한 선언
-	Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
-	
-	// Server instance for testing connection
-	NetworkServerControl networkServerControl = null;
-	
-	PrintWriter pw = new PrintWriter(System.out,true);	// to print messages
+    Logger logger = Logger.getLogger(this.getClass().getCanonicalName()); 
+	private Connection dbConnection = null;
+	Properties dbProperties = new Properties(); // connection properties
 
-	
-public JavaDBServerControl(){
-	
-}
-
-public JavaDBServerControl(int port) {
-	try {
-		networkServerControl = new
-			  NetworkServerControl(InetAddress.getByName("localhost"), port);
-	} catch (UnknownHostException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	logger.log(Level.INFO, "Derby Network Server 가 생성되었습니다.");
-}
-
-	/**
-	 * Start Derby Network server
-	 * @throws Exception 
-	 * 
-	 */
-	public void start() throws Exception {
-			networkServerControl.start(pw);
-			logger.log(Level.INFO, networkServerControl.getSysinfo());
-
-		logger.log(Level.INFO, "Derby Network Server 가 시작되었습니다.");
-	}
-	
-    /**
-     * Shutdown the NetworkServer
-     * @throws Exception 
-     */
-    public void shutdown() throws Exception {
-        	networkServerControl.shutdown();
-
-    }
-  
-	/**
-	 * trace utility of server
-	 * @throws Exception 
-	 */
-	public void logConnection(boolean onoff) throws Exception {
-			networkServerControl.logConnections(onoff);
-	}
-
-	
-	/**
-	 * trace utility of server
-	 * @throws Exception 
-	 */
-	public void trace(boolean onoff) throws Exception {
-			networkServerControl.trace(onoff);
-
-	}
-
-	/**
-	 * Try to test for a connection Throws exception if unable to get a
-	 * connection
-	 * @throws Exception 
-	 */
-	public void testForConnection() throws Exception  {
-
-			networkServerControl.ping();
-
-	}
-	
-	public Connection getConnection(Properties dbProperties) {
-
-		Connection connection =null;
-
+	public Connection start() {
 		if (isDatabaseExists()) {
-			System.out.println("기존 데이터베이스가 존재합니다.");
-			connection = createConnection(dbProperties);
+			logger.log(Level.INFO, "기존 데이터베이스가 존재합니다.");
+			dbConnection = createConnection();
 		} else {
-			System.out.println("기존 데이터베이스가 존재하지 않습니다.");
-			connection = checkAndCreateDatabase(dbProperties);
+			logger.log(Level.INFO, "기존 데이터베이스가 존재하지 않습니다.");
+			dbConnection = createDatabase();
 		}
-		return connection;
-		
+	//	printConnectionMetaData(dbConnection);
+		testConnection(dbConnection);
+		return dbConnection;
 	}
-	
 
-	private boolean isDatabaseExists() {
-		boolean isExists = false;
+	
+	public boolean isDatabaseExists() {
+		boolean bExists = false;
 		String dbLocation = getDatabaseLocation();
+		
+		logger.log(Level.INFO, "dbLocation: " + dbLocation);
+
 		
 		File dbFileDir = new File(dbLocation);
 		if (dbFileDir.exists()) {
-			isExists = true;
+			bExists = true;
 		}
-		return isExists;
+		return bExists;
 	}
 	
 	private String getDatabaseLocation() {
@@ -129,13 +53,12 @@ public JavaDBServerControl(int port) {
 				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
 		return dbLocation;
 	}
-	
-	
-	// DriverManager API를 사용하여 데이터베이스 컨넥션 취득
-	public Connection createConnection(Properties properties) {
+
+	public Connection createConnection() {
 
 		/* load the desired JDBC driver */
 		//loadJDBCDriver();
+		Properties dbProperties = getDBProperties();
 		Connection connection =null;
 		/*
 		 * By default, the schema APP will be used when no username is provided.
@@ -161,11 +84,11 @@ public JavaDBServerControl(int port) {
 		 */
 
 		String url = getDatabaseUrl();
-		System.out.println("url: " + url);
+		logger.log(Level.INFO, "url: " + url);
 		
 		try {
-			connection = DriverManager.getConnection(url, properties);
-			System.out.println("Connected to database "
+			connection = DriverManager.getConnection(url, dbProperties);
+			logger.log(Level.INFO, "Connected to database "
 					+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
 
 			// We want to control transactions manually. Autocommit is on by
@@ -179,6 +102,15 @@ public JavaDBServerControl(int port) {
 		return connection;
 	}
 	
+	private Properties getDBProperties() {
+		// providing a user name and password is optional in the embedded
+		// and derbyclient frameworks
+		dbProperties.put("user", Constants.DERBY_DATABASE.STRING_DB_USER);
+		dbProperties.put("password", Constants.DERBY_DATABASE.STRING_DB_PASSWORD);
+		logger.log(Level.INFO, "dbProperties" + dbProperties);
+
+		return dbProperties;
+	}
 	
 	public String getDatabaseUrl() {
 		String dbUrl = Constants.DERBY_DATABASE.STRING_PROTOOL
@@ -186,42 +118,43 @@ public JavaDBServerControl(int port) {
 		return dbUrl;
 	}
 	
-	
-	private Connection checkAndCreateDatabase(Properties dbProperties) {
-		boolean isTableCreated = false;
+	public Connection createDatabase() {
+		boolean bCreated = false;
 		String dbUrl = getDatabaseUrl();
 		Connection connection =null;
 
+		Properties dbProperties = getDBProperties();
 		dbProperties.put("create", "true");
 		try {
 			connection = DriverManager.getConnection(dbUrl, dbProperties);
-			System.out.println("Connected to and created database "
+			logger.log(Level.INFO, "Connected to and created database "
 					+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
-			isTableCreated = createTables(connection);
-			if (isTableCreated) {
+			bCreated = createTables(connection);
+			if (bCreated) {
 				insertDummyDataset(connection);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//dbProperties.remove("create");
+		dbProperties.remove("create");
 		return connection;
 	}
+
 	private boolean createTables(Connection dbConnection) {
-		boolean isTableCreated = false;
+		boolean bCreatedTables = false;
 		Statement statement = null;
 		try {
 			statement = dbConnection.createStatement();
 			statement
 					.execute(Constants.DERBY_ADDRESS_DAO.STR_SQL_CREATE_ADDRESS_TABLE);
-			isTableCreated = true;
+			bCreatedTables = true;
 		} catch (SQLException se) {
 			se.printStackTrace();
 			//printSQLException(se);
 		}
 
-		return isTableCreated;
+		return bCreatedTables;
 	}
 	
 	private void insertDummyDataset(Connection connection) {
@@ -275,6 +208,28 @@ public JavaDBServerControl(int port) {
 		}
 
 	}
+	
+	
+	private void printConnectionMetaData(Connection dbConnection) {
+		DatabaseMetaData dbmd = null;
+		try {
+
+			dbmd = dbConnection.getMetaData();
+
+			logger.log(Level.INFO, "Database Name    = "
+					+ dbmd.getDatabaseProductName());
+			logger.log(Level.INFO, "Database Version = "
+					+ dbmd.getDatabaseProductVersion());
+			logger.log(Level.INFO, "Driver Name      = " + dbmd.getDriverName());
+			logger.log(Level.INFO, "Driver Version   = " + dbmd.getDriverVersion());
+			logger.log(Level.INFO, "Database URL     = " + dbmd.getURL());
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+			//printSQLException(se);
+		}
+	}
+	
 
 	public void testConnection(Connection conn){
 
@@ -285,10 +240,9 @@ public JavaDBServerControl(int port) {
 			// system catalog tables
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery("select count(*) from sys.systables");
-			while (rs.next()){
-				System.out.println("number of rows in sys.systables = "
+			while (rs.next())
+				logger.log(Level.INFO, "number of rows in sys.systables = "
 						+ rs.getInt(1));
-			}
 
 		} catch (SQLException sqle) {
 			System.out
@@ -317,6 +271,21 @@ public JavaDBServerControl(int port) {
 				}
 		}
 
+	}
+	public void shutdown() {
+		if (dbConnection != null) {
+			String dbUrl = getDatabaseUrl();
+			dbProperties.put("shutdown", "true");
+			try {
+				dbConnection.commit();
+				dbConnection.close();
+				DriverManager.getConnection(dbUrl, dbProperties);
+				System.out.println("Disconnected to database "
+						+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
+
+			} catch (SQLException ex) {
+			}
+		}
 	}
 
 

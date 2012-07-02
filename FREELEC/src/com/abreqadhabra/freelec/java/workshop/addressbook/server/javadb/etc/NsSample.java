@@ -19,7 +19,7 @@
 
  */
  
-package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb;
+package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.etc;
 
 
 import java.util.Properties;

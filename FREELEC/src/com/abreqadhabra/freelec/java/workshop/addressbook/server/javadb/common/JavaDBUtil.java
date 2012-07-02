@@ -1,4 +1,4 @@
-package com.abreqadhabra.freelec.java.workshop.addressbook.javadb.common;
+package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.common;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
 

@@ -27,7 +27,7 @@
  This file contains the logging of connections made with the derby network server
  */
 
-package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb;
+package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.etc;
 
 import java.io.BufferedReader;
 import java.io.File;
