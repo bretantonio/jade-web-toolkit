@@ -42,7 +42,7 @@
  This file contains the logging of connections made with the derby network server
  */
 
-package com.abreqadhabra.freelec.java.workshop.addressbook.javadb;
+package com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +56,7 @@ import java.util.logging.Logger;
 import org.apache.derby.drda.NetworkServerControl;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
-import com.abreqadhabra.freelec.java.workshop.addressbook.javadb.common.JavaDBUtil;
+import com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.common.JavaDBUtil;
 
 public class JavaDBServer {
 
