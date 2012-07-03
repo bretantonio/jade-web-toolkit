@@ -156,7 +156,7 @@ public class JavaDBServer {
 			// 데이터베이스 환경 초기화
 			dbServer.initDatabaseEnviroments();
 			
-			dbServer.waitForConnection();
+			//dbServer.waitForConnection();
 			//dbServer.shutdown();
 
 		} catch (Exception e) {
