@@ -319,5 +319,33 @@ public JavaDBServerControl(int port) {
 
 	}
 
+	void waitForConnection() {
+		// Server instance for testing connection
+	//			NetworkServerControl server = null;
+
+				// Use NetworkServerControl.ping() to wait for
+				// NetworkServer to come up. We could have used
+				// NetworkServerControl to start the server but the property is
+				// easier.
+				try{
+		//		server = new NetworkServerControl();
+					
+					networkServerControl.ping();
+					networkServerControl.logConnections(true);
+					System.out.println(networkServerControl.getRuntimeInfo());
+
+					Thread.currentThread().sleep(5000);
+
+					System.out.println("Derby Network Server now running");
+//					
+//				System.out.println(networkServerControl.getSysinfo());
+//				System.out.println("Testing if Network Server is up and running!");
+		
+				} catch (Exception e) {
+
+						e.printStackTrace();
+
+				}
+	}
 
 }
