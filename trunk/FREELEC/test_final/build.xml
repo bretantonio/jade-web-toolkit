@@ -1,0 +1,77 @@
+<project name="FBNProject" default="package" basedir=".">
+    <description>
+        Fly By Night Service build file
+    </description>
+	<property name="src.dir" location="src"/>
+	<property name="javadoc.dir" location="docs"/>
+	<property name="bin.dir" location="bin"/>
+	<property name="dist.dir" location="dist"/>
+	<property name="java.home" location="C:/j2sdk1.4.2_12/bin"/>
+
+	<target name="clean" description="clean up" >
+		<delete dir="${javadoc.dir}"/>
+		<delete dir="${bin.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+
+	<target name="init"  depends="clean">
+		<mkdir dir="${javadoc.dir}"/>
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<fixcrlf srcdir="${src.dir}" eol="lf"
+		         includes="**/*.java"  encoding="UTF-8"
+		/>
+	</target>
+
+	<target name="javadoc" depends="init">
+		<javadoc destdir="${javadoc.dir}" Locale="en_US" source="1.4">
+			<fileset dir="${src.dir}" includes="**/*.java"/>
+		</javadoc>
+	</target>
+
+	<target name="compile" depends="javadoc" description="compile the source " >
+
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" 
+		       source="1.4" debug="on" 
+			   listfiles="no" encoding="UTF-8" 
+		>
+		<!-- 	<compilerarg value="-Xlint"/> -->
+
+		</javac>
+		<rmic classname="suncertify.dao.remote.RemoteDataDAOImpl" base="${bin.dir}" stubversion="1.4" />
+		<rmic classname="suncertify.client.remote.RemoteClientImpl" base="${bin.dir}" stubversion="1.4" />
+		<copy todir="${bin.dir}/resources">
+		<fileset dir="${src.dir}/resources"/>
+		</copy>
+	</target>
+
+
+  <target name="package" depends="compile" description="generate the jar" >
+		<copy file="${src.dir}/resources/client.policy" todir="${dist.dir}"/>
+		<copy file="${src.dir}/resources/server.policy" todir="${dist.dir}"/>
+		<copy file="${src.dir}/suncertify/db/db.db" todir="${dist.dir}"/>
+		<copy file="${src.dir}/resources/logging.properties" todir="${dist.dir}"/>
+		<tstamp>
+			<format property="ts" pattern="yyyy/MM/dd-HH:mm:ss-z"/>
+		</tstamp>
+		<jar jarfile="${dist.dir}/ClientApplication.jar" basedir="${bin.dir}" includes="resources/Client*.*, suncertify/dao/**/*.class,  suncertify/client/**/*.class, suncertify/db/*.class">
+			<manifest>
+				<attribute name="Main-Class" value="suncertify.client.ClientApplication"/>
+				<attribute name="Implementation-Title"   value="Fly By Night Service Client Application"/>
+				<attribute name="Implementation-Version" value="0.9"/>
+				<attribute name="Build-Id"
+				value="${ts} (Dongsup Kim [${os.name} ${os.version} ${os.arch}])"/>
+			</manifest>
+		</jar>
+		<jar jarfile="${dist.dir}/ServerApplication.jar" basedir="${bin.dir}" includes="resources/Server*.*, suncertify/dao/**/*.class, suncertify/server/*.class, suncertify/client/remote/*.class, suncertify/db/**/*.class, suncertify/util/*.class">
+			<manifest>
+				<attribute name="Main-Class" value="suncertify.server.ServerApplication"/>
+				<attribute name="Implementation-Title"   value="Fly By Night Service Server Application"/>
+				<attribute name="Implementation-Version" value="0.9"/>
+				<attribute name="Build-Id"
+				value="${ts} (Dongsup Kim [${os.name} ${os.version} ${os.arch}])"/>
+			</manifest>
+		</jar>
+  </target>
+
+</project>

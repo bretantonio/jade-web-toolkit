@@ -7,7 +7,7 @@ import com.abreqadhabra.freelec.java.workshop.addressbook.dao.AddressDAO;
 import com.abreqadhabra.freelec.java.workshop.addressbook.dao.DAOFactory;
 import com.abreqadhabra.freelec.java.workshop.addressbook.domain.Address;
 import com.abreqadhabra.freelec.java.workshop.addressbook.domain.ListEntry;
-import com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.JavaDBServerThread;
+import com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread;
 
 public class JavaDBThreadTest {
 
