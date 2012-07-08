@@ -1,0 +1,7 @@
+grant  {
+    /*
+        permission java.security.AllPermission;
+    */
+    permission java.net.SocketPermission "*:1024-65535", "connect,accept";
+    permission java.io.FilePermission "db.db", "read, write";
+};
