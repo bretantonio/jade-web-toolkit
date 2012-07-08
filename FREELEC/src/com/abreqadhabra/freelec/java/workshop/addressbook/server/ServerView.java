@@ -65,7 +65,11 @@ public class ServerView extends JPanel implements ActionListener {
         buttonPanel.add(_startupButton);
         buttonPanel.add(_shutDownButton);
         // Add the buttons to this panel.
-        add(buttonPanel, BorderLayout.PAGE_START);
+        add(buttonPanel, BorderLayout.NORTH);
+        JPanel configPanel = new JPanel(); // use FlowLayout
+        
+        
+        add(configPanel, BorderLayout.CENTER);    
         // Create and set up the window.
         JFrame.setDefaultLookAndFeelDecorated(true);
         JFrame frame = new JFrame(ServerController.resources
