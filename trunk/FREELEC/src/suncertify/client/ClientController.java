@@ -66,14 +66,15 @@ public final class ClientController {
          */
     protected void setDAO(final String clientMode) {
 
-	if (clientMode.equals(ClientController.resources
-		.getString("GUI.OptionDialog.ClientMode.Local"))) {
+//	if (clientMode.equals(ClientController.resources
+	//	.getString("GUI.OptionDialog.ClientMode.Local"))) {
 	    // create the required DAO Factory
 	    DAOFactory factory = DAOFactory.getDAOFactory(DAOFactory.LOCAL);
 	    // Create a DAO
 
 	    try {
-		_dao = (DataDAO) factory.getDataDAO("db.db");
+	    	System.out.println(System.getProperty("user.dir"));
+		_dao = (DataDAO) factory.getDataDAO("D:/dskim/gdrive/workspace/FREELEC/src/suncertify/db/db.db");
 	    } catch (RemoteException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -82,20 +83,20 @@ public final class ClientController {
 		e.printStackTrace();
 	    }
 
-	} else if (clientMode.equals(ClientController.resources
-		.getString("GUI.OptionDialog.ClientMode.Remote"))) {
+//	} else if (clientMode.equals(ClientController.resources
+//		.getString("GUI.OptionDialog.ClientMode.Remote"))) {
+//
+//	    RemoteClientImpl remoteClient = null;
+//	    try {
+//		remoteClient = new RemoteClientImpl(_gui);
+//		_dao = remoteClient.connect(this._serviceURL);
+//		((RemoteDataDAO) _dao).register(remoteClient);
+//	    } catch (RemoteException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	    }
 
-	    RemoteClientImpl remoteClient = null;
-	    try {
-		remoteClient = new RemoteClientImpl(_gui);
-		_dao = remoteClient.connect(this._serviceURL);
-		((RemoteDataDAO) _dao).register(remoteClient);
-	    } catch (RemoteException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-
-	}
+//	}
     }
 
     /**
