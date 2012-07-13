@@ -1,0 +1,5 @@
+java -classpath .;.\lib\jade.jar;.\lib\jadeTools.jar;.\lib\iiop.jar;.\lib\base64.jar;.\lib\crimson.jar; jade.Boot -host 127.0.0.1 -container-name NCS  NA:org.agentcommunity.ANSMAS.NCS.MCA
+PAUSE
+
+
+

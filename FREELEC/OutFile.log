@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2012-06-25T01:19:25</date>
+  <millis>1340554765118</millis>
+  <sequence>0</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.JavaDBServer</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.JavaDBServer</class>
+  <method>startWithProperty</method>
+  <thread>1</thread>
+  <message>Starting Network Server</message>
+</record>
+<record>
+  <date>2012-06-25T01:19:25</date>
+  <millis>1340554765206</millis>
+  <sequence>1</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.JavaDBServer</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.javadb.JavaDBServer</class>
+  <method>setDerbySystemDirectory</method>
+  <thread>1</thread>
+  <message>systemDir: C:\Users\Administrator/.FREELEC</message>
+</record>

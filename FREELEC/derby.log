@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Fri Jul 13 21:25:53 KST 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0138-804d-6a96-000000a8a470 
+on database directory D:\dskim\gdrive\workspace\FREELEC\test  with class loader sun.misc.Launcher$AppClassLoader@10a6ae2 
+Loaded from file:/D:/dskim/gdrive/workspace/FREELEC/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_05-b05
+user.dir=D:\dskim\gdrive\workspace\FREELEC
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
