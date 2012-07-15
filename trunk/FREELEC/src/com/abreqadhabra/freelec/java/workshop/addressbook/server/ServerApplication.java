@@ -1,6 +1,5 @@
 package com.abreqadhabra.freelec.java.workshop.addressbook.server;
 
-import suncertify.util.ValidationUtil;
 
 /**
  * This class implements the RMI-Based server application.

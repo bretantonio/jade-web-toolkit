@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.abreqadhabra.freelec.java.workshop.addressbook.common.constants.Constants;
-import com.abreqadhabra.freelec.java.workshop.addressbook.dao.AddressDAO;
 import com.abreqadhabra.freelec.java.workshop.addressbook.dao.DAOFactory;
+import com.abreqadhabra.freelec.java.workshop.addressbook.dao.FlightServiceDAO;
 
 public class DerbyDAOFactoryImpl extends DAOFactory {
 
@@ -49,9 +49,9 @@ public class DerbyDAOFactoryImpl extends DAOFactory {
 
 
 	@Override
-	public AddressDAO getAddressDAO() {
+	public FlightServiceDAO getFlightServiceDAO() {
 		// CloudscapeCustomerDAO implements CustomerDAO
-		return new DerbyAddressDAOImpl(dbConnection);
+		return new DerbyFlightServiceDAOImpl(dbConnection);
 	}
 	@Override
 	public void shutdown() {

@@ -213,8 +213,8 @@ public JavaDBServerControl(int port) {
 		Statement statement = null;
 		try {
 			statement = dbConnection.createStatement();
-			statement
-					.execute(Constants.DERBY_ADDRESS_DAO.STR_SQL_CREATE_ADDRESS_TABLE);
+			//statement.execute(Constants.DERBY_ADDRESS_DAO.STR_SQL_CREATE_ADDRESS_TABLE);
+			statement.execute(Constants.DERBY_FLIGHTS_DAO.STR_SQL_CREATE_FLIGHTS_TABLE);
 			isTableCreated = true;
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -229,11 +229,16 @@ public JavaDBServerControl(int port) {
 		PreparedStatement preStmtSaveAddress = null;
 
 		try {
-			preStmtSaveAddress = connection.prepareStatement(
-					Constants.DERBY_ADDRESS_DAO.STR_SQL_SAVE_ADDRESS,
-					Statement.RETURN_GENERATED_KEYS);
+//			preStmtSaveAddress = connection.prepareStatement(
+//					Constants.DERBY_ADDRESS_DAO.STR_SQL_SAVE_ADDRESS,
+//					Statement.RETURN_GENERATED_KEYS);
+		    preStmtSaveAddress = connection.prepareStatement(
+				Constants.DERBY_FLIGHTS_DAO.STR_SQL_INSERT_DUMMY_DATA);
+		    
+			int rowCount = preStmtSaveAddress.executeUpdate();
 
-			preStmtSaveAddress.clearParameters();
+
+/*			preStmtSaveAddress.clearParameters();
 
 			preStmtSaveAddress.setString(1, "LastName");
 			preStmtSaveAddress.setString(2, "FirstName");
@@ -266,7 +271,7 @@ public JavaDBServerControl(int port) {
 			preStmtSaveAddress.setString(11, "11");
 
 			rowCount = preStmtSaveAddress.executeUpdate();
-
+*/
 			connection.commit();
 
 		} catch (SQLException e) {
