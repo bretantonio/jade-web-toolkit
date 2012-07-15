@@ -9,44 +9,47 @@ DROP TABLE FREELEC.flights ;
 -- CREATE the products table for Bigdog's Surf Shop
 CREATE TABLE FREELEC.flights (
 id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-flight_number CHAR(5)  NOT NULL,
-origin_airport CHAR(3)  NOT NULL,
-destination_airport CHAR(3)  NOT NULL,
+flight_number VARCHAR(10)  NOT NULL,
+origin_airport VARCHAR(10)  NOT NULL,
+destination_airport VARCHAR(10)  NOT NULL,
 carrier VARCHAR(20) NOT NULL,
 price INTEGER,
 date TIMESTAMP,
-duration VARCHAR(8),
+flight_type VARCHAR(8),
 available_seats INTEGER
 ) ;
 
 
 -- Insert 26 rows into the products table
-INSERT INTO FREELEC.flights(flight_number, origin_airport, destination_airport, carrier, price, date, duration, available_seats)
+INSERT INTO FREELEC.flights(flight_number, origin_airport, destination_airport, carrier, price, date, flight_type, available_seats)
     VALUES 
-('SA001', 'SFO', 'DEN', 'SpeedyAir', 400, TIMESTAMP('2012-09-23 19:00:00'), '20m', 50), 
-('SA002', 'SFO', 'LHR', 'SpeedyAir', 2000, TIMESTAMP('2012-09-23 20:00:00'), '11h65m', 22), 
-('SA003', 'SFO', 'LAX', 'SpeedyAir', 100, TIMESTAMP('2012-09-23 21:00:00'), '22m', 37), 
-('SA004', 'LAX', 'SFO', 'SpeedyAir', 100, TIMESTAMP('2012-09-23 22:00:00'), '34m', 0), 
-('PA001', 'DAL', 'FRA', 'PromptAir', 800, TIMESTAMP('2012-09-23 23:00:00'), '9h35m', 14), 
-('PA002', 'FRA', 'DAL', 'PromptAir', 800, TIMESTAMP('2012-09-28 00:00:00'), '9h55m', 4), 
-('PA003', 'FRA', 'BOM', 'PromptAir', 700, TIMESTAMP('2012-09-28 01:00:00'), '8h30m', 97), 
-('PA004', 'BOM', 'FRA', 'PromptAir', 700, TIMESTAMP('2012-09-30 02:00:00'), '8h10m', 75), 
-('PA005', 'DEN', 'ABQ', 'PromptAir', 756, TIMESTAMP('2012-09-30 03:00:00'), '1h10m', 43), 
-('PA006', 'ABQ', 'DEN', 'PromptAir', 756, TIMESTAMP('2012-09-30 04:00:00'), '1h10m', 28), 
-('PA007', 'DEN', 'ATL', 'PromptAir', 536, TIMESTAMP('2012-09-30 05:00:00'), '2h55m', 78), 
-('PA008', 'ATL', 'DEN', 'PromptAir', 536, TIMESTAMP('2012-09-30 06:00:00'), '3h10m', 21), 
-('RA981', 'FRA', 'BOM', 'RainvilleAir', 700, TIMESTAMP('2012-09-30 07:00:00'), '9h30m', 120), 
-('RA982', 'BOM', 'FRA', 'RainvilleAir', 700, TIMESTAMP('2012-10-06 08:00:00'), '9h10m', 99), 
-('RA983', 'DAL', 'FRA', 'RainvilleAir', 800, TIMESTAMP('2012-10-06 09:00:00'), '10h35m', 43), 
-('RA984', 'FRA', 'DAL', 'RainvilleAir', 800, TIMESTAMP('2012-10-06 10:00:00'), '10h55m', 95), 
-('RA985', 'DEN', 'ATL', 'RainvilleAir', 536, TIMESTAMP('2012-10-06 11:00:00'), '3h55m', 5), 
-('RA986', 'ATL', 'DEN', 'RainvilleAir', 536, TIMESTAMP('2012-10-06 12:00:00'), '4h10m', 5), 
-('RA987', 'DEN', 'ABQ', 'RainvilleAir', 756, TIMESTAMP('2012-10-11 13:00:00'), '2h10m', 7), 
-('RA988', 'ABQ', 'DEN', 'RainvilleAir', 756, TIMESTAMP('2012-10-11 14:00:00'), '2h10m', 11), 
-('BA001', 'SFO', 'DEN', 'BeethAir', 387, TIMESTAMP('2012-10-11 15:00:00'), '20m', 50), 
-('BA002', 'SFO', 'LHR', 'BeethAir', 1645, TIMESTAMP('2012-10-14 16:00:00'), '11h65m', 22), 
-('BA003', 'SFO', 'LAX', 'BeethAir', 99, TIMESTAMP('2012-10-14 17:00:00'), '30m', 7), 
-('BA004', 'LAX', 'SFO', 'BeethAir', 99, TIMESTAMP('2012-10-14 18:00:00'), '40m', 10) ;
+('OZ8921', '김포', '제주', '아시아나항공', 400, TIMESTAMP('2012-09-23 12:00:00'), '국내선', 50), 
+('MU512', '김포', '상해(홍차오)', '중국동방항공', 2000, TIMESTAMP('2012-09-23 12:00:00'), '국제선', 22), 
+('JL92', '김포', '도쿄/하네다', '일본항공', 100, TIMESTAMP('2012-09-23 12:05:00'), '국제선', 37), 
+('7C111', '김포', '제주', '제주항공', 100, TIMESTAMP('2012-09-23 12:05:00'), '국내선', 0), 
+('KE1335', '김포', '여수', '대한항공', 800, TIMESTAMP('2012-09-23 12:20:00'), '국내선', 14), 
+('OZ8813', '김포', '김해(부산)', '아시아나항공', 800, TIMESTAMP('2012-09-28 12:30:00'), '국내선', 4), 
+('BX8813', '김포', '김해(부산)', '에어부산', 700, TIMESTAMP('2012-09-28 12:30:00'), '국내선', 97), 
+('OZ8923', '김포', '제주', '아시아나항공', 700, TIMESTAMP('2012-09-30 12:30:00'), '국내선', 75), 
+('CZ318', '김포', '북경', '중국남방항공', 756, TIMESTAMP('2012-09-30 12:30:00'), '국제선', 43), 
+('NH1162', '김포', '도쿄/하네다', '전일본공수', 756, TIMESTAMP('2012-09-30 12:40:00'), '국제선', 28), 
+('JL972', '김포', '오사카(간사이)', '일본항공', 536, TIMESTAMP('2012-09-30 12:45:00'), '국제선', 78), 
+('OZ8927', '김포', '제주', '아시아나항공', 536, TIMESTAMP('2012-09-30 12:45:00'), '국내선', 21), 
+('OZ8929', '김포', '제주', '아시아나항공', 700, TIMESTAMP('2012-09-30 12:50:00'), '국내선', 120), 
+('KE1609', '김포', '울산', '대한항공', 700, TIMESTAMP('2012-10-06 12:50:00'), '국내선', 99), 
+('TW711', '김포', '제주', '티웨이항공', 800, TIMESTAMP('2012-10-06 12:55:00'), '국내선', 43), 
+('KE1113', '김포', '김해(부산)', '대한항공', 800, TIMESTAMP('2012-10-06 13:00:00'), '국내선', 95), 
+('ZE215', '김포', '제주', '이스타항공', 536, TIMESTAMP('2012-10-06 13:00:00'), '국내선', 5), 
+('LJ335', '김포', '제주', '진에어', 536, TIMESTAMP('2012-10-06 13:10:00'), '국내선', 5), 
+('BX8815', '김포', '김해(부산)', '에어부산', 756, TIMESTAMP('2012-10-11 13:30:00'), '국내선', 7), 
+('OZ8815', '김포', '김해(부산)', '아시아나항공', 756, TIMESTAMP('2012-10-11 13:30:00'), '국내선', 11), 
+('KE1611', '김포', '울산', '대한항공', 387, TIMESTAMP('2012-10-11 13:30:00'), '국내선', 50), 
+('KE1229', '김포', '제주', '대한항공', 1645, TIMESTAMP('2012-10-14 13:40:00'), '국내선', 22), 
+('261', '김포', '쑹산', '중화항공', 99, TIMESTAMP('2012-10-14 13:45:00'), '국제선', 7), 
+('7C113', '김포', '제주', '제주항공', 99, TIMESTAMP('2012-10-14 13:45:00'), '국내선', 120), 
+('OZ8931', '김포', '제주', '아시아나항공', 100, TIMESTAMP('2012-10-15 13:55:00'), '국내선', 99), 
+('KE1231', '김포', '제주', '대한항공', 101, TIMESTAMP('2012-10-16 14:00:00'), '국내선', 43), 
+('KE1115', '김포', '김해(부산)', '대한항공', 102, TIMESTAMP('2012-10-17 14:00:00'), '국내선', 95) ;
 
 -- Query the database to dump the contents of the products table.
 SELECT * FROM FREELEC.flights ;

@@ -12,8 +12,9 @@ public abstract class DAOFactory {
 	// There will be a method for each DAO that can be
 	// created. The concrete factories will have to
 	// implement these methods.
-	public abstract AddressDAO getAddressDAO();
 
+	public abstract FlightServiceDAO getFlightServiceDAO() ;
+	
 	public static DAOFactory getDAOFactory(int whichFactory) {
 
 		switch (whichFactory) {
@@ -27,6 +28,8 @@ public abstract class DAOFactory {
 	}
 
 	public abstract void shutdown() ;
+
+	
 
 }
 // http://java.sun.com/blueprints/corej2eepatterns/Patterns/DataAccessObject.html

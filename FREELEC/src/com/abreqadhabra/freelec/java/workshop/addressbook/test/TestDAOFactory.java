@@ -19,7 +19,7 @@ public class TestDAOFactory {
 		DAOFactory derbyFactory =   
 		  DAOFactory.getDAOFactory(DAOFactory.DERBY);
 
-		// Create a DAO
+		/*// Create a DAO
 		AddressDAO addressDAO = 
 				derbyFactory.getAddressDAO();
 		
@@ -36,7 +36,7 @@ public class TestDAOFactory {
 		Address address = addressDAO.getAddress(1);
 		
 		System.out.println(address);
-
+*/
 //		// create a new customer
 //		int newCustNo = addressDAO.insertCustomer(...);
 //

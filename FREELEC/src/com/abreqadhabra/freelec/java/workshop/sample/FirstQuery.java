@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 public class FirstQuery {
 	private static final String driver = "org.apache.derby.jdbc.EmbeddedDriver" ;
-	private static final String url = "jdbc:derby:test" ;
+	private static final String url = "jdbc:derby:FREELEC" ;
 	private static final String qry = 
 		"SELECT itemNumber, price, stockDate, description FROM bigdog.products" ;	
 	

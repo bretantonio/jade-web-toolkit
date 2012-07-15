@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2012-06-29T21:56:46</date>
-  <millis>1340974606500</millis>
+  <date>2012-06-29T08:38:56</date>
+  <millis>1340926736053</millis>
   <sequence>0</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServer</logger>
   <level>INFO</level>
@@ -13,8 +13,8 @@
   <message>Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.</message>
 </record>
 <record>
-  <date>2012-06-29T21:56:46</date>
-  <millis>1340974606574</millis>
+  <date>2012-06-29T08:38:56</date>
+  <millis>1340926736162</millis>
   <sequence>1</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServer</logger>
   <level>INFO</level>
@@ -24,8 +24,8 @@
   <message>Derby Network Server가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.</message>
 </record>
 <record>
-  <date>2012-06-29T21:56:46</date>
-  <millis>1340974606575</millis>
+  <date>2012-06-29T08:38:56</date>
+  <millis>1340926736163</millis>
   <sequence>2</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServer</logger>
   <level>INFO</level>
@@ -35,8 +35,8 @@
   <message>JDBC드라이버를 로드합니다.</message>
 </record>
 <record>
-  <date>2012-06-29T21:56:47</date>
-  <millis>1340974607036</millis>
+  <date>2012-06-29T08:38:57</date>
+  <millis>1340926737123</millis>
   <sequence>3</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServerControl</logger>
   <level>INFO</level>
@@ -46,8 +46,8 @@
   <message>Derby Network Server 가 생성되었습니다.</message>
 </record>
 <record>
-  <date>2012-06-29T21:56:47</date>
-  <millis>1340974607100</millis>
+  <date>2012-06-29T08:38:57</date>
+  <millis>1340926737164</millis>
   <sequence>4</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServerControl</logger>
   <level>INFO</level>
@@ -57,7 +57,7 @@
   <message>--------- Derby Network Server 정보 --------
 버전: CSS10081/10.8.2.2 - (1181258)  빌드: 1181258  DRDA 제품 ID: CSS10081
 -- listing properties --
-derby.drda.traceDirectory=C:\Users\nhn/.FREELEC
+derby.drda.traceDirectory=C:\Users\Administrator/.FREELEC
 derby.drda.maxThreads=0
 derby.drda.sslMode=off
 derby.drda.keepAlive=true
@@ -67,34 +67,33 @@ derby.drda.logConnections=true
 derby.drda.timeSlice=0
 derby.drda.startNetworkServer=true
 derby.drda.host=127.0.0.1
-derby.drda.traceAll=false
+derby.drda.traceAll=true
 ------------------ Java Information ------------------
-Java Version:    1.7.0
+Java Version:    1.7.0_05
 Java Vendor:     Oracle Corporation
-Java home:       C:\Program Files\Java\jre7
-Java classpath:  D:\dskim\gdrive\workspace\FREELEC\bin;D:\dskim\gdrive\workspace\FREELEC\lib\derby.jar;D:\dskim\gdrive\workspace\FREELEC\lib\derbynet.jar;D:\dskim\gdrive\workspace\FREELEC\lib\derbyclient.jar
+Java home:       C:\Program Files\Java\jdk1.7.0_05\jre
+Java classpath:  .;..\lib\derby.jar;..\lib\derbynet.jar;
 OS name:         Windows 7
-OS architecture: x86
+OS architecture: amd64
 OS version:      6.1
-Java user name:  nhn
-Java user home:  C:\Users\nhn
-Java user dir:   D:\dskim\gdrive\workspace\FREELEC
+Java user name:  Administrator
+Java user home:  C:\Users\Administrator
+Java user dir:   D:\dskim\workspace\FREELEC\bin
 java.specification.name: Java Platform API Specification
 java.specification.version: 1.7
-java.runtime.version: 1.7.0-b147
+java.runtime.version: 1.7.0_05-b05
 --------- Derby Information --------
 JRE - JDBC: Java SE 6 - JDBC 4.0
-[D:\dskim\gdrive\workspace\FREELEC\lib\derby.jar] 10.8.1.2 - (1095077)
-[D:\dskim\gdrive\workspace\FREELEC\lib\derbynet.jar] 10.8.2.2 - (1181258)
-[D:\dskim\gdrive\workspace\FREELEC\lib\derbyclient.jar] 10.8.2.2 - (1181258)
+[D:\dskim\workspace\FREELEC\lib\derby.jar] 10.8.1.2 - (1095077)
+[D:\dskim\workspace\FREELEC\lib\derbynet.jar] 10.8.2.2 - (1181258)
 ------------------------------------------------------
 ----------------- Locale Information -----------------
 ------------------------------------------------------
 </message>
 </record>
 <record>
-  <date>2012-06-29T21:56:47</date>
-  <millis>1340974607101</millis>
+  <date>2012-06-29T08:38:57</date>
+  <millis>1340926737166</millis>
   <sequence>5</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServerControl</logger>
   <level>INFO</level>
@@ -104,8 +103,8 @@ JRE - JDBC: Java SE 6 - JDBC 4.0
   <message>Derby Network Server 가 시작되었습니다.</message>
 </record>
 <record>
-  <date>2012-06-29T21:56:47</date>
-  <millis>1340974607101</millis>
+  <date>2012-06-29T08:38:57</date>
+  <millis>1340926737167</millis>
   <sequence>6</sequence>
   <logger>com.abreqadhabra.freelec.java.workshop.addressbook.javadb.JavaDBServer</logger>
   <level>INFO</level>
@@ -114,3 +113,4 @@ JRE - JDBC: Java SE 6 - JDBC 4.0
   <thread>1</thread>
   <message>dbProperties{user=freelec, password=freelec!@#123}</message>
 </record>
+</log>
