@@ -63,22 +63,22 @@ public class Constants {
 
     }
 
-    public static final class DERBY_FLIGHTS_DAO {
+    public static final class DERBY_flight_DAO {
 
-	public static final String STR_SQL_CREATE_FLIGHTS_TABLE = "CREATE TABLE FREELEC.flights ("
+	public static final String STR_SQL_CREATE_flight_TABLE = "CREATE TABLE FREELEC.flight ("
 		+ "id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
 		+ "flight_number VARCHAR(10)  NOT NULL, "
 		+ "origin_airport VARCHAR(10)  NOT NULL, "
 		+ "destination_airport VARCHAR(10)  NOT NULL, "
 		+ "carrier VARCHAR(20) NOT NULL, "
 		+ "price INTEGER, "
-		+ "date TIMESTAMP, "
+		+ "departure TIMESTAMP, "
 		+ "flight_type VARCHAR(8), "
 		+ "available_seats INTEGER " 
 		+ ")";
 
-	public static final String STR_SQL_INSERT_DUMMY_DATA = "INSERT INTO FREELEC.flights ("
-		+ "flight_number, origin_airport, destination_airport, carrier, price, date, flight_type, available_seats"
+	public static final String STR_SQL_INSERT_DUMMY_DATA = "INSERT INTO FREELEC.flight ("
+		+ "flight_number, origin_airport, destination_airport, carrier, price, departure, flight_type, available_seats"
 		+ ") VALUES "
 		+ "('OZ8921', '김포', '제주', '아시아나항공', 400, TIMESTAMP('2012-09-23 12:00:00'), '국내선', 50), "
 		+ "('MU512', '김포', '상해(홍차오)', '중국동방항공', 2000, TIMESTAMP('2012-09-23 12:00:00'), '국제선', 22), "
@@ -108,13 +108,13 @@ public class Constants {
 		+ "('KE1231', '김포', '제주', '대한항공', 101, TIMESTAMP('2012-10-16 14:00:00'), '국내선', 43), "
 		+ "('KE1115', '김포', '김해(부산)', '대한항공', 102, TIMESTAMP('2012-10-17 14:00:00'), '국내선', 95)";
 
-	public static final String STR_SQL_GET_COLUMN_NAMES = "SELECT c.columnnumber, c.columnname FROM sys.systables t, sys.syscolumns c  WHERE t.tableid = c.referenceid AND t.tablename = 'FLIGHTS' ORDER BY c.columnnumber";
-	public static final String STR_SQL_GET_FLIGHTS = "SELECT * FROM FREELEC.flights";
+	public static final String STR_SQL_GET_COLUMN_NAMES = "SELECT c.columnnumber, c.columnname FROM sys.systables t, sys.syscolumns c  WHERE t.tableid = c.referenceid AND t.tablename = 'flight' ORDER BY c.columnnumber";
+	public static final String STR_SQL_GET_flight = "SELECT * FROM FREELEC.flight";
 
-	public static final String STR_SQL_GET_RECORD_COUNT = "SELECT COUNT(*) cnt FROM FREELEC.flights";
+	public static final String STR_SQL_GET_RECORD_COUNT = "SELECT COUNT(*) cnt FROM FREELEC.flight";
 
-	public static final String STR_SQL_GET_RECORD_BY_ID = "SELECT * FROM FREELEC.flights WHERE id = ?";
+	public static final String STR_SQL_GET_RECORD_BY_ID = "SELECT * FROM FREELEC.flight WHERE id = ?";
 
-	public static final String STR_SQL_FIND_BY_FLIGHT_NUMBER = "SELECT * FROM FREELEC.flights WHERE flight_number = ?";
+	public static final String STR_SQL_FIND_BY_FLIGHT_NUMBER = "SELECT * FROM FREELEC.flight WHERE flight_number = ?";
     }
 }

@@ -19,7 +19,7 @@ public class JavaDBThreadTest {
 		Thread t = new Thread(new JavaDBServerThread());
 		        t.start();
 
-		       // testDAOFactory();
+		        testDAOFactory();
 
 		      //  testAddressFrame();
 	}

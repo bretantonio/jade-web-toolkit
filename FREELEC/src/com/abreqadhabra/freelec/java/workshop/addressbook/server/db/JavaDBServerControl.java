@@ -53,6 +53,7 @@ public JavaDBServerControl(int port) {
 	 * 
 	 */
 	public void start() throws Exception {
+		
 			networkServerControl.start(pw);
 			logger.log(Level.INFO, networkServerControl.getSysinfo());
 
@@ -115,11 +116,14 @@ public JavaDBServerControl(int port) {
 
 	private boolean isDatabaseExists() {
 		boolean isExists = false;
-		String dbLocation = getDatabaseLocation();
-		
+		String dbLocation = getDatabaseLocation();		
 		File dbFileDir = new File(dbLocation);
 		if (dbFileDir.exists()) {
 			isExists = true;
+		}else{
+			dbFileDir.mkdir();
+			logger.log(Level.INFO,
+					"Derby Network Server가 사용하는 시스템 디렉토리가 존재하지 않아 새롭게 생성하였습니다.");
 		}
 		return isExists;
 	}

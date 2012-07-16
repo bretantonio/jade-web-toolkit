@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076262</millis>
+  <sequence>0</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>initNetworkServerEnviroments</method>
+  <thread>1</thread>
+  <message>Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076304</millis>
+  <sequence>1</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>initNetworkServerEnviroments</method>
+  <thread>1</thread>
+  <message>Derby Network Server가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076304</millis>
+  <sequence>2</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>initNetworkServerEnviroments</method>
+  <thread>1</thread>
+  <message>JDBC드라이버를 로드합니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076708</millis>
+  <sequence>3</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>&lt;init&gt;</method>
+  <thread>12</thread>
+  <message>Derby Network Server 가 생성되었습니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076818</millis>
+  <sequence>4</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>initNetworkServerEnviroments</method>
+  <thread>1</thread>
+  <message>Derby Network Server를 사용하기 위해 derby.drda.startNetworkServer 시스템 프로퍼티를 사용(true)으로 등록합니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076819</millis>
+  <sequence>5</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>initNetworkServerEnviroments</method>
+  <thread>1</thread>
+  <message>Derby Network Server가 사용하는 시스템 디렉토리를 설정합니다. 만일 대상 디렉토리가 존재하지 않다면 새롭게 생성합니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076820</millis>
+  <sequence>6</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>initNetworkServerEnviroments</method>
+  <thread>1</thread>
+  <message>JDBC드라이버를 로드합니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076829</millis>
+  <sequence>7</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>&lt;init&gt;</method>
+  <thread>17</thread>
+  <message>Derby Network Server 가 생성되었습니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076862</millis>
+  <sequence>8</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>start</method>
+  <thread>17</thread>
+  <message>--------- Derby Network Server 정보 --------
+버전: CSS10081/10.8.2.2 - (1181258)  빌드: 1181258  DRDA 제품 ID: CSS10081
+-- listing properties --
+derby.drda.traceDirectory=C:\Users\nhn/.FREELEC
+derby.drda.maxThreads=0
+derby.drda.sslMode=off
+derby.drda.keepAlive=true
+derby.drda.minThreads=0
+derby.drda.portNumber=1527
+derby.drda.logConnections=true
+derby.drda.timeSlice=0
+derby.drda.startNetworkServer=true
+derby.drda.host=127.0.0.1
+derby.drda.traceAll=false
+------------------ Java Information ------------------
+Java Version:    1.7.0_05
+Java Vendor:     Oracle Corporation
+Java home:       C:\Program Files\Java\jre7
+Java classpath:  D:\dskim\gdrive\workspace\FREELEC\bin;D:\dskim\gdrive\workspace\FREELEC\lib\derby.jar;D:\dskim\gdrive\workspace\FREELEC\lib\derbynet.jar;D:\dskim\gdrive\workspace\FREELEC\lib\derbyclient.jar
+OS name:         Windows 7
+OS architecture: x86
+OS version:      6.1
+Java user name:  nhn
+Java user home:  C:\Users\nhn
+Java user dir:   D:\dskim\gdrive\workspace\FREELEC
+java.specification.name: Java Platform API Specification
+java.specification.version: 1.7
+java.runtime.version: 1.7.0_05-b05
+--------- Derby Information --------
+JRE - JDBC: Java SE 6 - JDBC 4.0
+[D:\dskim\gdrive\workspace\FREELEC\lib\derby.jar] 10.8.1.2 - (1095077)
+[D:\dskim\gdrive\workspace\FREELEC\lib\derbynet.jar] 10.8.2.2 - (1181258)
+[D:\dskim\gdrive\workspace\FREELEC\lib\derbyclient.jar] 10.8.2.2 - (1181258)
+------------------------------------------------------
+----------------- Locale Information -----------------
+------------------------------------------------------
+</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076863</millis>
+  <sequence>9</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>start</method>
+  <thread>17</thread>
+  <message>Derby Network Server 가 시작되었습니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076863</millis>
+  <sequence>10</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>getDBProperties</method>
+  <thread>17</thread>
+  <message>dbProperties{user=freelec, password=freelec!@#123}</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:16</date>
+  <millis>1342407076865</millis>
+  <sequence>11</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>isDatabaseExists</method>
+  <thread>17</thread>
+  <message>Derby Network Server가 사용하는 시스템 디렉토리가 존재하지 않아 새롭게 생성하였습니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:17</date>
+  <millis>1342407077235</millis>
+  <sequence>12</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>start</method>
+  <thread>12</thread>
+  <message>--------- Derby Network Server 정보 --------
+버전: CSS10081/10.8.2.2 - (1181258)  빌드: 1181258  DRDA 제품 ID: CSS10081
+-- listing properties --
+derby.drda.traceDirectory=C:\Users\nhn/.FREELEC
+derby.drda.maxThreads=0
+derby.drda.sslMode=off
+derby.drda.keepAlive=true
+derby.drda.minThreads=0
+derby.drda.portNumber=1527
+derby.drda.logConnections=true
+derby.drda.timeSlice=0
+derby.drda.startNetworkServer=true
+derby.drda.host=127.0.0.1
+derby.drda.traceAll=false
+------------------ Java Information ------------------
+Java Version:    1.7.0_05
+Java Vendor:     Oracle Corporation
+Java home:       C:\Program Files\Java\jre7
+Java classpath:  D:\dskim\gdrive\workspace\FREELEC\bin;D:\dskim\gdrive\workspace\FREELEC\lib\derby.jar;D:\dskim\gdrive\workspace\FREELEC\lib\derbynet.jar;D:\dskim\gdrive\workspace\FREELEC\lib\derbyclient.jar
+OS name:         Windows 7
+OS architecture: x86
+OS version:      6.1
+Java user name:  nhn
+Java user home:  C:\Users\nhn
+Java user dir:   D:\dskim\gdrive\workspace\FREELEC
+java.specification.name: Java Platform API Specification
+java.specification.version: 1.7
+java.runtime.version: 1.7.0_05-b05
+--------- Derby Information --------
+JRE - JDBC: Java SE 6 - JDBC 4.0
+[D:\dskim\gdrive\workspace\FREELEC\lib\derby.jar] 10.8.1.2 - (1095077)
+[D:\dskim\gdrive\workspace\FREELEC\lib\derbynet.jar] 10.8.2.2 - (1181258)
+[D:\dskim\gdrive\workspace\FREELEC\lib\derbyclient.jar] 10.8.2.2 - (1181258)
+------------------------------------------------------
+----------------- Locale Information -----------------
+------------------------------------------------------
+</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:17</date>
+  <millis>1342407077236</millis>
+  <sequence>13</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerControl</class>
+  <method>start</method>
+  <thread>12</thread>
+  <message>Derby Network Server 가 시작되었습니다.</message>
+</record>
+<record>
+  <date>2012-07-16T11:51:17</date>
+  <millis>1342407077237</millis>
+  <sequence>14</sequence>
+  <logger>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</logger>
+  <level>INFO</level>
+  <class>com.abreqadhabra.freelec.java.workshop.addressbook.server.db.JavaDBServerThread</class>
+  <method>getDBProperties</method>
+  <thread>12</thread>
+  <message>dbProperties{user=freelec, password=freelec!@#123}</message>
+</record>
+</log>
