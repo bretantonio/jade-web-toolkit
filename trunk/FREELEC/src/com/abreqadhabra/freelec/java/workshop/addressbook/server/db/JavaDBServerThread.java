@@ -1,6 +1,5 @@
 package com.abreqadhabra.freelec.java.workshop.addressbook.server.db;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
@@ -23,10 +22,10 @@ public class JavaDBServerThread extends Thread {
 	Connection dbConnection = null;
 
 	public void run() {
-		JavaDBServerControl serverControl = new JavaDBServerControl(1527);
+		serverControl = new JavaDBServerControl(1527);
 		try {
 			serverControl.start();
-
+			initDatabaseEnviroments();
 			while (true) {
 
 				logger.log(Level.INFO, DateUtils.now());
@@ -88,8 +87,17 @@ public class JavaDBServerThread extends Thread {
 				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
 		System.setProperty("derby.system.home", systemDirectory);
 		// create the db system directory
-		File fileSystemDir = new File(systemDirectory);
-		fileSystemDir.mkdir();
+
+//		File fileSystemDir = new File(systemDirectory);
+//		if (fileSystemDir.exists()) {
+//			fileSystemDir.mkdir();
+//			logger.log(Level.INFO,
+//					"Derby Network Server가 사용하는 시스템 디렉토리가 존재하지 않아 새롭게 생성하였습니다.");
+//			
+//			initDatabaseEnviroments();
+//
+//			
+//		}
 	}
 
 	// 데이터베이스 환경 초기화
