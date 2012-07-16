@@ -25,10 +25,10 @@ public abstract class DatabaseFactory {
 	public static DatabaseFactory getDatabaseFactory(int whichDatabaseFactory) {
 		switch (whichDatabaseFactory) {
 		case LOCAL_DB_MODE:
-			logger.log(Level.INFO, "로컬 데이터베이스 모드로 동작합니다.");
+			logger.log(Level.INFO, "["+LOCAL_DB_MODE+"] 로컬 데이터베이스 모드로 동작합니다.");
 			return (DatabaseFactory) new LocalDatabaseFactoryImpl();
 		case REMOTE_DB_MODE:
-			logger.log(Level.INFO, "원격 데이터베이스 모드로 동작합니다.");
+			logger.log(Level.INFO, "["+REMOTE_DB_MODE+"] 원격 데이터베이스 모드로 동작합니다.");
 			// return new RemoteDataDAOFactory();
 		default:
 			return null;
