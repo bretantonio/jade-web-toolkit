@@ -19,7 +19,7 @@ public class DerbyDAOFactoryImpl extends DAOFactory {
 			logger.log(Level.INFO, "EmbeddedDataSource initialized");
 		}
 
-	}
+
 
 	@Override
 	public BookFlightsDAO getBookFlightsDAO() {
