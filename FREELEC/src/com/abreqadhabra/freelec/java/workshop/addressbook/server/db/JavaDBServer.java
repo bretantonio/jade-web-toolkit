@@ -115,7 +115,7 @@ public class JavaDBServer {
 		// decide on the db system directory
 		String userHomeDirectory = System.getProperty("user.home", ".");
 		String systemDirectory = userHomeDirectory + "/."
-				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME;
 		System.setProperty("derby.system.home", systemDirectory);
 		// create the db system directory
 		File fileSystemDir = new File(systemDirectory);
@@ -145,7 +145,7 @@ public class JavaDBServer {
 	
 	public String getDatabaseUrl() {
 		String dbUrl = Constants.DERBY_DATABASE.STRING_PROTOOL
-				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME;
 		return dbUrl;
 	}
 

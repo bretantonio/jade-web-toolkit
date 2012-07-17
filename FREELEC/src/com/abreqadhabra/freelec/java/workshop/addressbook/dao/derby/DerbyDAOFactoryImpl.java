@@ -29,7 +29,7 @@ public class DerbyDAOFactoryImpl extends DAOFactory {
 			try {
 				Class.forName(Constants.DERBY_DATABASE.STRING_DERBY_CLIENT_DRIVER_NAME)
 				.newInstance();
-				conn = DriverManager.getConnection("jdbc:derby://127.0.0.1:1527/"+Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
+				conn = DriverManager.getConnection("jdbc:derby://127.0.0.1:1527/"+Constants.DERBY_DATABASE.STRING_DATABASE_NAME);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
