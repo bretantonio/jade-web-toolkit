@@ -130,7 +130,7 @@ public JavaDBServerControl(int port) {
 	
 	private String getDatabaseLocation() {
 		String dbLocation = System.getProperty("derby.system.home") + "/"
-				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME;
 		return dbLocation;
 	}
 	
@@ -170,7 +170,7 @@ public JavaDBServerControl(int port) {
 		try {
 			connection = DriverManager.getConnection(url, properties);
 			System.out.println("Connected to database "
-					+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
+					+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME);
 
 			// We want to control transactions manually. Autocommit is on by
 			// default in JDBC.
@@ -186,7 +186,7 @@ public JavaDBServerControl(int port) {
 	
 	public String getDatabaseUrl() {
 		String dbUrl = Constants.DERBY_DATABASE.STRING_PROTOOL
-				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME;
 		return dbUrl;
 	}
 	
@@ -200,7 +200,7 @@ public JavaDBServerControl(int port) {
 		try {
 			connection = DriverManager.getConnection(dbUrl, dbProperties);
 			System.out.println("Connected to and created database "
-					+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME);
+					+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME);
 			isTableCreated = createTables(connection);
 			if (isTableCreated) {
 				insertDummyDataset(connection);

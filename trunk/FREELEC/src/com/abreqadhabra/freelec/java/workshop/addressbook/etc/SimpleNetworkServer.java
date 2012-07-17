@@ -80,7 +80,7 @@ public class SimpleNetworkServer {
 		// decide on the db system directory
 		String userHomeDir = System.getProperty("user.home", ".");
 		String systemDir = userHomeDir + "/."
-				+ Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME;
+				+ Constants.DERBY_DATABASE.STRING_DATABASE_NAME;
 		System.setProperty("derby.system.home", systemDir);
 
 		logger.log(Level.INFO, "systemDir: " + systemDir);
@@ -232,7 +232,7 @@ public class SimpleNetworkServer {
 				+ " -Dij.password="
 				+ Constants.DERBY_DATABASE.STRING_DB_PASSWORD
 				+ " -Dij.protocol=jdbc:derby://localhost:1527/ org.apache.derby.tools.ij\n";
-		ijUsage += "\tij> connect '" + Constants.DERBY_DATABASE.STRING_DB_SCHEMA_NAME
+		ijUsage += "\tij> connect '" + Constants.DERBY_DATABASE.STRING_DATABASE_NAME
 				+ "';\n\n";
 
 		return ijUsage;
