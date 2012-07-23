@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.abreqadhabra.freelec.java.workshop.bookflights.dao.BookFlightsDAO;
 import com.abreqadhabra.freelec.java.workshop.bookflights.dao.DAOFactory;
+import com.abreqadhabra.freelec.java.workshop.bookflights.database.ConnectionManager;
 
 public class DerbyDAOFactoryImpl extends DAOFactory {
 
@@ -15,8 +16,9 @@ public class DerbyDAOFactoryImpl extends DAOFactory {
 	public DerbyDAOFactoryImpl(int derbyDriverType) {
 
 		
-			DatabaseManager.initDatabaseEnviroments(derbyDriverType);
-			logger.log(Level.INFO, "EmbeddedDataSource initialized");
+		//	DatabaseManager.initDatabaseEnviroments(derbyDriverType);
+		initConnectionEnviroments(derbyDriverType);
+		logger.log(Level.INFO, "EmbeddedDataSource initialized");
 		}
 
 
