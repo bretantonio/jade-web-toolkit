@@ -18,6 +18,9 @@ public class DerbyDAOFactoryImpl extends DAOFactory {
 		
 			DatabaseManager.initDatabaseEnviroments(derbyDriverType);
 		//initConnectionEnviroments(derbyDriverType);
+			//DatabaseManager.importSQLScript(conn, in);
+			
+			
 		logger.log(Level.INFO, "EmbeddedDataSource initialized");
 		}
 
